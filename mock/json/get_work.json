@@ -1,0 +1,26 @@
+{
+  "status": 200,
+  "message": "success",
+  "data": {
+    "id": "dgsgg7979dsg896gs98s9d",
+    "aid": 1,
+    "account_id": "224y234ywerhwerhw345y2",
+    "user_id": "a6dsga789dg69adg6a9g22",
+    "work_state_version": 0,
+    "config": {},
+    "workflow_id": "s98df9h8s6df9h86ss9f6h",
+    "workflow": "sample_export",
+    "tag": "",
+    "modified_ms": 1441056355725,
+    "created_ms": 1428087995306,
+    "updated": "2015-08-31T21:25:55.725Z",
+    "created": "2012-01-15T00:00:00Z",
+    "auth_ids": [
+      "26723jk72l3gh2l34gj72l"
+    ],
+    "hidden": false,
+    "runtime": "",
+    "verbose_logging": false,
+    "statuscode": "sleeping"
+  }
+}

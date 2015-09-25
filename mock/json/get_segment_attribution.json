@@ -1,0 +1,66 @@
+{
+  "status": 200,
+  "message": "success",
+  "data": [
+    {
+      "id": "f186a334ad7109bbe08880",
+      "metrics": [
+        {
+          "value": 29,
+          "ts": "1442351132789",
+          "anomaly": 0
+        },
+        {
+          "value": 29,
+          "ts": "1442343932960",
+          "anomaly": 0
+        },
+        {
+          "value": 29,
+          "ts": "1442336732825",
+          "anomaly": 0
+        },
+        {
+          "value": 29,
+          "ts": "1442329532819",
+          "anomaly": 0
+        },
+        {
+          "value": 29,
+          "ts": "1442322332814",
+          "anomaly": 0
+        }
+      ]
+    },
+    {
+      "id": "erg9erg8er6gerge90r8er",
+      "metrics": [
+        {
+          "value": 1647,
+          "ts": "1442351132773",
+          "anomaly": 0
+        },
+        {
+          "value": 1647,
+          "ts": "1442343932937",
+          "anomaly": 0
+        },
+        {
+          "value": 1647,
+          "ts": "1442336732810",
+          "anomaly": 0
+        },
+        {
+          "value": 1647,
+          "ts": "1442329532799",
+          "anomaly": 0
+        },
+        {
+          "value": 1647,
+          "ts": "1442322332799",
+          "anomaly": 0
+        }
+      ]
+    }
+  ]
+}

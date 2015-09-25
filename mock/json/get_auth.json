@@ -1,0 +1,16 @@
+{
+  "status": 200,
+  "message": "success",
+  "data": {
+    "id": "26723jk72l3gh2l34gj72l",
+    "aid": 1,
+    "name": "",
+    "account_id": "224y234ywerhwerhw345y2",
+    "provider_id": "2g46k24g62jk346g2462k4",
+    "provider_name": "Sample Provider",
+    "user_id": "a6dsga789dg69adg6a9g22",
+    "created": "2015-03-27T21:52:09.893Z",
+    "updated": "2015-03-27T21:52:09.893Z",
+    "modified_ms": 1427493129893
+  }
+}

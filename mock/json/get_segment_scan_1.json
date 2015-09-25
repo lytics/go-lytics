@@ -1,0 +1,43 @@
+{
+  "status": 200,
+  "message": "success",
+  "_next": "number2",
+  "total": 13,
+  "data": [
+    {
+      "email": "email1@email.com",
+      "score_intensity": "50",
+      "segments": [
+        "one"
+      ]
+    },
+    {
+      "email": "email2@email.com",
+      "score_intensity": "50",
+      "segments": [
+        "one"
+      ]
+    },
+    {
+      "email": "email3@email.com",
+      "score_intensity": "50",
+      "segments": [
+        "one"
+      ]
+    },
+    {
+      "email": "email4@email.com",
+      "score_intensity": "50",
+      "segments": [
+        "one"
+      ]
+    },
+    {
+      "email": "email5@email.com",
+      "score_intensity": "50",
+      "segments": [
+        "one"
+      ]
+    }
+  ]
+}

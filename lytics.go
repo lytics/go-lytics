@@ -1,0 +1,256 @@
+package lytics
+
+import (
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
+	"time"
+)
+
+// Client defines the supported subset of the Lytics API. The Lytics API may contain other features
+// that have been added or deprecated since the last update of this SDK.
+//
+// Lytics reserves the right to deprecate or modify endpoints at any time and does not guarantee
+// backwards compatibility or SemVer versioning for early version of API.
+//
+// For more information see the Lytics API documentation at
+// http://getlytics.com/developers/rest-api
+//
+//  Original Author: Mark Hayden
+//  Contributions:   Mark Hayden
+//  Version:         0.0.1
+//
+// Examples
+// Coming Soon
+
+const (
+	apiBase        = "https://api.lytics.io/api"
+	updated        = "2015-09-15"
+	apiVersion     = "Beta 1.0.0"
+	libraryVersion = "0.0.1"
+)
+
+// Client bundles the data necessary to interact with the vast majority of Lytics REST endpoints.
+type Client struct {
+	baseURL    string
+	apiKey     string
+	dataApiKey string
+	client     *http.Client
+	Scan       *SegmentScanner
+}
+
+// ApiResp is the core api response for all Lytics endpoints. In some instances the "Status" is returned
+// as a string rather than an int. This is a known but and will be addressed / updated.
+type ApiResp struct {
+	Status  interface{} `json:"status"`
+	Message string      `json:"message"`
+	Meta    Meta        `json:"meta"`
+	Next    string      `json:"_next"`
+	Total   int         `json:"total"`
+	Data    interface{} `json:"data"`
+}
+
+type Meta struct {
+	Format   string   `json:"name"`
+	Name     []string `json:"by_fields"`
+	ByFields []string `json:"by_fields"`
+}
+
+// NewLytics creates a new client instance. This contains the segment pager, segment details
+// and maintains all core data used throughout this SDK
+func NewLytics(apiKey, dataApiKey interface{}) *Client {
+	l := Client{
+		baseURL: apiBase,
+		client:  http.DefaultClient,
+	}
+
+	// set the apikey if not null
+	if apiKey != nil {
+		l.apiKey = apiKey.(string)
+	}
+
+	// set the dataapikey if not null
+	if dataApiKey != nil {
+		l.dataApiKey = dataApiKey.(string)
+	}
+
+	return &l
+}
+
+// BaseUrl returns the base url used in all calls for this client.
+func (l *Client) BaseUrl() string {
+	return l.baseURL
+}
+
+// ApiKey returns the API key configured for this client.
+func (l *Client) ApiKey() string {
+	return l.apiKey
+}
+
+// DataApiKey returns the public API key configured for this client.
+func (l *Client) DataApiKey() string {
+	return l.dataApiKey
+}
+
+// Client returns the HTTP client configured for this client.
+func (l *Client) Client() *http.Client {
+	return l.client
+}
+
+// SetClient updates the HTTP client for this client. Used to alter main client
+// handling for instances such as AppEngine
+func (l *Client) SetClient(c *http.Client) {
+	l.client = c
+}
+
+// PrepUrl handles the parsing and setup for all api calls. The encoded url string is passed
+// along with a set of param. Params are looped and injected into the master url
+func (l *Client) PrepUrl(endpoint string, params interface{}, dataKey bool) (string, error) {
+	// parse the url into native http.URL
+	url, err := url.Parse(fmt.Sprintf("%s/%s", l.BaseUrl(), endpoint))
+	if err != nil {
+		return "", err
+	}
+
+	// add the api key
+	values := url.Query()
+
+	// if there is a data key use that by default, if not use the main api key
+	// assumption here is that if its a data key there are specific reasons
+	if dataKey {
+		values.Add("key", l.dataApiKey)
+	} else {
+		values.Add("key", l.apiKey)
+	}
+
+	// add additional params
+	if params != nil {
+		for key, value := range params.(map[string]string) {
+			values.Add(key, value)
+		}
+	}
+
+	// encode the final url so we can return string and make call
+	url.RawQuery = values.Encode()
+
+	return url.String(), nil
+}
+
+// Do handles executing all http requests for the SDK. Takes a httpRequest and parses
+// the response into the master api struct as well as a specific data type.
+func (l *Client) Do(r *http.Request, response, data interface{}) error {
+	// make the request
+	res, err := l.client.Do(r)
+	if err != nil {
+		return err
+	}
+	defer res.Body.Close()
+
+	// get the response
+	b, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return err
+	}
+
+	// if we have an invalid response code error out
+	if res.StatusCode >= 301 {
+		return errors.New(fmt.Sprintf("Received non-successful response: %d", res.StatusCode))
+	}
+
+	// if we have some struct to unmarshal body into, do that and return
+	if response != nil {
+		return buildRespJSON(b, response, data)
+	}
+
+	return nil
+}
+
+// Get prepares a get request and then executes using the Do method
+func (l *Client) Get(endpoint string, params interface{}, body io.Reader, response, data interface{}) error {
+	method := "GET"
+
+	// get the formatted endpoint url
+	path, err := l.PrepUrl(endpoint, params, false)
+	if err != nil {
+		return err
+	}
+
+	// build the request
+	r, _ := http.NewRequest(method, path, body)
+
+	// execute the request
+	err = l.Do(r, response, data)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// buildRespJSON handles the first round of unmarshaling into the master Api Response struct
+func buildRespJSON(b []byte, response, data interface{}) error {
+	var err error
+
+	err = json.Unmarshal(b, response)
+	if err != nil {
+		return err
+	}
+
+	err = buildDataJSON(response.(*ApiResp).Data, &data)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// buildDataJSON is a helper function that translates the data object into a speciic
+// data type based upon value passed in. This simplifies working with the various
+// responses throughout the SDK
+func buildDataJSON(data, parse interface{}) error {
+	// first we have to marshal this since its already been unmarshaled
+	marsh, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	// then unmarshal to desired format
+	err = json.Unmarshal(marsh, parse)
+	return err
+}
+
+// parseLyticsTime translates a timestamp as returned by Lytics into a Go standard timestamp.
+func parseLyticsTime(ts string) (time.Time, error) {
+	var err error
+
+	i, err := strconv.ParseInt(ts, 10, 64)
+	if err != nil {
+		return time.Now(), err
+	}
+
+	tm := time.Unix((i / 1000), 0)
+
+	return tm, err
+}
+
+// formatLyticsTime translates a timestamp into a human-readable form.
+func formatLyticsTime(t *time.Time) string {
+	return t.Format("Mon, 2 Jan 2006 15:04:05 -0700")
+}
+
+// parseLyticsURL joins params with a string using : notation
+func parseLyticsURL(url string, params map[string]string) string {
+	out := url
+
+	for key, value := range params {
+		out = strings.Replace(out, fmt.Sprintf(":%s", key), value, -1)
+	}
+
+	return out
+}

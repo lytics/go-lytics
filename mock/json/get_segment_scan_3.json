@@ -1,0 +1,29 @@
+{
+  "status": 200,
+  "message": "success",
+  "_next": "",
+  "total": 13,
+  "data": [
+    {
+      "email": "email11@email.com",
+      "score_intensity": "50",
+      "segments": [
+        "one"
+      ]
+    },
+    {
+      "email": "email12@email.com",
+      "score_intensity": "50",
+      "segments": [
+        "one"
+      ]
+    },
+    {
+      "email": "email13@email.com",
+      "score_intensity": "50",
+      "segments": [
+        "one"
+      ]
+    }
+  ]
+}

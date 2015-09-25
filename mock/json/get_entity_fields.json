@@ -1,0 +1,22 @@
+{
+  "meta": {
+    "format": "json",
+    "name": "user",
+    "by_fields": [
+      "emails",
+      "fbuid",
+      "user_id"
+    ]
+  },
+  "data": {
+    "score_intensity": "83",
+    "segments": [
+      "sample one weeeee"
+    ],
+    "segments_all": [
+      "a50f26b01d52ae7ce307cf4c35eedfhjfjgd"
+    ]
+  },
+  "status": 200,
+  "message": "success"
+}

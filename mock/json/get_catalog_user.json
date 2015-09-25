@@ -1,0 +1,86 @@
+{
+  "status": 200,
+  "message": "success",
+  "data": {
+    "name": "user",
+    "by_fields": [
+      "sample_user_id",
+      "email",
+      "fbuid",
+      "user_id",
+      "_uids"
+    ],
+    "columns": [
+      {
+        "as": "region",
+        "is_by": false,
+        "type": "string",
+        "op": "default",
+        "shortdesc": "State/Province",
+        "longdesc": "State/Province from Geo IP",
+        "froms": [
+          "default"
+        ],
+        "identities": [
+          "georegion"
+        ]
+      },
+      {
+        "as": "sample_user_id",
+        "is_by": true,
+        "type": "string",
+        "op": "latest",
+        "shortdesc": "",
+        "longdesc": "",
+        "froms": [
+          "default"
+        ],
+        "identities": [
+          "distinct_id"
+        ]
+      },
+      {
+        "as": "sample_firstname",
+        "is_by": true,
+        "type": "string",
+        "op": "latest",
+        "shortdesc": "",
+        "longdesc": "",
+        "froms": [
+          "default"
+        ],
+        "identities": [
+          "firstname"
+        ]
+      },
+      {
+        "as": "sample_user_lastname",
+        "is_by": true,
+        "type": "string",
+        "op": "latest",
+        "shortdesc": "",
+        "longdesc": "",
+        "froms": [
+          "default"
+        ],
+        "identities": [
+          "lastname"
+        ]
+      },
+      {
+        "as": "sample_user_email",
+        "is_by": true,
+        "type": "string",
+        "op": "latest",
+        "shortdesc": "",
+        "longdesc": "",
+        "froms": [
+          "default"
+        ],
+        "identities": [
+          "email"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "status": 200,
+  "message": "success",
+  "data": [
+    {
+      "id": "f186a334ad7109bbe08880",
+      "name": "Lytics Test Segment",
+      "slug_name": "lytics_test_segment",
+      "size": 1647
+    },
+    {
+      "id": "erg9erg8er6gerge90r8er",
+      "name": "Lytics Test Segment 2",
+      "slug_name": "lytics_test_segment_2",
+      "size": 1647
+    }
+  ]
+}

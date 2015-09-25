@@ -1,0 +1,17 @@
+{
+  "status": 200,
+  "message": "success",
+  "data": {
+    "id": "2g46k24g62jk346g2462k4",
+    "slug": "facebook",
+    "hidden": true,
+    "name": "Facebook",
+    "namespace": "fb",
+    "description": "",
+    "categories": [
+      "export"
+    ],
+    "auth_description": "",
+    "no_auth": true
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "status": 200,
+  "message": "success",
+  "data": [
+    {
+      "id": "2g46k24g62jk346g2462k4",
+      "slug": "facebook",
+      "hidden": true,
+      "name": "Facebook",
+      "namespace": "fb",
+      "description": "",
+      "categories": [
+        "export"
+      ],
+      "auth_description": "",
+      "no_auth": true
+    },
+    {
+      "id": "eregr78gr87g8re8r",
+      "slug": "twitter",
+      "hidden": true,
+      "name": "Twitter",
+      "namespace": "tw",
+      "description": "",
+      "categories": [
+        "social"
+      ],
+      "oauth": {
+        "consumer_key": "2342l4k62j436;",
+        "consumer_secret": "",
+        "request_token_url": "https://api.twitter.com/oauth/request_token",
+        "access_token_url": "https://api.twitter.com/oauth/access_token",
+        "authorization_url": "https://api.twitter.com/oauth/authorize",
+        "callback_url": "https://somesamplecallback.com"
+      },
+      "auth_method": "oauth1",
+      "auth_description": "",
+      "no_auth": false
+    },
+    {
+      "id": "j3k4hg3jkh4g53khg45k345",
+      "slug": "mailgun",
+      "hidden": true,
+      "name": "Mailgun",
+      "namespace": "mg",
+      "description": "",
+      "categories": [
+        "email",
+        "import",
+        "export"
+      ],
+      "auth_description": "",
+      "no_auth": false,
+      "config": [
+        {
+          "control": "text",
+          "type": "string",
+          "label": "Api Key",
+          "name": "apikey",
+          "sort_order": 0,
+          "optional": false,
+          "suffix": ""
+        }
+      ]
+    }
+  ]
+}

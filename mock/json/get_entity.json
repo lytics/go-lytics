@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "format": "json",
+    "name": "user",
+    "by_fields": [
+      "emails",
+      "fbuid",
+      "user_id"
+    ]
+  },
+  "data": {
+    "content": "ebook_clicked",
+    "cm_status": "active",
+    "name": "Joe Sample",
+    "_uids": [
+      "100786.800170346344",
+      "101023.5207214585685"
+    ],
+    "score_frequency": "100",
+    "utm_contents": [
+      "Test",
+      "Test Two",
+      "Test Three"
+    ],
+    "account_name": "Sample",
+    "visitct": "214",
+    "app_devices": {
+      "IOS": "38",
+      "desktop": "1988"
+    },
+    "app_lastvisit_ts": "2015-09-17T21:45:07.043Z",
+    "emaildomains": [
+      "sample.com"
+    ],
+    "lead_source": [
+      "Somewhere"
+    ],
+    "hourly": {
+      "1": "28",
+      "15": "19",
+      "16": "206",
+      "17": "255",
+      "18": "229",
+      "19": "156",
+      "2": "30",
+      "20": "270",
+      "21": "248"
+    },
+    "yymm": {
+      "1407": "560",
+      "1408": "299",
+      "1409": "89",
+      "1410": "148"
+    },
+    "timezone": "-7",
+    "refs": [
+      "localhost:8080/",
+      "www.getlytics.com/",
+      "www.linkedin.com/"
+    ],
+    "hashedurls": {
+      "-1111484132157415711": "2",
+      "-1332379252641554162": "1",
+      "-164459937190371810": "2",
+      "-1776427235529081481": "1",
+      "-1930026254798188417": "5"
+    },
+    "mc_listids": [
+      "235h23k5h23",
+      "lkklg34gu3g",
+      "2okg2342623"
+    ],
+    "app_ismobile": "t",
+    "app_pageviewct": "1931",
+    "app_hourofweek": {
+      "1": "17",
+      "101": "1",
+      "102": "21",
+      "103": "40",
+      "112": "3",
+      "113": "39",
+      "114": "47",
+      "115": "21",
+      "116": "46",
+      "117": "24",
+      "118": "33",
+      "119": "57",
+      "120": "29",
+      "121": "8",
+      "123": "4",
+      "126": "1"
+    },
+    "score_intensity": "83",
+    "region": "OR",
+    "score_propensity": "2",
+    "content_category": "home",
+    "registered_ts": "2015-02-05T01:25:57.431Z",
+    "score_momentum": "16",
+    "email": "sample@sample.com",
+    "score_recency": "87",
+    "country": "US",
+    "emails": [
+      "sample@sample.com",
+      "joe@sample.com"
+    ],
+    "segments": [
+      "sample_1",
+      "sample_2",
+      "sample_3"
+    ]
+  },
+  "status": 200,
+  "message": "success"
+}

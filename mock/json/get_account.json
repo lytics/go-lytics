@@ -1,0 +1,29 @@
+{
+  "status": 200,
+  "message": "success",
+  "data": {
+    "id": "224y234ywerhwerhw345y2",
+    "created": "2012-01-15T00:00:00Z",
+    "updated": "2015-09-10T05:16:09.858Z",
+    "fid": "sampleaccount.com",
+    "domain": "sampleaccount.com",
+    "aid": 1,
+    "parentaid": 1,
+    "parent_id": "224y234ywerhwerhw345y2",
+    "email": "lytics@lytics.io",
+    "apikey": "NOTAREALAPIKEY",
+    "dataapikey": "NOTAREALDATAAPIKEY",
+    "name": "LyticsTest",
+    "timezone": "UTC",
+    "pubusers": true,
+    "masteraid": 0,
+    "whitelist_fields": [
+      "first_name",
+      "last_name",
+      "email"
+    ],
+    "whitelist_domains": [
+      "test.getlytics.com"
+    ]
+  }
+}

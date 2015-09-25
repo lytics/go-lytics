@@ -1,0 +1,35 @@
+{
+  "status": 200,
+  "message": "success",
+  "data": {
+    "id": "a6dsga789dg69adg6a9g22",
+    "accounts": [
+      {
+        "aid": 1,
+        "account_id": "224y234ywerhwerhw345y2",
+        "roles": [
+          "api",
+          "segments"
+        ],
+        "granted_by": "a6dsga789dg69adg6a9g22",
+        "created": "2014-02-06T18:00:27.716Z",
+        "updated": "2015-06-26T15:19:29.703Z"
+      }
+    ],
+    "email": "testuser@lytics.io",
+    "name": "Test User",
+    "auth_type": "",
+    "password": "",
+    "last_pwd_change": "0001-01-01T00:00:00Z",
+    "created": "2014-02-06T18:00:27.716Z",
+    "updated": "2015-06-26T15:19:29.704Z",
+    "last_logon": "0001-01-01T00:00:00Z",
+    "aid": 1,
+    "account_id": "224y234ywerhwerhw345y2",
+    "roles": [
+      "api",
+      "segments"
+    ],
+    "date": "2014-02-06T18:00:27.716Z"
+  }
+}

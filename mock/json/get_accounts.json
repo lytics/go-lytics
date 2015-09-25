@@ -1,0 +1,49 @@
+{
+  "status": 200,
+  "message": "success",
+  "data": [
+    {
+      "id": "224y234ywerhwerhw345y2",
+      "created": "2012-01-15T00:00:00Z",
+      "updated": "2015-09-10T05:16:09.858Z",
+      "fid": "sampleaccount.com",
+      "domain": "sampleaccount.com",
+      "aid": 1,
+      "parentaid": 1,
+      "parent_id": "224y234ywerhwerhw345y2",
+      "email": "lytics@lytics.io",
+      "apikey": "NOTAREALAPIKEY",
+      "dataapikey": "NOTAREALDATAAPIKEY",
+      "name": "LyticsTest",
+      "timezone": "UTC",
+      "pubusers": true,
+      "whitelist_fields": [
+        "first_name",
+        "last_name",
+        "email"
+      ],
+      "whitelist_domains": [
+        "test.getlytics.com"
+      ]
+    },
+    {
+      "id": "2g4k62glk46g234g62l4g362lkjg46l",
+      "created": "2015-05-14T21:36:57.437Z",
+      "updated": "2015-09-11T21:32:32.413Z",
+      "fid": "test2.getlytics.com",
+      "domain": "test2.getlytics.com",
+      "aid": 2,
+      "parentaid": 1,
+      "parent_id": "224y234ywerhwerhw345y2",
+      "email": "mark@lytics.io",
+      "apikey": "ANOTHERFAKEAPIKEY",
+      "dataapikey": "ANOTHERFAKEDATAAPIKEY",
+      "name": "Lytics Tests Two",
+      "pubusers": true,
+      "whitelist_fields": [
+        "email"
+      ],
+      "whitelist_domains": []
+    }
+  ]
+}
