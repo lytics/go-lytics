@@ -64,10 +64,15 @@ type Meta struct {
 
 // NewLytics creates a new client instance. This contains the segment pager, segment details
 // and maintains all core data used throughout this SDK
-func NewLytics(apiKey, dataApiKey interface{}) *Client {
+func NewLytics(apiKey, dataApiKey interface{}, httpclient *http.Client) *Client {
 	l := Client{
 		baseURL: apiBase,
-		client:  http.DefaultClient,
+	}
+
+	if httpclient != nil {
+		l.client = httpclient
+	} else {
+		l.client = http.DefaultClient
 	}
 
 	// set the apikey if not null
