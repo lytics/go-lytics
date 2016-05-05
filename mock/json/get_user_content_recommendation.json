@@ -1,0 +1,43 @@
+{
+  "data": [
+    {
+      "url": "www.testwebsite.com/some/url",
+      "title": "Test Website",
+      "description": "Test Description Here",
+      "topics": [
+        "test",
+        "mock"
+      ],
+      "topic_relevances": {
+        "test": 1,
+        "mock": 0.5346904321167891
+      },
+      "primary_image": "http://www.testwebsite.com/img/image.png",
+      "author": "Test Author",
+      "created": "2016-03-01T22:48:34.158495196Z",
+      "id": "0000000000",
+      "stream": "default",
+      "path": [
+        "some",
+        "some/url"
+      ],
+      "aspects": [
+        "other"
+      ],
+      "language": "en",
+      "updated": "2016-05-02T22:37:31.452705838Z",
+      "fetched": "2016-04-14T04:40:51.504691828Z",
+      "meta": [
+        "og:locale/en_us",
+        "og:site_name/test",
+        "og:title/test website",
+        "og:type/website",
+        "og:url/http://www.testwebsite.com/some/url"
+      ],
+      "confidence": 0.8328074038765564,
+      "visited": false
+    }
+  ],
+  "message": "success",
+  "status": 200
+}
