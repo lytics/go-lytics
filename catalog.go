@@ -1,9 +1,5 @@
 package lytics
 
-import (
-	"strconv"
-)
-
 const (
 	schemaEndpoint               = "schema/:table"           // limit
 	schemaTableFieldinfoEndpoint = "schema/:table/fieldinfo" // limit, fields
@@ -28,17 +24,12 @@ type Column struct {
 
 // GetSchema returns the data schema for an account
 // https://www.getlytics.com/developers/rest-api#schema
-func (l *Client) GetSchema(table string, limit int) (Schema, error) {
+func (l *Client) GetSchema(table string) (Schema, error) {
 	res := ApiResp{}
 	data := Schema{}
-	params := map[string]string{}
-
-	if limit > -1 {
-		params["limit"] = strconv.Itoa(limit)
-	}
 
 	// make the request
-	err := l.Get(parseLyticsURL(schemaEndpoint, map[string]string{"table": table}), params, nil, &res, &data)
+	err := l.Get(parseLyticsURL(schemaEndpoint, map[string]string{"table": table}), nil, nil, &res, &data)
 	if err != nil {
 		return data, err
 	}

@@ -13,14 +13,7 @@ func TestGetSchema(t *testing.T) {
 	mock.RegisterCatalogMocks()
 
 	client := NewLytics(mock.MockApiKey, nil)
-	data, err := client.GetSchema("user", 2)
-
-	assert.Equal(t, err, nil)
-	assert.Equal(t, data.Name, "user")
-	assert.Equal(t, len(data.Columns), 2)
-
-	client = NewLytics(mock.MockApiKey, nil)
-	data, err = client.GetSchema("user", -1)
+	data, err := client.GetSchema("user")
 
 	assert.Equal(t, err, nil)
 	assert.Equal(t, data.Name, "user")

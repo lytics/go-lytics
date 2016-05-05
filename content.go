@@ -37,15 +37,15 @@ type Recommendation struct {
   VisitRate       float64            `json:"visitrate,omitempty"`
 }
 
-// GetUserContentRecommendation returns
-// a list of documents to recommend the user
-// based on their content affinity
+// GetUserContentRecommendation returns a list of documents
+// to recommend the user based on their content affinities
+// Example QL string: FILTER AND (url LIKE "www.example.com/*") FROM content
 func (l *Client) GetUserContentRecommendation(fieldName, fieldVal, ql string, limit int, shuffle bool) ([]Recommendation, error) {
   res := ApiResp{}
   data := []Recommendation{}
   params := map[string]string{}
 
-  if limit > -1 {
+  if limit > 0 {
     params["limit"] = strconv.Itoa(limit)
   }
 
