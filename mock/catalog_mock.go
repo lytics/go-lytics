@@ -23,11 +23,6 @@ func RegisterCatalogMocks() {
 				return httpmock.NewStringResponse(401, readJsonFile("get_error")), nil
 			}
 
-			// if we have a limit param respond with cut down
-			if queries.Get("limit") == "2" {
-				return httpmock.NewStringResponse(200, readJsonFile("get_catalog_user_limit")), nil
-			}
-
 			return httpmock.NewStringResponse(200, readJsonFile("get_catalog_user")), nil
 		},
 	)

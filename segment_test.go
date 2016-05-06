@@ -75,20 +75,13 @@ func TestGetSegmentAttribution(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterSegmentMocks()
 
-	var (
-		segments []string
-		limit    int
-	)
-
-	segments = []string{
+	segments := []string{
 		mock.MockSegmentID1,
 		mock.MockSegmentID2,
 	}
 
-	limit = 5
-
 	client := NewLytics(mock.MockApiKey, nil)
-	attr, err := client.GetSegmentAttribution(segments, limit)
+	attr, err := client.GetSegmentAttribution(segments)
 
 	assert.Equal(t, err, nil)
 	assert.T(t, len(attr[0].Metrics) == 5)

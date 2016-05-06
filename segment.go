@@ -2,7 +2,6 @@ package lytics
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -12,7 +11,7 @@ const (
 	segmentListEndpoint        = "segment"
 	segmentSizeEndpoint        = "segment/:id/sizes"
 	segmentSizesEndpoint       = "segment/sizes"       // ids
-	segmentAttributionEndpoint = "segment/attribution" // limit, ids
+	segmentAttributionEndpoint = "segment/attribution" // ids
 	segmentScanEndpoint        = "segment/:id/scan"
 )
 
@@ -139,7 +138,7 @@ func (l *Client) GetSegmentSizes(segments []string) ([]SegmentSize, error) {
 // GetSegmentAttribution returns the attribution (change over time) for segments
 // method accepts a string slice of 1 or more segments to query.
 // NOT CURRENTLY DOCUMENTED
-func (l *Client) GetSegmentAttribution(segments []string, limit int) ([]SegmentAttribution, error) {
+func (l *Client) GetSegmentAttribution(segments []string) ([]SegmentAttribution, error) {
 	var params map[string]string
 
 	res := ApiResp{}
@@ -150,11 +149,6 @@ func (l *Client) GetSegmentAttribution(segments []string, limit int) ([]SegmentA
 		params = map[string]string{
 			"ids": strings.Join(segments, ","),
 		}
-	}
-
-	// if we have a limit add that to params
-	if limit > -1 {
-		params["limit"] = strconv.Itoa(limit)
 	}
 
 	// make the request
@@ -179,9 +173,12 @@ func (l *Client) GetSegmentAttribution(segments []string, limit int) ([]SegmentA
 func (l *Client) GetSegmentEntities(segment, next string) (interface{}, string, []Entity, error) {
 	res := ApiResp{}
 	data := []Entity{}
+	params := map[string]string{}
+
+	params["start"] = next
 
 	// make the request
-	err := l.Get(parseLyticsURL(segmentScanEndpoint, map[string]string{"id": segment}), map[string]string{"start": next}, nil, &res, &data)
+	err := l.Get(parseLyticsURL(segmentScanEndpoint, map[string]string{"id": segment}), params, nil, &res, &data)
 	if err != nil {
 		return "", "", data, err
 	}

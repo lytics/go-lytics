@@ -110,12 +110,6 @@ func RegisterSegmentMocks() {
 				fail = true
 			}
 
-			// make sure we have the correct limit param
-			if queries.Get("limit") != "5" {
-				fmt.Println("Limit Query Failed in Segment Attribution Mock")
-				fail = true
-			}
-
 			if fail {
 				return httpmock.NewStringResponse(401, readJsonFile("get_error")), nil
 			}
