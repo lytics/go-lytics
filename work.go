@@ -27,6 +27,7 @@ type Work struct {
 	Hidden           bool            `json:"hidden"`
 	RuntimeOverride  string          `json:"runtime"`
 	VerboseLogging   bool            `json:"verbose_logging"`
+	StatusCode       string          `json:"statuscode"`
 }
 
 // GetWork returns a single work
