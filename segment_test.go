@@ -13,7 +13,7 @@ func TestGetSegments(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterSegmentMocks()
 
-	client := NewLytics(mock.MockApiKey, nil)
+	client := NewLytics(mock.MockApiKey, nil, nil)
 	segs, err := client.GetSegments()
 	assert.Equal(t, err, nil)
 	assert.T(t, len(segs) > 1)
@@ -24,7 +24,7 @@ func TestGetSegment(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterSegmentMocks()
 
-	client := NewLytics(mock.MockApiKey, nil)
+	client := NewLytics(mock.MockApiKey, nil, nil)
 	seg, err := client.GetSegment(mock.MockSegmentID1)
 	assert.Equal(t, err, nil)
 	assert.T(t, seg.Id == mock.MockSegmentID1)
@@ -35,7 +35,7 @@ func TestGetSegmentSize(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterSegmentMocks()
 
-	client := NewLytics(mock.MockApiKey, nil)
+	client := NewLytics(mock.MockApiKey, nil, nil)
 	seg, err := client.GetSegmentSize(mock.MockSegmentID1)
 
 	assert.Equal(t, err, nil)
@@ -49,7 +49,7 @@ func TestGetSegmentSizes(t *testing.T) {
 
 	var segments []string
 
-	client := NewLytics(mock.MockApiKey, nil)
+	client := NewLytics(mock.MockApiKey, nil, nil)
 
 	segments = []string{
 		mock.MockSegmentID1,
@@ -80,7 +80,7 @@ func TestGetSegmentAttribution(t *testing.T) {
 		mock.MockSegmentID2,
 	}
 
-	client := NewLytics(mock.MockApiKey, nil)
+	client := NewLytics(mock.MockApiKey, nil, nil)
 	attr, err := client.GetSegmentAttribution(segments)
 
 	assert.Equal(t, err, nil)
@@ -99,7 +99,7 @@ func TestSegmentPager(t *testing.T) {
 		countEntities int
 	)
 
-	client := NewLytics(mock.MockApiKey, nil)
+	client := NewLytics(mock.MockApiKey, nil, nil)
 
 	// create the segment scanner
 	err := client.CreateScanner()

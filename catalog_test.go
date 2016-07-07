@@ -12,7 +12,7 @@ func TestGetSchema(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterCatalogMocks()
 
-	client := NewLytics(mock.MockApiKey, nil)
+	client := NewLytics(mock.MockApiKey, nil, nil)
 	data, err := client.GetSchema("user")
 
 	assert.Equal(t, err, nil)

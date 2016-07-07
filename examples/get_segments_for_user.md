@@ -16,7 +16,7 @@ func main() {
 	fieldval := "<YOUR FIELD VALUE>"   // value of the field
 
 	// create the client
-	client := lytics.NewLytics(key, nil)
+	client := lytics.NewLytics(key, nil, nil)
 
 	// list all accounts for key
 	entity, err := client.GetEntity(entitytype, fieldname, fieldval, nil)

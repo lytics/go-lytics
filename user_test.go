@@ -12,7 +12,7 @@ func TestGetUsers(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterUserMocks()
 
-	client := NewLytics(mock.MockApiKey, nil)
+	client := NewLytics(mock.MockApiKey, nil, nil)
 	users, err := client.GetUsers()
 	assert.Equal(t, err, nil)
 	assert.T(t, len(users) > 1)
@@ -23,7 +23,7 @@ func TestGetUser(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterUserMocks()
 
-	client := NewLytics(mock.MockApiKey, nil)
+	client := NewLytics(mock.MockApiKey, nil, nil)
 	user, err := client.GetUser(mock.MockUserID)
 	assert.Equal(t, err, nil)
 	assert.T(t, user.Id == mock.MockUserID)

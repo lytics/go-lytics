@@ -60,7 +60,7 @@ func main() {
 
 	// estblish cli client
 	c := Cli{
-		Client: lytics.NewLytics(apikey, dataapikey),
+		Client: lytics.NewLytics(apikey, dataapikey, nil),
 	}
 
 	output, err := c.handleFunction(method)
@@ -125,7 +125,7 @@ func (c *Cli) handleFunction(method string) (string, error) {
 		result, err = c.getAuths(id)
 
 	case "schema":
-		result, err = c.getSchema(table, limit)
+		result, err = c.getSchema(table)
 
 	case "entity":
 		result, err = c.getEntity(entitytype, fieldname, fieldvalue, fieldsSlice)

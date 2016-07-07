@@ -12,7 +12,7 @@ func TestGetAccounts(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterAccountMocks()
 
-	client := NewLytics(mock.MockApiKey, nil)
+	client := NewLytics(mock.MockApiKey, nil, nil)
 	accts, err := client.GetAccounts()
 	assert.Equal(t, err, nil)
 	assert.T(t, len(accts) > 1)
@@ -23,7 +23,7 @@ func TestGetAccount(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterAccountMocks()
 
-	client := NewLytics(mock.MockApiKey, nil)
+	client := NewLytics(mock.MockApiKey, nil, nil)
 	acct, err := client.GetAccount(mock.MockAccountID)
 	assert.Equal(t, err, nil)
 	assert.T(t, acct.Id == mock.MockAccountID)

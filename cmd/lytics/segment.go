@@ -37,7 +37,7 @@ func (c *Cli) getSegmentSizes(segments []string) (interface{}, error) {
 }
 
 func (c *Cli) getSegmentAttributions(segments []string, limit int) (interface{}, error) {
-	attributions, err := c.Client.GetSegmentAttribution(segments, limit)
+	attributions, err := c.Client.GetSegmentAttribution(segments)
 	if err != nil {
 		return nil, err
 	}

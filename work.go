@@ -2,11 +2,12 @@ package lytics
 
 import (
 	"encoding/json"
+	"strconv"
 	"time"
 )
 
 const (
-	workEndpoint     = "work/:id"
+	workEndpoint     = "work/:id" // state
 	workListEndpoint = "work"
 )
 
@@ -30,12 +31,12 @@ type Work struct {
 
 // GetWork returns a single work
 // https://www.getlytics.com/developers/rest-api#work-get
-func (l *Client) GetWork(id string) (Work, error) {
+func (l *Client) GetWork(id string, state bool) (Work, error) {
 	res := ApiResp{}
 	data := Work{}
 
 	// make the request
-	err := l.Get(parseLyticsURL(workEndpoint, map[string]string{"id": id}), nil, nil, &res, &data)
+	err := l.Get(parseLyticsURL(workEndpoint, map[string]string{"id": id, "state": strconv.FormatBool(state)}), nil, nil, &res, &data)
 	if err != nil {
 		return data, err
 	}
