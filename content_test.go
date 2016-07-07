@@ -12,7 +12,7 @@ func TestGetUserContentRecommendation(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterContentMocks()
 
-	client := NewLytics(mock.MockApiKey, nil)
+	client := NewLytics(mock.MockApiKey, nil, nil)
 	recs, err := client.GetUserContentRecommendation("user_id", mock.MockUserID, "", 1, false)
 
 	assert.Equal(t, err, nil)

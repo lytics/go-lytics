@@ -18,6 +18,8 @@ type Account struct {
 	Aid              int       `json:"aid"`
 	ParentAid        int       `json:"parentaid"`
 	ParentId         string    `json:"parent_id"`
+	PartnerId        string    `json:"partner_id"`
+	PackageId        string    `json:"package_id"`
 	Email            string    `json:"email"`
 	ApiKey           string    `json:"apikey"`
 	DataApiKey       string    `json:"dataapikey"`

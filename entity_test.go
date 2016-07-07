@@ -12,7 +12,7 @@ func TestGetEntity(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterEntityMocks()
 
-	client := NewLytics(mock.MockApiKey, nil)
+	client := NewLytics(mock.MockApiKey, nil, nil)
 
 	fields := []string{}
 	entitytype := "user"

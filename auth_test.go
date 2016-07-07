@@ -12,7 +12,7 @@ func TestGetAuths(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterAuthMocks()
 
-	client := NewLytics(mock.MockApiKey, nil)
+	client := NewLytics(mock.MockApiKey, nil, nil)
 	auths, err := client.GetAuths()
 	assert.Equal(t, err, nil)
 	assert.T(t, len(auths) > 1)
@@ -23,7 +23,7 @@ func TestGetAuth(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterAuthMocks()
 
-	client := NewLytics(mock.MockApiKey, nil)
+	client := NewLytics(mock.MockApiKey, nil, nil)
 	auth, err := client.GetAuth(mock.MockAuthID)
 	assert.Equal(t, err, nil)
 	assert.T(t, auth.Id == mock.MockAuthID)

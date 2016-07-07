@@ -17,7 +17,7 @@ func main() {
 	segmentid := "<YOUR SEGMENT ID HERE>"
 
 	// create the client
-	client := lytics.NewLytics(apikey, nil)
+	client := lytics.NewLytics(apikey, nil, nil)
 
 	// create the segment scanner
 	err = client.CreateScanner()

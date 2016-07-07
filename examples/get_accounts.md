@@ -14,7 +14,7 @@ func main() {
 	key := "<YOUR API KEY>"
 
 	// create the client
-	client := lytics.NewLytics(key, nil)
+	client := lytics.NewLytics(key, nil, nil)
 
 	// list all accounts for key
 	accounts, err := client.GetAccounts()
