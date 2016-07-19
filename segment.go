@@ -7,12 +7,14 @@ import (
 )
 
 const (
-	segmentEndpoint            = "segment/:id"
-	segmentListEndpoint        = "segment"
-	segmentSizeEndpoint        = "segment/:id/sizes"
-	segmentSizesEndpoint       = "segment/sizes"       // ids
-	segmentAttributionEndpoint = "segment/attribution" // ids
-	segmentScanEndpoint        = "segment/:id/scan"
+	segmentEndpoint               = "segment/:id"
+	segmentListEndpoint           = "segment"
+	segmentSizeEndpoint           = "segment/:id/sizes"
+	segmentSizesEndpoint          = "segment/sizes"       // ids
+	segmentAttributionEndpoint    = "segment/attribution" // ids
+	segmentScanEndpoint           = "segment/:id/scan"
+	segmentCollectionListEndpoint = "segmentcollection"
+	segmentCollectionEndpoint     = "segmentcollection/:id"
 )
 
 type Segment struct {
@@ -50,6 +52,27 @@ type SegmentAttributionMetrics struct {
 	Value   int64   `json:"value"`
 	Ts      string  `json:"ts"`
 	Anomaly float64 `json:"anomaly"`
+}
+
+type SegmentCollection struct {
+	Aid           int               `json:"aid"`
+	AccountId     string            `json:"account_id"`
+	Id            string            `json:"id"`
+	Name          string            `json:"name"`
+	Slug          string            `json:"slug_name"`
+	Description   string            `json:"description,omitempty"`
+	Table         string            `json:"table,omitempty"`
+	AuthorId      string            `json:"author_id"`
+	Updated       time.Time         `json:"updated"`
+	Created       time.Time         `json:"created"`
+	Internal      bool              `json:"internal"`
+	Collection    []*SegColRelation `json:"collection""`
+	ParentSegment string            `json:"parent_segment"`
+}
+
+type SegColRelation struct {
+	Id    string `json:"id"`
+	Order int    `json:"order"`
 }
 
 type SegmentScanner struct {
@@ -153,6 +176,34 @@ func (l *Client) GetSegmentAttribution(segments []string) ([]SegmentAttribution,
 
 	// make the request
 	err := l.Get(parseLyticsURL(segmentAttributionEndpoint, nil), params, nil, &res, &data)
+	if err != nil {
+		return data, err
+	}
+
+	return data, nil
+}
+
+// GetSegmentCollection returns a single collection of segments
+// (a grouped/named lists of segments)
+func (l *Client) GetSegmentCollection(id string) (SegmentCollection, error) {
+	res := ApiResp{}
+	data := SegmentCollection{}
+
+	err := l.Get(parseLyticsURL(segmentCollectionEndpoint, map[string]string{"id": id}), nil, nil, &res, &data)
+	if err != nil {
+		return data, err
+	}
+
+	return data, nil
+}
+
+// GetSegmentCollectionList returns a list of all segment
+// collections for an account
+func (l *Client) GetSegmentCollectionList() ([]SegmentCollection, error) {
+	res := ApiResp{}
+	data := []SegmentCollection{}
+
+	err := l.Get(parseLyticsURL(segmentCollectionListEndpoint, nil), nil, nil, &res, &data)
 	if err != nil {
 		return data, err
 	}

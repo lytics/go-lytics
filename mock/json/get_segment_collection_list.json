@@ -1,0 +1,56 @@
+{
+  "data": [
+    {
+      "aid": 1,
+      "account_id": "224y234ywerhwerhw345y2",
+      "id": "6f3b8fac70fa45aa95c0e7",
+      "name": "Goal Funnel",
+      "slug_name": "goal_funnel",
+      "table": "user",
+      "author_id": "",
+      "updated": "2016-06-02T20:35:53.929Z",
+      "created": "2016-06-02T20:35:53.929Z",
+      "internal": false,
+      "collection": [
+        {
+          "id": "f186a334ad7109bbe08880",
+          "order": 0
+        },
+        {
+          "id": "erg9erg8er6gerge90r8er",
+          "order": 1
+        }
+      ],
+      "parent_segment": ""
+    },
+    {
+      "aid": 1,
+      "account_id": "224y234ywerhwerhw345y2",
+      "id": "ae6d1711731c4d02a79c0b",
+      "name": "Mobile",
+      "slug_name": "mobile",
+      "table": "user",
+      "author_id": "",
+      "updated": "2016-06-02T20:35:53.929Z",
+      "created": "2016-06-02T20:35:53.929Z",
+      "internal": false,
+      "collection": [
+        {
+          "id": "c29e8ed3271b4b34b789fe",
+          "order": 0
+        },
+        {
+          "id": "ddd3f216c5b04019afa6d1",
+          "order": 1
+        },
+        {
+          "id": "892c1a1d61764dc6bfb6cc",
+          "order": 2
+        }
+      ],
+      "parent_segment": ""
+    }
+  ],
+  "message": "success",
+  "status": 200
+}

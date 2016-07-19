@@ -88,6 +88,37 @@ func TestGetSegmentAttribution(t *testing.T) {
 	assert.T(t, len(attr[1].Metrics) == 5)
 }
 
+func TestGetSegmentCollection(t *testing.T) {
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+	mock.RegisterSegmentMocks()
+
+	client := NewLytics(mock.MockApiKey, nil, nil)
+	collection, err := client.GetSegmentCollection(mock.MockSegmentCollection)
+
+	assert.Equal(t, err, nil)
+	assert.Equal(t, collection.Slug, "goal_funnel")
+	assert.T(t, len(collection.Collection) == 2)
+	assert.Equal(t, collection.Collection[0].Id, mock.MockSegmentID1)
+	assert.Equal(t, collection.Collection[1].Id, mock.MockSegmentID2)
+}
+
+func TestGetSegmentCollectionList(t *testing.T) {
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+	mock.RegisterSegmentMocks()
+
+	client := NewLytics(mock.MockApiKey, nil, nil)
+	collections, err := client.GetSegmentCollectionList()
+
+	assert.Equal(t, err, nil)
+	assert.T(t, len(collections) == 2)
+	assert.Equal(t, collections[0].Slug, "goal_funnel")
+	assert.T(t, len(collections[0].Collection) == 2)
+	assert.Equal(t, collections[1].Slug, "mobile")
+	assert.T(t, len(collections[1].Collection) == 3)
+}
+
 func TestSegmentPager(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
