@@ -1,0 +1,62 @@
+{
+  "data": [
+    {
+      "id": "572d930921c447348ed424",
+      "variation": 0,
+      "campaign_id": "4a5984e1138646bb9d692c",
+      "vehicle": "pathfora",
+      "reach": "f186a334ad7109bbe08880",
+      "conversion": "erg9erg8er6gerge90r8er",
+      "detail": {
+        "appearsOn": [
+          {
+            "match": "substring",
+            "value": "example.com"
+          }
+        ],
+        "attachment": "top-center",
+        "body": "Example body text",
+        "headline": null,
+        "layout": "sticky-bar",
+        "tactic": "present_message",
+        "targetURL": null,
+        "typeKey": "campaign-variation-detail-pathfora"
+      },
+      "created_at": "2016-07-21T17:22:26.723Z",
+      "updated_at": "2016-07-21T17:22:26.829Z",
+      "aid": 1,
+      "account_id": "224y234ywerhwerhw345y2",
+      "user_id": "a6dsga789dg69adg6a9g22"
+    },
+    {
+      "id": "b6d237b4f397495eaf633f9",
+      "variation": 1,
+      "campaign_id": "4a5984e1138646bb9d692c",
+      "vehicle": "pathfora",
+      "reach": "f186a334ad7109bbe08880",
+      "conversion": "erg9erg8er6gerge90r8er",
+      "detail": {
+        "appearsOn": [
+          {
+            "match": "substring",
+            "value": "example.com"
+          }
+        ],
+        "attachment": "bottom-center",
+        "body": "Example body text variation 2",
+        "headline": null,
+        "layout": "sticky-bar",
+        "tactic": "present_message",
+        "targetURL": null,
+        "typeKey": "campaign-variation-detail-pathfora"
+      },
+      "created_at": "2016-07-21T17:22:26.723Z",
+      "updated_at": "2016-07-21T17:22:26.829Z",
+      "aid": 1,
+      "account_id": "224y234ywerhwerhw345y2",
+      "user_id": "a6dsga789dg69adg6a9g22"
+    }
+  ],
+  "message": "success",
+  "status": 200
+}

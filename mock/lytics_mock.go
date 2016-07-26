@@ -15,6 +15,8 @@ const (
 	MockSegmentID1        = "f186a334ad7109bbe08880"
 	MockSegmentID2        = "erg9erg8er6gerge90r8er"
 	MockSegmentCollection = "92630989bbea40f7b830f2"
+	MockCampaignID        = "4a5984e1138646bb9d692c"
+	MockVariationID       = "572d930921c447348ed424"
 )
 
 func readJsonFile(name string) string {
