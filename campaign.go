@@ -13,18 +13,18 @@ const (
 )
 
 type Campaign struct {
-	Id          string     `json:"id,omitempty"`
-	Name        string     `json:"name,omitempty"`
-	Status      string     `json:"status,omitempty"`
-	PublishedAt *time.Time `json:"published_at,omitempty"`
-	CreatedAt   time.Time  `json:"created_at,omitempty"`
-	UpdatedAt   time.Time  `json:"updated_at,omitempty"`
-	StartAt     *time.Time `json:"start_at,omitempty"`
-	EndAt       *time.Time `json:"end_at,omitempty"`
-	Segments    []string   `json:"segments,omitempty"`
-	Aid         int        `json:"aid,omitempty"`
-	AccountId   string     `json:"account_id,omitempty"`
-	UserId      string     `json:"user_id,omitempty"`
+	Id          string    `json:"id,omitempty"`
+	Name        string    `json:"name,omitempty"`
+	Status      string    `json:"status,omitempty"`
+	PublishedAt time.Time `json:"published_at,omitempty"`
+	CreatedAt   time.Time `json:"created_at,omitempty"`
+	UpdatedAt   time.Time `json:"updated_at,omitempty"`
+	StartAt     time.Time `json:"start_at,omitempty"`
+	EndAt       time.Time `json:"end_at,omitempty"`
+	Segments    []string  `json:"segments,omitempty"`
+	Aid         int       `json:"aid,omitempty"`
+	AccountId   string    `json:"account_id,omitempty"`
+	UserId      string    `json:"user_id,omitempty"`
 }
 
 type Variation struct {
