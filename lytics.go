@@ -48,12 +48,12 @@ type Client struct {
 // ApiResp is the core api response for all Lytics endpoints. In some instances the "Status" is returned
 // as a string rather than an int. This is a known but and will be addressed / updated.
 type ApiResp struct {
-	Status  interface{} `json:"status"`
-	Message string      `json:"message"`
-	Meta    Meta        `json:"meta"`
-	Next    string      `json:"_next"`
-	Total   int         `json:"total"`
-	Data    interface{} `json:"data"`
+	Status  interface{}     `json:"status"`
+	Message string          `json:"message"`
+	Meta    Meta            `json:"meta"`
+	Next    string          `json:"_next"`
+	Total   int             `json:"total"`
+	Data    json.RawMessage `json:"data"`
 }
 
 type Meta struct {
@@ -207,27 +207,12 @@ func buildRespJSON(b []byte, response, data interface{}) error {
 		return err
 	}
 
-	err = buildDataJSON(response.(*ApiResp).Data, &data)
+	err = json.Unmarshal(response.(*ApiResp).Data, &data)
 	if err != nil {
 		return err
 	}
 
 	return nil
-}
-
-// buildDataJSON is a helper function that translates the data object into a speciic
-// data type based upon value passed in. This simplifies working with the various
-// responses throughout the SDK
-func buildDataJSON(data, parse interface{}) error {
-	// first we have to marshal this since its already been unmarshaled
-	marsh, err := json.Marshal(data)
-	if err != nil {
-		return err
-	}
-
-	// then unmarshal to desired format
-	err = json.Unmarshal(marsh, parse)
-	return err
 }
 
 // parseLyticsTime translates a timestamp as returned by Lytics into a Go standard timestamp.

@@ -2,12 +2,14 @@ package lytics
 
 import (
 	"strconv"
+	"strings"
 	"time"
 )
 
 const (
 	userRecommendEndpoint    = "content/recommend/user/:fieldName/:fieldVal"
 	segmentRecommendEndpoint = "content/recommend/segment/:id"
+	documentsEndpoint        = "content/doc"
 )
 
 type Document struct {
@@ -36,6 +38,11 @@ type Recommendation struct {
 	Confidence float64 `json:"confidence"`
 	Visited    bool    `json:"visited"`
 	VisitRate  float64 `json:"visitrate,omitempty"`
+}
+
+type Documents struct {
+	Urls  []Document `json: "urls"`
+	Total int        `json: "total"`
 }
 
 // GetUserContentRecommendation returns a list of documents
@@ -88,6 +95,30 @@ func (l *Client) GetSegmentContentRecommendation(segId string, ql string, limit 
 
 	// make the request
 	err := l.Get(parseLyticsURL(segmentRecommendEndpoint, map[string]string{"id": segId}), params, nil, &res, &data)
+	if err != nil {
+		return data, err
+	}
+
+	return data, nil
+}
+
+// GetDocuments returns a summary for document(s).
+// If no url is specified, then return the 10 most recent urls.
+// https://www.getlytics.com/developers/rest-api#content-document
+func (l *Client) GetDocuments(urls []string, limit int) (Documents, error) {
+	res := ApiResp{}
+	data := Documents{}
+	params := map[string]string{}
+
+	if limit > 0 {
+		params["limit"] = strconv.Itoa(limit)
+	}
+
+	if len(urls) > 0 {
+		params["urls"] = strings.Join(urls, ",")
+	}
+
+	err := l.Get(documentsEndpoint, params, nil, &res, &data)
 	if err != nil {
 		return data, err
 	}

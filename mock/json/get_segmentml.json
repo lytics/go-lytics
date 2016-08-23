@@ -1,0 +1,49 @@
+{
+  "data": {
+    "all::active_prospects": {
+      "fieldtypes": {
+        "aspect_aspect_mobile_android": "numeric", 
+        "aspect_aspect_mobile_ios": "numeric", 
+        "aspect_aspect_mobile_opened": "numeric", 
+        "aspect_aspect_web_multisession": "numeric", 
+        "aspect_aspect_web_singlepage": "numeric", 
+        "aspect_aspect_web_visit_mobileweb": "numeric", 
+        "aspect_aspect_web_visit_web": "numeric", 
+        "lytics_score_frequency": "numeric", 
+        "lytics_score_intensity": "numeric", 
+        "lytics_score_momentum": "numeric", 
+        "lytics_score_propensity": "numeric", 
+        "lytics_score_quantity": "numeric", 
+        "lytics_score_recency": "numeric", 
+        "rob_masters_20_outreach": "numeric"
+      }, 
+      "importance": {
+        "aspect_aspect_mobile_android": 0, 
+        "aspect_aspect_mobile_ios": 0, 
+        "aspect_aspect_mobile_opened": 0, 
+        "aspect_aspect_web_multisession": 0.16233333333333333, 
+        "aspect_aspect_web_singlepage": 0, 
+        "aspect_aspect_web_visit_mobileweb": 0, 
+        "aspect_aspect_web_visit_web": 0, 
+        "lytics_score_frequency": 0.5850666666666667, 
+        "lytics_score_intensity": 0.4132333333333339, 
+        "lytics_score_momentum": 0.42413333333333275, 
+        "lytics_score_propensity": 0, 
+        "lytics_score_quantity": 0.36269999999999963, 
+        "lytics_score_recency": 0.10316666666666663, 
+        "rob_masters_20_outreach": 0
+      }, 
+      "summary": {
+        "Conf": {
+          "FalseNegative": 3, 
+          "FalsePositive": 1, 
+          "TrueNegative": 2, 
+          "TruePositive": 2
+        }, 
+        "Mse": 0.27024152611111113, 
+        "Rsq": -0.008901697481481508
+      },
+      "name": "all::active_prospects"
+    }
+  }
+}

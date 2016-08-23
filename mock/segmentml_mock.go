@@ -5,11 +5,11 @@ import (
 	"net/http"
 )
 
-func RegisterContentMocks() {
+func RegisterSegmentMLMocks() {
 	// *******************************************************
-	// GET USER CONTENT RECOMMENDATION
+	// GET SINGLE SEGMENTML MODEL
 	// *******************************************************
-	httpmock.RegisterResponder("GET", "https://api.lytics.io/api/content/recommend/user/user_id/"+MockUserID,
+	httpmock.RegisterResponder("GET", "https://api.lytics.io/api/segmentml/"+MockSegmentMLID,
 		func(req *http.Request) (*http.Response, error) {
 			var fail bool
 
@@ -23,14 +23,14 @@ func RegisterContentMocks() {
 				return httpmock.NewStringResponse(401, readJsonFile("get_error")), nil
 			}
 
-			return httpmock.NewStringResponse(200, readJsonFile("get_user_content_recommendation")), nil
+			return httpmock.NewStringResponse(200, readJsonFile("get_segmentml")), nil
 		},
 	)
 
 	// *******************************************************
-	// GET SEGMENT CONTENT RECOMMENDATION
+	// GET ALL SEGMENTML MODELS
 	// *******************************************************
-	httpmock.RegisterResponder("GET", "https://api.lytics.io/api/content/recommend/segment/"+MockSegmentID1,
+	httpmock.RegisterResponder("GET", "https://api.lytics.io/api/segmentml",
 		func(req *http.Request) (*http.Response, error) {
 			var fail bool
 
@@ -44,7 +44,7 @@ func RegisterContentMocks() {
 				return httpmock.NewStringResponse(401, readJsonFile("get_error")), nil
 			}
 
-			return httpmock.NewStringResponse(200, readJsonFile("get_user_content_recommendation")), nil
+			return httpmock.NewStringResponse(200, readJsonFile("get_segmentml_models")), nil
 		},
 	)
 
