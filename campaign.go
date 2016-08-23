@@ -13,34 +13,40 @@ const (
 )
 
 type Campaign struct {
-	Id          string    `json:"id,omitempty"`
-	Name        string    `json:"name,omitempty"`
-	Status      string    `json:"status,omitempty"`
-	PublishedAt time.Time `json:"published_at,omitempty"`
-	CreatedAt   time.Time `json:"created_at,omitempty"`
-	UpdatedAt   time.Time `json:"updated_at,omitempty"`
-	StartAt     time.Time `json:"start_at,omitempty"`
-	EndAt       time.Time `json:"end_at,omitempty"`
-	Segments    []string  `json:"segments,omitempty"`
-	Aid         int       `json:"aid,omitempty"`
-	AccountId   string    `json:"account_id,omitempty"`
-	UserId      string    `json:"user_id,omitempty"`
+	Id           string    `json:"id,omitempty"`
+	Name         string    `json:"name,omitempty"`
+	Status       string    `json:"status,omitempty"`
+	SystemStatus string    `json:"system_status,omitempty"`
+	PublishedAt  time.Time `json:"published_at,omitempty"`
+	CreatedAt    time.Time `json:"created_at,omitempty"`
+	UpdatedAt    time.Time `json:"updated_at,omitempty"`
+	StartAt      time.Time `json:"start_at,omitempty"`
+	EndAt        time.Time `json:"end_at,omitempty"`
+	Segments     []string  `json:"segments,omitempty"`
+	DeletedAt    time.Time `json:"deleted_at,omitempty"`
+	Deleted      bool      `json:"deleted,omitempty"`
+	Aid          int       `json:"aid,omitempty"`
+	AccountId    string    `json:"account_id,omitempty"`
+	UserId       string    `json:"user_id,omitempty"`
 }
 
 type Variation struct {
-	Id         string                 `json:"id,omitempty"`
-	Variation  int                    `json:"variation"`
-	CampaignId string                 `json:"campaign_id,omitempty"`
-	Vehicle    string                 `json:"vehicle,omitempty"`
-	Reach      string                 `json:"reach,omitempty"`
-	Conversion string                 `json:"conversion,omitempty"`
-	Detail     map[string]interface{} `json:"detail,omitempty"`
-	CreatedAt  time.Time              `json:"created_at,omitempty"`
-	UpdatedAt  time.Time              `json:"updated_at,omitempty"`
-	Preview    bool                   `json:"preview,omitempty"`
-	Aid        int                    `json:"aid,omitempty"`
-	AccountId  string                 `json:"account_id,omitempty" bson:"account_id"`
-	UserId     string                 `json:"user_id,omitempty" bson:"user_id"`
+	Id             string                 `json:"id,omitempty"`
+	Variation      int                    `json:"variation"`
+	CampaignId     string                 `json:"campaign_id,omitempty"`
+	Vehicle        string                 `json:"vehicle,omitempty"`
+	Reach          string                 `json:"reach,omitempty"`
+	Conversion     string                 `json:"conversion,omitempty"`
+	Detail         map[string]interface{} `json:"detail,omitempty"`
+	DetailOverride map[string]interface{} `json:"detail_override,omitempty"`
+	CreatedAt      time.Time              `json:"created_at,omitempty"`
+	UpdatedAt      time.Time              `json:"updated_at,omitempty"`
+	Deleted        bool                   `json:"deleted,omitempty"`
+	DeletedAt      *time.Time             `json:"deleted_at,omitempty"`
+	Preview        bool                   `json:"preview,omitempty"`
+	Aid            int                    `json:"aid,omitempty"`
+	AccountId      string                 `json:"account_id,omitempty" bson:"account_id"`
+	UserId         string                 `json:"user_id,omitempty" bson:"user_id"`
 }
 
 // GetCampaign returns the details for a single personalization campaign
@@ -58,7 +64,7 @@ func (l *Client) GetCampaign(id string) (Campaign, error) {
 }
 
 // GetCampaignList returns the details for all campaigns in an account
-// optional status parameter to filter by status
+// optional status parameter to filter by status: published, unpublished, deleted
 func (l *Client) GetCampaignList(status []string) ([]Campaign, error) {
 	var params map[string]string
 
