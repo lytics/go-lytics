@@ -10,6 +10,7 @@ const (
 	userRecommendEndpoint    = "content/recommend/user/:fieldName/:fieldVal"
 	segmentRecommendEndpoint = "content/recommend/segment/:id"
 	documentsEndpoint        = "content/doc"
+	topicEndpoint            = "content/topic/:topicId"
 )
 
 type Document struct {
@@ -43,6 +44,24 @@ type Recommendation struct {
 type Documents struct {
 	Urls  []Document `json: "urls"`
 	Total int        `json: "total"`
+}
+
+type TopicSummary struct {
+	Topics struct {
+		Total      int     `json:"total"`
+		Missing    int     `json:"missing"`
+		Present    int     `json:"present"`
+		NoneBucket int     `json:"bucket_none"`
+		LowBucket  int     `json:"bucket_low"`
+		MidBucket  int     `json:"bucket_mid"`
+		HighBucket int     `json:"bucket_high"`
+		Avg        float64 `json:"avg"`
+	} `json:"topics"`
+
+	Docs struct {
+		Total int        `json:"total"`
+		Urls  []Document `json:urls`
+	}
 }
 
 // GetUserContentRecommendation returns a list of documents
@@ -119,6 +138,26 @@ func (l *Client) GetDocuments(urls []string, limit int) (Documents, error) {
 	}
 
 	err := l.Get(documentsEndpoint, params, nil, &res, &data)
+	if err != nil {
+		return data, err
+	}
+
+	return data, nil
+}
+
+// GetTopicSummary returns a summary of user affinity for, and related
+// documents to a topic.
+// https://www.getlytics.com/developers/rest-api#content-topic-summary
+func (l *Client) GetTopicSummary(topic string, limit int) (TopicSummary, error) {
+	res := ApiResp{}
+	data := TopicSummary{}
+	params := map[string]string{}
+
+	if limit > 0 {
+		params["limit"] = strconv.Itoa(limit)
+	}
+
+	err := l.Get(parseLyticsURL(topicEndpoint, map[string]string{"topicId": topic}), params, nil, &res, &data)
 	if err != nil {
 		return data, err
 	}
