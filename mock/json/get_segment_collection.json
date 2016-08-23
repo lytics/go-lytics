@@ -1,0 +1,27 @@
+{
+  "data": {
+    "aid": 1,
+    "account_id": "224y234ywerhwerhw345y2",
+    "id": "6f3b8fac70fa45aa95c0e7",
+    "name": "Goal Funnel",
+    "slug_name": "goal_funnel",
+    "table": "user",
+    "author_id": "",
+    "updated": "2016-06-02T20:35:53.929Z",
+    "created": "2016-06-02T20:35:53.929Z",
+    "internal": false,
+    "collection": [
+      {
+        "id": "f186a334ad7109bbe08880",
+        "order": 0
+      },
+      {
+        "id": "erg9erg8er6gerge90r8er",
+        "order": 1
+      }
+    ],
+    "parent_segment": ""
+  },
+  "message": "success",
+  "status": 200
+}

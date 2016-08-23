@@ -6,7 +6,8 @@ import (
 )
 
 const (
-	userRecommendEndpoint = "content/recommend/user/:fieldName/:fieldVal"
+	userRecommendEndpoint    = "content/recommend/user/:fieldName/:fieldVal"
+	segmentRecommendEndpoint = "content/recommend/segment/:id"
 )
 
 type Document struct {
@@ -59,6 +60,34 @@ func (l *Client) GetUserContentRecommendation(fieldName, fieldVal, ql string, li
 
 	// make the request
 	err := l.Get(parseLyticsURL(userRecommendEndpoint, map[string]string{"fieldName": fieldName, "fieldVal": fieldVal}), params, nil, &res, &data)
+	if err != nil {
+		return data, err
+	}
+
+	return data, nil
+}
+
+// GetSegmentContentRecommendation returns a list of documents
+// to recommend to users in a segment
+func (l *Client) GetSegmentContentRecommendation(segId string, ql string, limit int, shuffle bool) ([]Recommendation, error) {
+	res := ApiResp{}
+	data := []Recommendation{}
+	params := map[string]string{}
+
+	if limit > 0 {
+		params["limit"] = strconv.Itoa(limit)
+	}
+
+	if shuffle {
+		params["shuffle"] = "true"
+	}
+
+	if ql != "" {
+		params["ql"] = ql
+	}
+
+	// make the request
+	err := l.Get(parseLyticsURL(segmentRecommendEndpoint, map[string]string{"id": segId}), params, nil, &res, &data)
 	if err != nil {
 		return data, err
 	}

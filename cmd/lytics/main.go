@@ -315,7 +315,7 @@ METHODS:
          example:
          -------
               lyticscmd -apikey=<apikey> -method=segmentattribution
-              lyticscmd -apikey=<apikey> -method=segmentattribution -segmentes=one,two -limit=5
+              lyticscmd -apikey=<apikey> -method=segmentattribution -segments=one,two -limit=5
 
     [user]
          retrieves user information based upon api key.

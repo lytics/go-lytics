@@ -119,6 +119,48 @@ func RegisterSegmentMocks() {
 	)
 
 	// *******************************************************
+	// GET SEGMENT COLLECTION
+	// *******************************************************
+	httpmock.RegisterResponder("GET", "https://api.lytics.io/api/segmentcollection/"+MockSegmentCollection,
+		func(req *http.Request) (*http.Response, error) {
+			var fail bool
+
+			queries := req.URL.Query()
+
+			if queries.Get("key") != MockApiKey {
+				fail = true
+			}
+
+			if fail {
+				return httpmock.NewStringResponse(401, readJsonFile("get_error")), nil
+			}
+
+			return httpmock.NewStringResponse(200, readJsonFile("get_segment_collection")), nil
+		},
+	)
+
+	// *******************************************************
+	// GET SEGMENT COLLECTION List
+	// *******************************************************
+	httpmock.RegisterResponder("GET", "https://api.lytics.io/api/segmentcollection",
+		func(req *http.Request) (*http.Response, error) {
+			var fail bool
+
+			queries := req.URL.Query()
+
+			if queries.Get("key") != MockApiKey {
+				fail = true
+			}
+
+			if fail {
+				return httpmock.NewStringResponse(401, readJsonFile("get_error")), nil
+			}
+
+			return httpmock.NewStringResponse(200, readJsonFile("get_segment_collection_list")), nil
+		},
+	)
+
+	// *******************************************************
 	// GET SEGMENT SCAN
 	// *******************************************************
 	httpmock.RegisterResponder("GET", "https://api.lytics.io/api/segment/f186a334ad7109bbe08880/scan",
