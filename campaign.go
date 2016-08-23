@@ -42,7 +42,7 @@ type Variation struct {
 	CreatedAt      time.Time              `json:"created_at,omitempty"`
 	UpdatedAt      time.Time              `json:"updated_at,omitempty"`
 	Deleted        bool                   `json:"deleted,omitempty"`
-	DeletedAt      *time.Time             `json:"deleted_at,omitempty"`
+	DeletedAt      time.Time              `json:"deleted_at,omitempty"`
 	Preview        bool                   `json:"preview,omitempty"`
 	Aid            int                    `json:"aid,omitempty"`
 	AccountId      string                 `json:"account_id,omitempty" bson:"account_id"`
