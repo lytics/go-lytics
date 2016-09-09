@@ -2,6 +2,7 @@ package lytics
 
 import (
 	"fmt"
+	"net/url"
 	"strings"
 	"time"
 )
@@ -138,15 +139,13 @@ func (l *Client) GetSegmentSize(id string) (SegmentSize, error) {
 // GetSegmentSizes returns the segment sizes for all segments on an account
 // https://www.getlytics.com/developers/rest-api#segment-sizes
 func (l *Client) GetSegmentSizes(segments []string) ([]SegmentSize, error) {
-	var params map[string]string
+	params := url.Values{}
 	res := ApiResp{}
 	data := []SegmentSize{}
 
 	// if we have specific segments to filter by add those to the params as comma separated string
 	if len(segments) > 0 {
-		params = map[string]string{
-			"ids": strings.Join(segments, ","),
-		}
+		params.Add("ids", strings.Join(segments, ","))
 	}
 
 	// make the request
@@ -162,16 +161,14 @@ func (l *Client) GetSegmentSizes(segments []string) ([]SegmentSize, error) {
 // method accepts a string slice of 1 or more segments to query.
 // NOT CURRENTLY DOCUMENTED
 func (l *Client) GetSegmentAttribution(segments []string) ([]SegmentAttribution, error) {
-	var params map[string]string
+	params := url.Values{}
 
 	res := ApiResp{}
 	data := []SegmentAttribution{}
 
 	// if the request is for a specific set of segments add that as comma separated param
 	if len(segments) > 0 {
-		params = map[string]string{
-			"ids": strings.Join(segments, ","),
-		}
+		params.Add("ids", strings.Join(segments, ","))
 	}
 
 	// make the request
@@ -224,9 +221,9 @@ func (l *Client) GetSegmentCollectionList() ([]SegmentCollection, error) {
 func (l *Client) GetSegmentEntities(segment, next string) (interface{}, string, []Entity, error) {
 	res := ApiResp{}
 	data := []Entity{}
-	params := map[string]string{}
+	params := url.Values{}
 
-	params["start"] = next
+	params.Add("start", next)
 
 	// make the request
 	err := l.Get(parseLyticsURL(segmentScanEndpoint, map[string]string{"id": segment}), params, nil, &res, &data)

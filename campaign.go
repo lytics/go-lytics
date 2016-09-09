@@ -1,6 +1,7 @@
 package lytics
 
 import (
+	"net/url"
 	"strings"
 	"time"
 )
@@ -66,15 +67,13 @@ func (l *Client) GetCampaign(id string) (Campaign, error) {
 // GetCampaignList returns the details for all campaigns in an account
 // optional status parameter to filter by status: published, unpublished, deleted
 func (l *Client) GetCampaignList(status []string) ([]Campaign, error) {
-	var params map[string]string
+	params := url.Values{}
 
 	res := ApiResp{}
 	data := []Campaign{}
 
 	if len(status) > 0 {
-		params = map[string]string{
-			"status": strings.Join(status, ","),
-		}
+		params.Add("status", strings.Join(status, ","))
 	}
 
 	// make the request

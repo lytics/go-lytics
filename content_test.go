@@ -12,8 +12,15 @@ func TestGetUserContentRecommendation(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterContentMocks()
 
+	filter := &RecommendationFilter{
+		Limit:   1,
+		Shuffle: false,
+		Topics:  []string{"mock", "test"},
+		Visited: false,
+	}
+
 	client := NewLytics(mock.MockApiKey, nil, nil)
-	recs, err := client.GetUserContentRecommendation("user_id", mock.MockUserID, "", 1, false)
+	recs, err := client.GetUserContentRecommendation("user_id", mock.MockUserID, filter)
 
 	assert.Equal(t, err, nil)
 	assert.Equal(t, len(recs), 1)
@@ -26,8 +33,13 @@ func TestGetSegmentContentRecommendation(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterContentMocks()
 
+	filter := &RecommendationFilter{
+		Limit: 1,
+		Rank:  "popular",
+	}
+
 	client := NewLytics(mock.MockApiKey, nil, nil)
-	recs, err := client.GetSegmentContentRecommendation(mock.MockSegmentID1, "", 1, false)
+	recs, err := client.GetSegmentContentRecommendation(mock.MockSegmentID1, filter)
 
 	assert.Equal(t, err, nil)
 	assert.Equal(t, len(recs), 1)
