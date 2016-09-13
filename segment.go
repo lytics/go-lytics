@@ -29,6 +29,7 @@ type Segment struct {
 	PublicName  string    `json:"public_name,omitempty"`
 	SlugName    string    `json:"slug_name"`
 	Description string    `json:"description,omitempty"`
+	Kind        string    `json:"kind,omitempty"`
 	Table       string    `json:"table,omitempty"`
 	AuthorId    string    `json:"author_id"`
 	Updated     time.Time `json:"updated" bson:"updated"`
