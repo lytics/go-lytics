@@ -3,6 +3,7 @@ package lytics
 import (
 	"fmt"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -218,12 +219,13 @@ func (l *Client) GetSegmentCollectionList() ([]SegmentCollection, error) {
 // GetSegmentEntities returns a single page of entities (20max) for the given segment
 // also returns the next value if there are more than 20 entities in the segment
 // https://www.getlytics.com/developers/rest-api#segment-scan
-func (l *Client) GetSegmentEntities(segment, next string) (interface{}, string, []Entity, error) {
+func (l *Client) GetSegmentEntities(segment, next string, limit int) (interface{}, string, []Entity, error) {
 	res := ApiResp{}
 	data := []Entity{}
 	params := url.Values{}
 
 	params.Add("start", next)
+	params.Add("limit", strconv.Itoa(limit))
 
 	// make the request
 	err := l.Get(parseLyticsURL(segmentScanEndpoint, map[string]string{"id": segment}), params, nil, &res, &data)
@@ -269,7 +271,7 @@ func (l *Client) LoadEntity() {
 
 	// make calls for next batch of segments until we run out of next params
 	for {
-		_, l.Scan.Next, entities, err = l.GetSegmentEntities(l.Scan.SegmentID, l.Scan.Next)
+		_, l.Scan.Next, entities, err = l.GetSegmentEntities(l.Scan.SegmentID, l.Scan.Next, 100)
 		if err != nil {
 			fails++
 
