@@ -1,0 +1,57 @@
+{
+  "data": {
+    "topics": {
+      "total": 123456,
+      "missing": 3456,
+      "present": 7890,
+      "bucket_none": 6864,
+      "bucket_low": 876,
+      "bucket_mid": 98775,
+      "bucket_high": 351,
+      "avg": 0.66123489
+    },
+    "docs": {
+      "total": 1,
+      "urls": [
+        {
+          "url": "www.testwebsite.com/path/to/my-article",
+          "title": "Test Article",
+          "description": "Test Article Description Here",
+          "topics": [
+            "test",
+            "mock"
+          ],
+          "topic_relevances": {
+            "test": 1,
+            "mock": 0.9981982
+          },
+          "primary_image": "http://www.testwebsite.com/img/image2.png",
+          "author": "Another Author",
+          "created": "2016-06-01T22:48:34.158495196Z",
+          "id": "0000000000",
+          "stream": "default",
+          "path": [
+            "path",
+            "path/to",
+            "path/to/my-article"
+          ],
+          "aspects": [
+            "artcile"
+          ],
+          "language": "en",
+          "updated": "2016-03-02T22:37:31.452705838Z",
+          "fetched": "2016-09-14T04:40:51.504691828Z",
+          "meta": [
+            "og:locale/en_us",
+            "og:site_name/test",
+            "og:title/test website",
+            "og:type/website",
+            "og:url/http://www.testwebsite.com/path/to/my-article"
+          ]
+        }
+      ]
+    }
+  },
+  "message": "success",
+  "status": 200
+}

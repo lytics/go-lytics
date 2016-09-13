@@ -2,6 +2,7 @@ package lytics
 
 import (
 	"fmt"
+	"net/url"
 	"strings"
 )
 
@@ -19,7 +20,7 @@ func (l *Client) GetEntity(entitytype, fieldname, fieldval string, fields []stri
 	data := Entity{}
 	toAppend := ""
 	endpointParams := map[string]string{}
-	params := map[string]string{}
+	params := url.Values{}
 
 	// handle optional endpointParams
 	if entitytype != "" {
@@ -42,9 +43,7 @@ func (l *Client) GetEntity(entitytype, fieldname, fieldval string, fields []stri
 
 	// if there are also fields, add them
 	if len(fields) > 0 {
-		params = map[string]string{
-			"fields": strings.Join(fields, ","),
-		}
+		params.Add("fields", strings.Join(fields, ","))
 	}
 
 	// make the request

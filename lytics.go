@@ -116,15 +116,23 @@ func (l *Client) SetClient(c *http.Client) {
 
 // PrepUrl handles the parsing and setup for all api calls. The encoded url string is passed
 // along with a set of param. Params are looped and injected into the master url
-func (l *Client) PrepUrl(endpoint string, params interface{}, dataKey bool) (string, error) {
+func (l *Client) PrepUrl(endpoint string, params url.Values, dataKey bool) (string, error) {
 	// parse the url into native http.URL
 	url, err := url.Parse(fmt.Sprintf("%s/%s", l.BaseUrl(), endpoint))
 	if err != nil {
 		return "", err
 	}
 
-	// add the api key
 	values := url.Query()
+
+	// add the api key
+	if params != nil {
+		for key, val := range params {
+			for _, v := range val {
+				values.Add(key, v)
+			}
+		}
+	}
 
 	// if there is a data key use that by default, if not use the main api key
 	// assumption here is that if its a data key there are specific reasons
@@ -132,13 +140,6 @@ func (l *Client) PrepUrl(endpoint string, params interface{}, dataKey bool) (str
 		values.Add("key", l.dataApiKey)
 	} else {
 		values.Add("key", l.apiKey)
-	}
-
-	// add additional params
-	if params != nil {
-		for key, value := range params.(map[string]string) {
-			values.Add(key, value)
-		}
 	}
 
 	// encode the final url so we can return string and make call
@@ -177,7 +178,7 @@ func (l *Client) Do(r *http.Request, response, data interface{}) error {
 }
 
 // Get prepares a get request and then executes using the Do method
-func (l *Client) Get(endpoint string, params interface{}, body io.Reader, response, data interface{}) error {
+func (l *Client) Get(endpoint string, params url.Values, body io.Reader, response, data interface{}) error {
 	method := "GET"
 
 	// get the formatted endpoint url

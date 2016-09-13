@@ -1,6 +1,7 @@
 package lytics
 
 import (
+	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -10,6 +11,7 @@ const (
 	userRecommendEndpoint    = "content/recommend/user/:fieldName/:fieldVal"
 	segmentRecommendEndpoint = "content/recommend/segment/:id"
 	documentsEndpoint        = "content/doc"
+	topicEndpoint            = "content/topic/:topicId"
 )
 
 type Document struct {
@@ -40,29 +42,95 @@ type Recommendation struct {
 	VisitRate  float64 `json:"visitrate,omitempty"`
 }
 
+// Filter params for recommendations:
+// https://www.getlytics.com/developers/rest-api#content-recommendation
+type RecommendationFilter struct {
+	Limit   int         // limit on number of documents to suggest/return
+	Ql      string      // raw FilterQL statement
+	Shuffle interface{} // randomize the recommendation order (expected to be bool)
+	Topics  []string    // allow recommendations on content with the specified topics
+	Rollups []string    // allow recommendations on content that have relevance to a topic rollup
+	From    string      // start of time range (publication date)
+	To      string      // end of time range (publication date)
+	Path    string      // url path to match
+	Domain  string      // url domain to match
+	Rank    string      // (popular | recent | affinity)
+	Visited interface{} // show recommendations for content the user has already viewed (expected to be bool)
+}
+
 type Documents struct {
 	Urls  []Document `json: "urls"`
 	Total int        `json: "total"`
 }
 
+type TopicSummary struct {
+	Topics struct {
+		Total      int     `json:"total"`
+		Missing    int     `json:"missing"`
+		Present    int     `json:"present"`
+		NoneBucket int     `json:"bucket_none"`
+		LowBucket  int     `json:"bucket_low"`
+		MidBucket  int     `json:"bucket_mid"`
+		HighBucket int     `json:"bucket_high"`
+		Avg        float64 `json:"avg"`
+	} `json:"topics"`
+
+	Docs struct {
+		Total int        `json:"total"`
+		Urls  []Document `json:urls`
+	}
+}
+
 // GetUserContentRecommendation returns a list of documents
 // to recommend the user based on their content affinities
-// Example QL string: FILTER AND (url LIKE "www.example.com/*") FROM content
-func (l *Client) GetUserContentRecommendation(fieldName, fieldVal, ql string, limit int, shuffle bool) ([]Recommendation, error) {
+// https://www.getlytics.com/developers/rest-api#content-recommendation
+func (l *Client) GetUserContentRecommendation(fieldName, fieldVal string, filter *RecommendationFilter) ([]Recommendation, error) {
 	res := ApiResp{}
 	data := []Recommendation{}
-	params := map[string]string{}
+	params := url.Values{}
 
-	if limit > 0 {
-		params["limit"] = strconv.Itoa(limit)
+	if filter.Limit > 0 {
+		params.Add("limit", strconv.Itoa(filter.Limit))
 	}
 
-	if shuffle {
-		params["shuffle"] = "true"
+	if shuffle, ok := filter.Shuffle.(bool); ok {
+		params.Add("shuffle", strconv.FormatBool(shuffle))
 	}
 
-	if ql != "" {
-		params["ql"] = ql
+	if filter.Ql != "" {
+		params.Add("ql", filter.Ql)
+	}
+
+	for _, topic := range filter.Topics {
+		params.Add("topics[]", topic)
+	}
+
+	for _, rollup := range filter.Rollups {
+		params.Add("rollups[]", rollup)
+	}
+
+	if filter.To != "" {
+		params.Add("to", filter.To)
+	}
+
+	if filter.From != "" {
+		params.Add("from", filter.From)
+	}
+
+	if filter.Path != "" {
+		params.Add("path", filter.Path)
+	}
+
+	if filter.Domain != "" {
+		params.Add("domain", filter.Domain)
+	}
+
+	if filter.Rank != "" {
+		params.Add("rank", filter.Rank)
+	}
+
+	if visited, ok := filter.Visited.(bool); ok {
+		params.Add("visited", strconv.FormatBool(visited))
 	}
 
 	// make the request
@@ -76,21 +144,53 @@ func (l *Client) GetUserContentRecommendation(fieldName, fieldVal, ql string, li
 
 // GetSegmentContentRecommendation returns a list of documents
 // to recommend to users in a segment
-func (l *Client) GetSegmentContentRecommendation(segId string, ql string, limit int, shuffle bool) ([]Recommendation, error) {
+func (l *Client) GetSegmentContentRecommendation(segId string, filter *RecommendationFilter) ([]Recommendation, error) {
 	res := ApiResp{}
 	data := []Recommendation{}
-	params := map[string]string{}
+	params := url.Values{}
 
-	if limit > 0 {
-		params["limit"] = strconv.Itoa(limit)
+	if filter.Limit > 0 {
+		params.Add("limit", strconv.Itoa(filter.Limit))
 	}
 
-	if shuffle {
-		params["shuffle"] = "true"
+	if shuffle, ok := filter.Shuffle.(bool); ok {
+		params.Add("shuffle", strconv.FormatBool(shuffle))
 	}
 
-	if ql != "" {
-		params["ql"] = ql
+	if filter.Ql != "" {
+		params.Add("ql", filter.Ql)
+	}
+
+	for _, topic := range filter.Topics {
+		params.Add("topics[]", topic)
+	}
+
+	for _, rollup := range filter.Rollups {
+		params.Add("rollups[]", rollup)
+	}
+
+	if filter.To != "" {
+		params.Add("to", filter.To)
+	}
+
+	if filter.From != "" {
+		params.Add("from", filter.From)
+	}
+
+	if filter.Path != "" {
+		params.Add("path", filter.Path)
+	}
+
+	if filter.Domain != "" {
+		params.Add("domain", filter.Domain)
+	}
+
+	if filter.Rank != "" {
+		params.Add("rank", filter.Rank)
+	}
+
+	if visited, ok := filter.Visited.(bool); ok {
+		params.Add("visited", strconv.FormatBool(visited))
 	}
 
 	// make the request
@@ -108,17 +208,37 @@ func (l *Client) GetSegmentContentRecommendation(segId string, ql string, limit 
 func (l *Client) GetDocuments(urls []string, limit int) (Documents, error) {
 	res := ApiResp{}
 	data := Documents{}
-	params := map[string]string{}
+	params := url.Values{}
 
 	if limit > 0 {
-		params["limit"] = strconv.Itoa(limit)
+		params.Add("limit", strconv.Itoa(limit))
 	}
 
 	if len(urls) > 0 {
-		params["urls"] = strings.Join(urls, ",")
+		params.Add("urls", strings.Join(urls, ","))
 	}
 
 	err := l.Get(documentsEndpoint, params, nil, &res, &data)
+	if err != nil {
+		return data, err
+	}
+
+	return data, nil
+}
+
+// GetTopicSummary returns a summary of user affinity for, and related
+// documents to a topic.
+// https://www.getlytics.com/developers/rest-api#content-topic-summary
+func (l *Client) GetTopicSummary(topic string, limit int) (TopicSummary, error) {
+	res := ApiResp{}
+	data := TopicSummary{}
+	params := url.Values{}
+
+	if limit > 0 {
+		params.Add("limit", strconv.Itoa(limit))
+	}
+
+	err := l.Get(parseLyticsURL(topicEndpoint, map[string]string{"topicId": topic}), params, nil, &res, &data)
 	if err != nil {
 		return data, err
 	}
