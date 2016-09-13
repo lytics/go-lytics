@@ -20,23 +20,29 @@ const (
 )
 
 type Segment struct {
-	Id          string    `json:"id"`
-	Aid         int       `json:"aid"` // Deprecated; use AccountId
-	AccountId   string    `json:"account_id"`
-	ShortId     string    `json:"short_id,omitempty"`
-	Name        string    `json:"name"`
-	IsPublic    bool      `json:"is_public"`
-	PublicName  string    `json:"public_name,omitempty"`
-	SlugName    string    `json:"slug_name"`
-	Description string    `json:"description,omitempty"`
-	Kind        string    `json:"kind,omitempty"`
-	Table       string    `json:"table,omitempty"`
-	AuthorId    string    `json:"author_id"`
-	Updated     time.Time `json:"updated" bson:"updated"`
-	Created     time.Time `json:"created" bson:"created"`
-	SegType     string    `json:"op"`
-	Negate      bool      `json:"negate"`
-	Tags        []string  `json:"tags"`
+	Id            string    `json:"id"`
+	Aid           int       `json:"aid"` // Deprecated; use AccountId
+	AccountId     string    `json:"account_id"`
+	ShortId       string    `json:"short_id,omitempty"`
+	Name          string    `json:"name"`
+	IsPublic      bool      `json:"is_public"`
+	PublicName    string    `json:"public_name,omitempty"`
+	SlugName      string    `json:"slug_name"`
+	Description   string    `json:"description,omitempty"`
+	SegKind       string    `json:"kind,omitempty"`
+	Table         string    `json:"table,omitempty"`
+	AuthorId      string    `json:"author_id"`
+	Updated       time.Time `json:"updated" bson:"updated"`
+	Created       time.Time `json:"created" bson:"created"`
+	SegType       string    `json:"op"`
+	Negate        bool      `json:"negate"`
+	Tags          []string  `json:"tags"`
+	Category      string    `json:category,omitempty`
+	Invalid       bool      `json:"invalid"`
+	InvalidReason string    `json:"invalid_reason"`
+	Deleted       bool      `json:"deleted"`
+	SaveHistory   bool      `json:"save_hist"`
+	FilterQL      string    `json:"segment_ql,omitempty"`
 }
 
 type SegmentSize struct {

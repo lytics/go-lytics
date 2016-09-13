@@ -88,7 +88,7 @@ func RegisterContentMocks() {
 	// *******************************************************
 	// GET TOPIC SUMMARY
 	// *******************************************************
-	httpmock.RegisterResponder("GET", "https://api.lytics.io/api/content/topic/"+MockTopicId,
+	httpmock.RegisterResponder("GET", "https://api.lytics.io/api/content/topic/"+MockTopicID,
 		func(req *http.Request) (*http.Response, error) {
 			var fail bool
 

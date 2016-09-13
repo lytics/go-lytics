@@ -74,7 +74,7 @@ func TestGetTopicSummary(t *testing.T) {
 	mock.RegisterContentMocks()
 
 	client := NewLytics(mock.MockApiKey, nil, nil)
-	topicSummary, err := client.GetTopicSummary(mock.MockTopicId, 0)
+	topicSummary, err := client.GetTopicSummary(mock.MockTopicID, 0)
 
 	assert.Equal(t, err, nil)
 	assert.Equal(t, topicSummary.Docs.Total, 1)
