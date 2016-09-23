@@ -1,0 +1,44 @@
+{
+  "data": [
+    {
+      "id": "5c9aefbfa9bb48dc9310d4afc73820a6",
+      "acctid": "224y234ywerhwerhw345y2",
+      "label": "Marketing",
+      "topics": [
+        {
+          "label": "Email marketing",
+          "value": 0
+        },
+        {
+          "label": "PR marketings",
+          "value": 0
+        },
+        {
+          "label": "Digital marketing",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "bda518fe4d1b4003880d0811cc3b90eb",
+      "acctid": "224y234ywerhwerhw345y2",
+      "label": "Data science",
+      "topics": [
+        {
+          "label": "Data",
+          "value": 0
+        },
+        {
+          "label": "Statistics",
+          "value": 0
+        },
+        {
+          "label": "Data visualization",
+          "value": 0
+        }
+      ]
+    }
+  ],
+  "message": "success",
+  "status": 200
+}

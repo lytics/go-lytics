@@ -1,0 +1,58 @@
+{
+  "data": {
+    "n": 438,
+    "nodes": [
+      {
+        "name": "marketing technology",
+        "doc_count": 2
+      },
+      {
+        "name": "AdWords",
+        "doc_count": 1
+      },
+      {
+        "name": "ad retargeting",
+        "doc_count": 4
+      },
+      {
+        "name": "analytics",
+        "doc_count": 2
+      },
+      {
+        "name": "customer service",
+        "doc_count": 1
+      },
+      {
+        "name": "data visualization",
+        "doc_count": 2
+      },
+      {
+        "name": "data-first marketing",
+        "doc_count": 157
+      },
+      {
+        "name": "personalization",
+        "doc_count": 15
+      }
+    ],
+    "links": [
+      {
+        "source": 66,
+        "target": 54,
+        "value": 0.375
+      },
+      {
+        "source": 66,
+        "target": 75,
+        "value": 0.25
+      },
+      {
+        "source": 66,
+        "target": 37,
+        "value": 0.25
+      }
+    ]
+  },
+  "message": "success",
+  "status": 200
+}

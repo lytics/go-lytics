@@ -105,4 +105,46 @@ func RegisterContentMocks() {
 			return httpmock.NewStringResponse(200, readJsonFile("get_topic")), nil
 		},
 	)
+
+	// *******************************************************
+	// GET CONTENT TAXONOMY
+	// *******************************************************
+	httpmock.RegisterResponder("GET", "https://api.lytics.io/api/content/taxonomy",
+		func(req *http.Request) (*http.Response, error) {
+			var fail bool
+
+			queries := req.URL.Query()
+
+			if queries.Get("key") != MockApiKey {
+				fail = true
+			}
+
+			if fail {
+				return httpmock.NewStringResponse(401, readJsonFile("get_error")), nil
+			}
+
+			return httpmock.NewStringResponse(200, readJsonFile("get_content_taxonomy")), nil
+		},
+	)
+
+	// *******************************************************
+	// GET TOPIC ROLLUPS
+	// *******************************************************
+	httpmock.RegisterResponder("GET", "https://api.lytics.io/api/content/topicrollup",
+		func(req *http.Request) (*http.Response, error) {
+			var fail bool
+
+			queries := req.URL.Query()
+
+			if queries.Get("key") != MockApiKey {
+				fail = true
+			}
+
+			if fail {
+				return httpmock.NewStringResponse(401, readJsonFile("get_error")), nil
+			}
+
+			return httpmock.NewStringResponse(200, readJsonFile("get_topic_rollups")), nil
+		},
+	)
 }

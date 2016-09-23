@@ -12,6 +12,8 @@ const (
 	segmentRecommendEndpoint = "content/recommend/segment/:id"
 	documentsEndpoint        = "content/doc"
 	topicEndpoint            = "content/topic/:topicId"
+	taxonomyEndpoint         = "content/taxonomy"
+	rollupListEndpoint       = "content/topicrollup"
 )
 
 type Document struct {
@@ -79,6 +81,35 @@ type TopicSummary struct {
 		Total int        `json:"total"`
 		Urls  []Document `json:urls`
 	}
+}
+
+type TopicNode struct {
+	Name  string `json:"name"`
+	Count int    `json:"doc_count"`
+}
+
+type TopicLink struct {
+	Source int     `json:"source"`
+	Target int     `json:"target"`
+	Value  float64 `json:"value"`
+}
+
+type TopicGraph struct {
+	DocCount int          `json:"n"`
+	Nodes    []*TopicNode `json:"nodes"`
+	Links    []*TopicLink `json:"links"`
+}
+
+type Topic struct {
+	Label string  `json:"label"`
+	Value float64 `json:"value"`
+}
+
+type TopicRollup struct {
+	Id     string   `json:"id"`
+	AcctId string   `json:"acctid"`
+	Label  string   `json:"label"`
+	Topics []*Topic `json:"topics"`
 }
 
 // GetUserContentRecommendation returns a list of documents
@@ -239,6 +270,33 @@ func (l *Client) GetTopicSummary(topic string, limit int) (TopicSummary, error) 
 	}
 
 	err := l.Get(parseLyticsURL(topicEndpoint, map[string]string{"topicId": topic}), params, nil, &res, &data)
+	if err != nil {
+		return data, err
+	}
+
+	return data, nil
+}
+
+// GetContentTaxonomy returns a graph relationship among topics.
+// https://www.getlytics.com/developers/rest-api#content-taxonomy
+func (l *Client) GetContentTaxonomy() (TopicGraph, error) {
+	res := ApiResp{}
+	data := TopicGraph{}
+
+	err := l.Get(taxonomyEndpoint, nil, nil, &res, &data)
+	if err != nil {
+		return data, err
+	}
+
+	return data, nil
+}
+
+// GetTopicRollups returns a list of topic rollups for an account.
+func (l *Client) GetTopicRollups() ([]TopicRollup, error) {
+	res := ApiResp{}
+	data := []TopicRollup{}
+
+	err := l.Get(rollupListEndpoint, nil, nil, &res, &data)
 	if err != nil {
 		return data, err
 	}
