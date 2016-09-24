@@ -15,8 +15,11 @@ const (
 	segmentSizesEndpoint          = "segment/sizes"       // ids
 	segmentAttributionEndpoint    = "segment/attribution" // ids
 	segmentScanEndpoint           = "segment/:id/scan"
+	adHocsegmentScanEndpoint      = "segment/scan"
 	segmentCollectionListEndpoint = "segmentcollection"
 	segmentCollectionEndpoint     = "segmentcollection/:id"
+	segmentCreateEndpoint         = segmentListEndpoint
+	segmentValidateEndpoint       = "segment/validate"
 )
 
 type Segment struct {
@@ -86,6 +89,7 @@ type SegColRelation struct {
 
 type SegmentScanner struct {
 	SegmentID string
+	SegmentQl string
 	Next      string
 	Previous  string
 	Loader    chan []Entity
@@ -116,12 +120,15 @@ func (l *Client) GetSegment(id string) (Segment, error) {
 
 // GetSegments returns a list of all segments for an account
 // https://www.getlytics.com/developers/rest-api#segment-list
-func (l *Client) GetSegments() ([]Segment, error) {
+func (l *Client) GetSegments(string table) ([]Segment, error) {
 	res := ApiResp{}
 	data := []Segment{}
+	params := url.Values{}
+
+	params.Add("table", table)
 
 	// make the request
-	err := l.Get(segmentListEndpoint, nil, nil, &res, &data)
+	err := l.Get(segmentListEndpoint, params, &res, &data)
 	if err != nil {
 		return data, err
 	}
@@ -243,6 +250,25 @@ func (l *Client) GetSegmentEntities(segment, next string, limit int) (interface{
 	return res.Status, res.Next, data, nil
 }
 
+// GetAdHocSegmentEntities returns a single page of entities for the given Ad Hoc segment
+// also returns the next value if there are more than 20 entities in the segment
+// https://www.getlytics.com/developers/rest-api#segment-scan
+func (l *Client) GetAdHocSegmentEntities(ql, next string, limit int) (interface{}, string, []Entity, error) {
+	res := ApiResp{}
+	data := []Entity{}
+	params := url.Values{}
+
+	params.Add("start", next)
+	params.Add("limit", strconv.Itoa(limit))
+
+	err := l.Get(adHocsegmentScanEndpoint, params, ql, params, &res, &data)
+	if err != nil {
+		return "", "", data, err
+	}
+
+	return res.Status, res.Next, data, nil
+}
+
 // CreateScanner generates a segment scanner so that we can process entities as they are loaded
 // reduces the load as some segments can have hundreds of thousands of users and it is impractical
 // to return a single result
@@ -266,7 +292,7 @@ func (l *Client) CreateScanner() error {
 // LoadEntity does the heavy lifting when it comes to paging. It loops through all available pages
 // and emits the batch of entities to be processed along the way. Also maintains a slice of batch
 // counts and total count to help with debugging and reporting.
-func (l *Client) LoadEntity() {
+func (l *Client) LoadEntity(segType string) {
 	var (
 		entities []Entity
 		err      error
@@ -278,7 +304,16 @@ func (l *Client) LoadEntity() {
 
 	// make calls for next batch of segments until we run out of next params
 	for {
-		_, l.Scan.Next, entities, err = l.GetSegmentEntities(l.Scan.SegmentID, l.Scan.Next, 100)
+		switch segType {
+		case "ql":
+			_, l.Scan.Next, entities, err = l.GetAdHocSegmentEntities(l.Scan.SegmentQl, l.Scan.Next, 100)
+			break
+
+		default:
+			_, l.Scan.Next, entities, err = l.GetSegmentEntities(l.Scan.SegmentID, l.Scan.Next, 100)
+			break
+		}
+
 		if err != nil {
 			fails++
 
@@ -316,6 +351,53 @@ func (l *Client) PageMembers(segment string) error {
 	l.Scan.SegmentID = segment
 
 	// fire up the go routine for paging entities
-	go l.LoadEntity()
+	go l.LoadEntity("id")
 	return nil
+}
+
+// PageAdHocSegment sets the ad-hoc segment ql on the master scanner and initiates
+// the main go routine for paging
+func (l *Client) PageAdHocSegment(ql string) error {
+	l.Scan.SegmentQl = ql
+
+	go l.LoadEntity("ql")
+	return nil
+}
+
+// CreateSegment creates a new segment from a Segment QL logic expression
+// https://www.getlytics.com/developers/rest-api#segment
+func (l *Client) CreateSegment(name, ql, slug string) (Segment, error) {
+	res := ApiResp{}
+	data := Segment{}
+
+	payload := Segment{
+		Name:     name,
+		FilterQL: ql,
+		Slug:     slug,
+	}
+
+	// make the request
+	err := l.Post(segmentCreateEndpoint, nil, payload, &res, &data)
+	if err != nil {
+		return data, err
+	}
+
+	return res.Status, res.Next, data, nil
+}
+
+// ValidateSegment validates a single segment QL statement
+// https://www.getlytics.com/developers/rest-api#segment-validate
+func (l *Client) ValidateSegment(ql string) (bool, error) {
+	res := ApiResp{}
+
+	err := l.Post(segmentValidateEndpoint, nil, ql, &res, nil)
+	if err != nil {
+		return false, err
+	}
+
+	if res.Message == "success" {
+		return true, nil
+	}
+
+	return false, nil
 }
