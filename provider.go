@@ -26,7 +26,7 @@ func (l *Client) GetProviders() ([]Provider, error) {
 	data := []Provider{}
 
 	// make the request
-	err := l.Get(providerListEndpoint, nil, &res, &data)
+	err := l.Get(providerListEndpoint, nil, nil, &res, &data)
 	if err != nil {
 		return data, err
 	}
