@@ -1,0 +1,15 @@
+{
+  "data": {
+    "id": "f186a334ad7109bbe08880",
+    "account_id": "224y234ywerhwerhw345y2",
+    "author_id": "a6dsga789dg69adg6a9g22",
+    "kind": "segment",
+    "segment_ql": "FILTER AND (created >= \"now-30d\", aspects = \"articles\") FROM content",
+    "updated": "2014-05-13T16:53:20Z",
+    "created": "2014-05-13T16:53:20Z",
+    "name": "Recent Articles",
+    "slug_name": "recent_articles",
+    "table": "content",
+    "tags": []
+  }
+}

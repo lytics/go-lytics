@@ -120,7 +120,7 @@ func (l *Client) GetSegment(id string) (Segment, error) {
 
 // GetSegments returns a list of all segments for an account
 // https://www.getlytics.com/developers/rest-api#segment-list
-func (l *Client) GetSegments(string table) ([]Segment, error) {
+func (l *Client) GetSegments(table string) ([]Segment, error) {
 	res := ApiResp{}
 	data := []Segment{}
 	params := url.Values{}
@@ -128,7 +128,7 @@ func (l *Client) GetSegments(string table) ([]Segment, error) {
 	params.Add("table", table)
 
 	// make the request
-	err := l.Get(segmentListEndpoint, params, &res, &data)
+	err := l.Get(segmentListEndpoint, params, nil, &res, &data)
 	if err != nil {
 		return data, err
 	}
@@ -261,7 +261,7 @@ func (l *Client) GetAdHocSegmentEntities(ql, next string, limit int) (interface{
 	params.Add("start", next)
 	params.Add("limit", strconv.Itoa(limit))
 
-	err := l.Get(adHocsegmentScanEndpoint, params, ql, params, &res, &data)
+	err := l.Get(adHocsegmentScanEndpoint, params, ql, &res, &data)
 	if err != nil {
 		return "", "", data, err
 	}
@@ -373,7 +373,7 @@ func (l *Client) CreateSegment(name, ql, slug string) (Segment, error) {
 	payload := Segment{
 		Name:     name,
 		FilterQL: ql,
-		Slug:     slug,
+		SlugName: slug,
 	}
 
 	// make the request
@@ -382,7 +382,7 @@ func (l *Client) CreateSegment(name, ql, slug string) (Segment, error) {
 		return data, err
 	}
 
-	return res.Status, res.Next, data, nil
+	return data, nil
 }
 
 // ValidateSegment validates a single segment QL statement

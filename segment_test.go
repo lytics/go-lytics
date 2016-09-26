@@ -13,10 +13,18 @@ func TestGetSegments(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterSegmentMocks()
 
+	// user segment
 	client := NewLytics(mock.MockApiKey, nil, nil)
-	segs, err := client.GetSegments()
+	segs, err := client.GetSegments("user")
 	assert.Equal(t, err, nil)
 	assert.T(t, len(segs) > 1)
+	assert.Equal(t, segs[0].Table, "user")
+
+	// content segment
+	segs, err = client.GetSegments("content")
+	assert.Equal(t, err, nil)
+	assert.T(t, len(segs) > 1)
+	assert.Equal(t, segs[0].Table, "content")
 }
 
 func TestGetSegment(t *testing.T) {
@@ -162,4 +170,38 @@ PagingComplete:
 	assert.Equal(t, countCalls, 3)
 	assert.Equal(t, completed, true)
 	fmt.Printf("*** COMPLETED SCAN: Loaded %d batches and %d total entities", len(client.Scan.Batches), client.Scan.Total)
+}
+
+func TestCreateSegment(t *testing.T) {
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+	mock.RegisterSegmentMocks()
+
+	client := NewLytics(mock.MockApiKey, nil, nil)
+
+	ql := "FILTER AND (created >= \"now-30d\", aspects = \"articles\") FROM content"
+
+	seg, err := client.CreateSegment("Recent Articles", ql, "recent_articles")
+	assert.Equal(t, err, nil)
+	assert.T(t, seg.Id != "")
+	assert.Equal(t, seg.FilterQL, ql)
+
+	seg, err = client.CreateSegment("Invalid Segment", "", "invalid")
+	assert.NotEqual(t, err, nil)
+}
+
+func TestValidateSegment(t *testing.T) {
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+	mock.RegisterSegmentMocks()
+
+	client := NewLytics(mock.MockApiKey, nil, nil)
+
+	valid, err := client.ValidateSegment("FILTER AND (created >= \"now-30d\", aspects = \"articles\") FROM content")
+	assert.Equal(t, err, nil)
+	assert.T(t, valid)
+
+	valid, err = client.ValidateSegment("")
+	assert.NotEqual(t, err, nil)
+	assert.T(t, !valid)
 }

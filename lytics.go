@@ -1,6 +1,7 @@
 package lytics
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -235,9 +236,9 @@ func (l *Client) Post(endpoint string, params url.Values, body interface{}, resp
 func prepRequestBody(body interface{}) (io.Reader, error) {
 	// prep the body of the request
 	if body != nil {
-		if _, ok := body.(string); ok {
+		if bodystr, ok := body.(string); ok {
 			// plain/text body
-			return strings.NewReader(body), nil
+			return strings.NewReader(bodystr), nil
 		} else {
 			// json body
 			b, err := json.Marshal(body)
