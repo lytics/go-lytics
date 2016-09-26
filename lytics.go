@@ -234,20 +234,19 @@ func (l *Client) Post(endpoint string, params url.Values, body interface{}, resp
 
 // prepBodyRequest takes the payload and returns an io.Reader
 func prepRequestBody(body interface{}) (io.Reader, error) {
-	// prep the body of the request
-	if body != nil {
-		if bodystr, ok := body.(string); ok {
-			// plain/text body
-			return strings.NewReader(bodystr), nil
-		} else {
-			// json body
-			b, err := json.Marshal(body)
-			if err != nil {
-				return nil, err
-			}
 
-			return bytes.NewReader(b), nil
+	switch val := body.(type) {
+	case string:
+		return strings.NewReader(val), nil
+	case nil:
+		return nil, nil
+	default:
+		b, err := json.Marshal(body)
+		if err != nil {
+			return nil, err
 		}
+
+		return bytes.NewReader(b), nil
 	}
 
 	return nil, nil
