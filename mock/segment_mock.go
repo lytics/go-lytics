@@ -1,6 +1,8 @@
 package mock
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"github.com/jarcoal/httpmock"
 	"net/http"
@@ -39,6 +41,10 @@ func RegisterSegmentMocks() {
 
 			if queries.Get("key") != MockApiKey {
 				fail = true
+			}
+
+			if queries.Get("table") == "content" {
+				return httpmock.NewStringResponse(200, readJsonFile("get_content_segments")), nil
 			}
 
 			if fail {
@@ -186,6 +192,52 @@ func RegisterSegmentMocks() {
 			}
 
 			return httpmock.NewStringResponse(200, readJsonFile("get_segment_scan_1")), nil
+		},
+	)
+
+	// *******************************************************
+	// POST CREATE SEGMENT
+	// *******************************************************
+	httpmock.RegisterResponder("POST", "https://api.lytics.io/api/segment",
+		func(req *http.Request) (*http.Response, error) {
+
+			body := make(map[string]interface{})
+			json.NewDecoder(req.Body).Decode(&body)
+
+			if _, ok := body["segment_ql"]; !ok {
+				return httpmock.NewStringResponse(400, readJsonFile("post_segment_create_error")), nil
+			}
+
+			queries := req.URL.Query()
+
+			if queries.Get("key") != MockApiKey {
+				return httpmock.NewStringResponse(401, readJsonFile("get_error")), nil
+			}
+
+			return httpmock.NewStringResponse(200, readJsonFile("post_segment_create")), nil
+		},
+	)
+
+	// *******************************************************
+	// POST SEGMENT VALIDATE
+	// *******************************************************
+	httpmock.RegisterResponder("POST", "https://api.lytics.io/api/segment/validate",
+		func(req *http.Request) (*http.Response, error) {
+
+			buf := new(bytes.Buffer)
+			buf.ReadFrom(req.Body)
+
+			if buf.String() == "" {
+				return httpmock.NewStringResponse(400, readJsonFile("post_segment_validate_error")), nil
+			}
+
+			queries := req.URL.Query()
+
+			if queries.Get("key") != MockApiKey {
+				return httpmock.NewStringResponse(401, readJsonFile("get_error")), nil
+			}
+
+			return httpmock.NewStringResponse(200, readJsonFile("post_segment_validate")), nil
 		},
 	)
 }
