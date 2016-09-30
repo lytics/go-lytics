@@ -1,6 +1,7 @@
 package lytics
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -178,7 +179,7 @@ func (l *Client) Do(r *http.Request, response, data interface{}) error {
 }
 
 // Get prepares a get request and then executes using the Do method
-func (l *Client) Get(endpoint string, params url.Values, body io.Reader, response, data interface{}) error {
+func (l *Client) Get(endpoint string, params url.Values, body interface{}, response, data interface{}) error {
 	method := "GET"
 
 	// get the formatted endpoint url
@@ -187,8 +188,13 @@ func (l *Client) Get(endpoint string, params url.Values, body io.Reader, respons
 		return err
 	}
 
+	payload, err := prepRequestBody(body)
+	if err != nil {
+		return err
+	}
+
 	// build the request
-	r, _ := http.NewRequest(method, path, body)
+	r, _ := http.NewRequest(method, path, payload)
 
 	// execute the request
 	err = l.Do(r, response, data)
@@ -197,6 +203,53 @@ func (l *Client) Get(endpoint string, params url.Values, body io.Reader, respons
 	}
 
 	return nil
+}
+
+// Get prepares a post request and then executes using the Do method
+func (l *Client) Post(endpoint string, params url.Values, body interface{}, response, data interface{}) error {
+	method := "POST"
+
+	// get the formatted endpoint url
+	path, err := l.PrepUrl(endpoint, params, false)
+	if err != nil {
+		return err
+	}
+
+	payload, err := prepRequestBody(body)
+	if err != nil {
+		return err
+	}
+
+	// build the request
+	r, _ := http.NewRequest(method, path, payload)
+
+	// execute the request
+	err = l.Do(r, response, data)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// prepBodyRequest takes the payload and returns an io.Reader
+func prepRequestBody(body interface{}) (io.Reader, error) {
+
+	switch val := body.(type) {
+	case string:
+		return strings.NewReader(val), nil
+	case nil:
+		return nil, nil
+	default:
+		b, err := json.Marshal(body)
+		if err != nil {
+			return nil, err
+		}
+
+		return bytes.NewReader(b), nil
+	}
+
+	return nil, nil
 }
 
 // buildRespJSON handles the first round of unmarshaling into the master Api Response struct

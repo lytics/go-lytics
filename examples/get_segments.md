@@ -17,7 +17,7 @@ func main() {
 	client := lytics.NewLytics(key, nil, nil)
 
 	// list all accounts for key
-	segments, err := client.GetSegments()
+	segments, err := client.GetSegments("user")
 	if err != nil {
 		panic(err)
 	}
