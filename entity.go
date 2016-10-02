@@ -1,6 +1,7 @@
 package lytics
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/url"
 	"strings"
@@ -53,4 +54,9 @@ func (l *Client) GetEntity(entitytype, fieldname, fieldval string, fields []stri
 	}
 
 	return data, nil
+}
+
+func (e *Entity) PrettyJson() string {
+	by, _ := json.MarshalIndent(e, "", "  ")
+	return string(by)
 }

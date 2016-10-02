@@ -22,29 +22,25 @@ const (
 	segmentValidateEndpoint       = "segment/validate"
 )
 
+// Segment is a logical expression to filter entity
+//  The normal concept is logical filter to find users, but the
+//  table also allows logical filter on content, or other entity types.
 type Segment struct {
 	Id            string    `json:"id"`
-	Aid           int       `json:"aid"` // Deprecated; use AccountId
 	AccountId     string    `json:"account_id"`
-	ShortId       string    `json:"short_id,omitempty"`
 	Name          string    `json:"name"`
 	IsPublic      bool      `json:"is_public"`
-	PublicName    string    `json:"public_name,omitempty"`
 	SlugName      string    `json:"slug_name"`
 	Description   string    `json:"description,omitempty"`
 	SegKind       string    `json:"kind,omitempty"`
 	Table         string    `json:"table,omitempty"`
 	AuthorId      string    `json:"author_id"`
-	Updated       time.Time `json:"updated" bson:"updated"`
-	Created       time.Time `json:"created" bson:"created"`
-	SegType       string    `json:"op"`
-	Negate        bool      `json:"negate"`
+	Updated       time.Time `json:"updated"`
+	Created       time.Time `json:"created"`
 	Tags          []string  `json:"tags"`
 	Category      string    `json:category,omitempty`
 	Invalid       bool      `json:"invalid"`
 	InvalidReason string    `json:"invalid_reason"`
-	Deleted       bool      `json:"deleted"`
-	SaveHistory   bool      `json:"save_hist"`
 	FilterQL      string    `json:"segment_ql,omitempty"`
 }
 
@@ -66,8 +62,9 @@ type SegmentAttributionMetrics struct {
 	Anomaly float64 `json:"anomaly"`
 }
 
+// SegmentCollection is a set of Segments logically grouped
+// and containing relations (ordering)
 type SegmentCollection struct {
-	Aid           int               `json:"aid"`
 	AccountId     string            `json:"account_id"`
 	Id            string            `json:"id"`
 	Name          string            `json:"name"`
@@ -87,15 +84,40 @@ type SegColRelation struct {
 	Order int    `json:"order"`
 }
 
+// SegmentScanner is a stateful, forward only pager to iterate through
+// entities in a Segment
 type SegmentScanner struct {
 	SegmentID string
 	SegmentQl string
-	Next      string
-	Previous  string
-	Loader    chan []Entity
-	Shutdown  chan bool
+	next      string
+	previous  string
+	buffer    chan []Entity
+	nextChan  chan Entity
+	shutdown  chan bool
 	Total     int
 	Batches   []int
+	err       error
+}
+
+func (s *SegmentScanner) Stop() {
+	defer func() { recover() }()
+	close(s.shutdown)
+}
+
+func (s *SegmentScanner) Err() error {
+	return s.err
+}
+
+func (s *SegmentScanner) Next() Entity {
+	select {
+	case e, ok := <-s.nextChan:
+		if !ok {
+			return nil
+		}
+		return e
+	case <-s.shutdown:
+		return nil
+	}
 }
 
 // Created is a helper method to convert the timestamp into human readable format for metrics
@@ -230,8 +252,8 @@ func (l *Client) GetSegmentCollectionList() ([]SegmentCollection, error) {
 
 // **************************** START OF SEGMENT SCAN METHODS ****************************
 
-// GetSegmentEntities returns a single page of entities (20max) for the given segment
-// also returns the next value if there are more than 20 entities in the segment
+// GetSegmentEntities returns a single page of entities for the given segment
+// also returns the next value if there are more than limit entities in the segment
 // https://www.getlytics.com/developers/rest-api#segment-scan
 func (l *Client) GetSegmentEntities(segment, next string, limit int) (interface{}, string, []Entity, error) {
 	res := ApiResp{}
@@ -251,9 +273,10 @@ func (l *Client) GetSegmentEntities(segment, next string, limit int) (interface{
 }
 
 // GetAdHocSegmentEntities returns a single page of entities for the given Ad Hoc segment
-// also returns the next value if there are more than 20 entities in the segment
+// also returns the next value if there are more than limit entities in the segment
 // https://www.getlytics.com/developers/rest-api#segment-scan
 func (l *Client) GetAdHocSegmentEntities(ql, next string, limit int) (interface{}, string, []Entity, error) {
+
 	res := ApiResp{}
 	data := []Entity{}
 	params := url.Values{}
@@ -269,99 +292,111 @@ func (l *Client) GetAdHocSegmentEntities(ql, next string, limit int) (interface{
 	return res.Status, res.Next, data, nil
 }
 
-// CreateScanner generates a segment scanner so that we can process entities as they are loaded
-// reduces the load as some segments can have hundreds of thousands of users and it is impractical
-// to return a single result
-func (l *Client) CreateScanner() error {
-	scanner := SegmentScanner{}
-
-	// create loader and shutdown
-	loader := make(chan []Entity)
-	shutdown := make(chan bool)
-
-	// save to scanner
-	scanner.Loader = loader
-	scanner.Shutdown = shutdown
-
-	// add the scanner to the client
-	l.Scan = &scanner
-
-	return nil
-}
-
-// LoadEntity does the heavy lifting when it comes to paging. It loops through all available pages
-// and emits the batch of entities to be processed along the way. Also maintains a slice of batch
-// counts and total count to help with debugging and reporting.
-func (l *Client) LoadEntity(segType string) {
+func (s *SegmentScanner) run(c *Client) {
 	var (
 		entities []Entity
-		err      error
 		fails    int
 		maxTries int
+		err      error
 	)
 
 	maxTries = 10
 
-	// make calls for next batch of segments until we run out of next params
+	go func() {
+		defer func() { recover() }()
+		// This drains the Buffer into output channel
+		for {
+			select {
+			case <-s.shutdown:
+				// we are shutdown
+				return
+			case el, ok := <-s.buffer:
+				if !ok {
+					// we have closed buffer, we are done
+					close(s.shutdown)
+					return
+				}
+				for _, e := range el {
+					s.nextChan <- e
+				}
+			}
+		}
+	}()
+	// make calls for next batch of segment entities until we run out of next pages
 	for {
-		switch segType {
-		case "ql":
-			_, l.Scan.Next, entities, err = l.GetAdHocSegmentEntities(l.Scan.SegmentQl, l.Scan.Next, 100)
-			break
 
+		select {
+		case <-s.shutdown:
+			// we are shutdown
+			return
 		default:
-			_, l.Scan.Next, entities, err = l.GetSegmentEntities(l.Scan.SegmentID, l.Scan.Next, 100)
-			break
+			// keep paging
+		}
+		switch {
+		case s.SegmentQl != "":
+			_, s.next, entities, err = c.GetAdHocSegmentEntities(s.SegmentQl, s.next, 100)
+		case s.SegmentID != "":
+			_, s.next, entities, err = c.GetSegmentEntities(s.SegmentID, s.next, 100)
+		default:
+			s.err = fmt.Errorf("Must have segment id or segmentql")
+			return
 		}
 
 		if err != nil {
 			fails++
 
 			if fails > maxTries {
-				panic(fmt.Sprintf("Failed to get entities, exceeded max tries(%d): %v", maxTries, err))
+				s.err = err
+				return
 			}
 
 			// if we fail and have not exceeded the limit, try again
 			continue
+		} else {
+			maxTries = 10
 		}
 
 		// for logging add the batch details to the scanner
-		l.Scan.Batches = append(l.Scan.Batches, len(entities))
+		s.Batches = append(s.Batches, len(entities))
 
 		// for logging add the total entites returned to the scanner
-		l.Scan.Total = l.Scan.Total + len(entities)
+		s.Total = s.Total + len(entities)
 
-		// emit the entities to the loader for processing
-		l.Scan.Loader <- entities
+		// if buffer is full we will block here
+		// thus preving getting too far ahead of consumption
+		s.buffer <- entities
 
 		// if there are no more pages we will have a blank next, just break and return
-		if l.Scan.Next == "" {
+		if s.next == "" {
+			close(s.buffer)
 			break
 		}
 	}
-
-	// everything worked, shutdown safely
-	l.Scan.Shutdown <- true
 }
 
-// PageMembers sets the segment on the master scanner and initiates the main go routine
-// for paging
-func (l *Client) PageMembers(segment string) error {
-	// save the target segment on the scanner
-	l.Scan.SegmentID = segment
+// PageSegmentId pages through each user in segment
+func (l *Client) PageSegmentId(segmentid string) *SegmentScanner {
+	return l.pageSegment(segmentid, "")
+}
+func (l *Client) pageSegment(segmentid, ql string) *SegmentScanner {
+
+	scanner := &SegmentScanner{
+		buffer:    make(chan []Entity, 1),
+		nextChan:  make(chan Entity, 1),
+		shutdown:  make(chan bool),
+		SegmentID: segmentid,
+		SegmentQl: ql,
+	}
 
 	// fire up the go routine for paging entities
-	go l.LoadEntity("id")
-	return nil
+	go scanner.run(l)
+	return scanner
 }
 
 // PageAdHocSegment sets the ad-hoc segment ql on the master scanner and initiates
 // the main go routine for paging
-func (l *Client) PageAdHocSegment(ql string) error {
-	l.Scan.SegmentQl = ql
-
-	go l.LoadEntity("ql")
-	return nil
+func (l *Client) PageAdHocSegment(ql string) *SegmentScanner {
+	return l.pageSegment("", ql)
 }
 
 // CreateSegment creates a new segment from a Segment QL logic expression

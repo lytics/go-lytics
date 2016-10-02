@@ -134,42 +134,28 @@ func TestSegmentPager(t *testing.T) {
 
 	var (
 		completed     bool
-		countCalls    int
 		countEntities int
 	)
 
 	client := NewLytics(mock.MockApiKey, nil, nil)
 
-	// create the segment scanner
-	err := client.CreateScanner()
-	assert.Equal(t, err, nil)
-
 	// start the paging routine
-	err = client.PageMembers(mock.MockSegmentID1)
-	assert.Equal(t, err, nil)
+	scan := client.PageSegmentId(mock.MockSegmentID1)
+	assert.Equal(t, nil, scan.Err())
 
 	// handle processing the entities
-PagingComplete:
 	for {
-		select {
-		case entities := <-client.Scan.Loader:
-			countCalls++
-
-			for _, v := range entities {
-				countEntities++
-				assert.Equal(t, v["email"], fmt.Sprintf("email%d@email.com", countEntities))
-			}
-
-		case shutdown := <-client.Scan.Shutdown:
-			if shutdown {
-				completed = true
-				break PagingComplete
-			}
+		e := scan.Next()
+		if e == nil {
+			completed = true
+			break
 		}
+		countEntities++
+		assert.Equal(t, e["email"], fmt.Sprintf("email%d@email.com", countEntities))
 	}
-	assert.Equal(t, countCalls, 3)
+	assert.Equal(t, countEntities, 13)
 	assert.Equal(t, completed, true)
-	fmt.Printf("*** COMPLETED SCAN: Loaded %d batches and %d total entities", len(client.Scan.Batches), client.Scan.Total)
+	t.Logf("*** COMPLETED SCAN: %d total entities", scan.Total)
 }
 
 func TestCreateSegment(t *testing.T) {

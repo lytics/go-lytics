@@ -43,7 +43,6 @@ type Client struct {
 	apiKey     string
 	dataApiKey string
 	client     *http.Client
-	Scan       *SegmentScanner
 }
 
 // ApiResp is the core api response for all Lytics endpoints. In some instances the "Status" is returned
