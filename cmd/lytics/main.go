@@ -37,8 +37,8 @@ func init() {
 		usageExit()
 	}
 
-	flag.StringVar(&apikey, "apikey", "", "Lytics API Key")
-	flag.StringVar(&dataapikey, "dataapikey", "", "Lytics Data API Key")
+	flag.StringVar(&apikey, "apikey", os.Getenv("LIOKEY"), "Lytics API Key")
+	flag.StringVar(&dataapikey, "dataapikey", os.Getenv("LIODATAKEY"), "Lytics Data API Key")
 	flag.StringVar(&method, "method", "", "Method Name")
 	flag.StringVar(&id, "id", "", "Method Name")
 	flag.StringVar(&segments, "segments", "", "Comma Separated Segments")
@@ -134,7 +134,7 @@ func (c *Cli) handleFunction(method string) (string, error) {
 		result, err = c.getProviders(id)
 
 	case "segment":
-		result, err = c.getSegments(segmentsSlice)
+		result, err = c.getSegments("user", segmentsSlice)
 
 	case "segmentsize":
 		result, err = c.getSegmentSizes(segmentsSlice)

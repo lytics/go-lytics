@@ -1,6 +1,6 @@
 package main
 
-func (c *Cli) getSegments(segments []string) (interface{}, error) {
+func (c *Cli) getSegments(table string, segments []string) (interface{}, error) {
 	if len(segments) == 1 {
 		segment, err := c.Client.GetSegment(segments[0])
 		if err != nil {
@@ -9,7 +9,7 @@ func (c *Cli) getSegments(segments []string) (interface{}, error) {
 
 		return segment, nil
 	} else {
-		segments, err := c.Client.GetSegments()
+		segments, err := c.Client.GetSegments(table)
 		if err != nil {
 			return nil, err
 		}
