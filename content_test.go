@@ -81,3 +81,35 @@ func TestGetTopicSummary(t *testing.T) {
 	assert.Equal(t, topicSummary.Topics.Present, 7890)
 	assert.Equal(t, topicSummary.Topics.HighBucket, 351)
 }
+
+func TestGetContentTaxonomy(t *testing.T) {
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+	mock.RegisterContentMocks()
+
+	client := NewLytics(mock.MockApiKey, nil, nil)
+	taxonomy, err := client.GetContentTaxonomy()
+
+	assert.Equal(t, err, nil)
+	assert.Equal(t, taxonomy.DocCount, 438)
+	assert.Equal(t, taxonomy.Nodes[0].Name, "marketing technology")
+	assert.Equal(t, taxonomy.Nodes[1].Count, 1)
+}
+
+func TestGetTopicRollups(t *testing.T) {
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+	mock.RegisterContentMocks()
+
+	client := NewLytics(mock.MockApiKey, nil, nil)
+	rollups, err := client.GetTopicRollups()
+
+	assert.Equal(t, err, nil)
+	assert.Equal(t, len(rollups), 2)
+	assert.Equal(t, rollups[0].Label, "Marketing")
+	assert.Equal(t, len(rollups[0].Topics), 3)
+	assert.Equal(t, rollups[0].AcctId, mock.MockAccountID)
+
+	assert.Equal(t, rollups[1].Label, "Data science")
+	assert.Equal(t, rollups[1].Topics[0].Label, "Data")
+}
