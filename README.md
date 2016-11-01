@@ -86,7 +86,7 @@ go install github.com/lytics/go-lytics/cmd/lytics
 ### Usage
 
 ```
-lyticscmd -help
+lytics -help
 ```
 	
 ## Contributing

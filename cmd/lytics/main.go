@@ -37,10 +37,9 @@ func init() {
 		usageExit()
 	}
 
-	flag.StringVar(&apikey, "apikey", os.Getenv("LIOKEY"), "Lytics API Key")
-	flag.StringVar(&dataapikey, "dataapikey", os.Getenv("LIODATAKEY"), "Lytics Data API Key")
-	flag.StringVar(&method, "method", "", "Method Name")
-	flag.StringVar(&id, "id", "", "Method Name")
+	flag.StringVar(&apikey, "apikey", os.Getenv("LIOKEY"), "Lytics API Key - Or use env LIOKEY")
+	flag.StringVar(&dataapikey, "dataapikey", os.Getenv("LIODATAKEY"), "Lytics Data API Key - Or use env LIODATAKEY")
+	flag.StringVar(&id, "id", "", "Id of object")
 	flag.StringVar(&segments, "segments", "", "Comma Separated Segments")
 	flag.StringVar(&fields, "fields", "", "Comma Separated Fields")
 	flag.StringVar(&fieldname, "fieldname", "", "Field Name")
@@ -53,12 +52,26 @@ func init() {
 }
 
 func main() {
-	if (apikey == "" && dataapikey == "") || method == "" {
-		fmt.Println("Missing -apikey and/or -method: use -help for assistance")
+	if apikey == "" && dataapikey == "" {
+		fmt.Println(`Missing -apikey and/or -method: use -help for assistance
+
+    LIOKEY env variable will fullfill api key needs
+    `)
 		os.Exit(1)
 	}
 
-	// estblish cli client
+	if len(os.Args) < 2 {
+		fmt.Println(`Missing command use -help for assistance.
+
+    export LIOKEY="mykey"
+
+    lytics schema
+    `)
+		os.Exit(1)
+	}
+	method = os.Args[1]
+
+	// create lytics client with auth info
 	c := Cli{
 		Client: lytics.NewLytics(apikey, dataapikey, nil),
 	}
@@ -148,6 +161,8 @@ func (c *Cli) handleFunction(method string) (string, error) {
 	case "user":
 		result, err = c.getUsers(id)
 
+	case "watch":
+		c.watch()
 	default:
 		output = "Unknown Method"
 	}
