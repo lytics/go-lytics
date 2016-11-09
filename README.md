@@ -1,17 +1,12 @@
 #Lytics SDK for Go
-The Lytics SDK for go offers easy integration with all public REST API endpoints. This library is actively being managed and every effort will be made to ensure that all handling reflects the best methods available. Overview of supported methods outlined below.
-
-## Version
-0.0.1
+The Lytics SDK for go offers easy integration with our public REST API endpoints. 
+This library is actively being managed and every effort will be made to ensure 
+that all handling reflects the best methods available. 
+Overview of supported methods outlined below.
 
 ## Full REST API Documentation
 https://www.getlytics.com/developers/rest-api
 
-## Roadmap
-* Command line tool
-* Data upload (single and bulk)
-* AppEngine specific docs
-* More detailed examples
 
 ## Getting Started
 1. Import the library. `go get github.com/lytics/go-lytics`
@@ -58,7 +53,7 @@ func main() {
 * **Auth**
 	* Single `GET`
 	* All `GET`
-* **User**
+* **Admin User**
 	* Single `GET`
 	* All `GET`
 * **Provider**
@@ -73,9 +68,14 @@ func main() {
 * **Entity API** `GET`
 * **Catalog**
 	* Schema `GET`
+* **Query**
+	* All `GET`
+	* Test Evaluation `POST`
 
 ## Command Line Tool
-We have built out a simple command line tool that lets you test many of the endpoints as well as write the results to files. This is a work in progress and will continue to evolve.
+We have built out a simple command line tool that lets you test 
+many of the endpoints as well as write the results to files. 
+This is a work in progress and will continue to evolve.
 
 ### Installation
 
@@ -90,8 +90,10 @@ lytics -help
 ```
 	
 ## Contributing
-Want to add something? Go for it, just fork the repo and send us a PR. Please make sure all tests run `go test -v` and that all new functionality comes with well documented and thorough testing.
+Want to add something? Go for it, just fork the repo and 
+send us a PR. Please make sure all tests run `go test -v` 
+and that all new functionality comes with well documented and thorough testing.
 
 ## License
 [Apache Version 2.0 ](LICENSE.md)   
-Copyright (c) 2015 Lytics
+Copyright (c) 2015, 2016 Lytics

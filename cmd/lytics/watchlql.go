@@ -13,18 +13,6 @@ import (
 	lytics "github.com/lytics/go-lytics"
 )
 
-/*
-Watch a folder for changes and output evaluated entity
-
-- watch   *.lql files for lql
-- watch *.json for data
-- watch *.csv for data
-  - turn into json at change time
-
-- output results to stdout
-
-*/
-
 func (c *Cli) watch() (interface{}, error) {
 
 	l := newLql(c)
@@ -98,6 +86,8 @@ func (l *lql) print(d *datafile) {
 			log.Printf("Could not evaluate query/entity: %v \n\n", err)
 			return
 		}
+
+		// Output the user response
 		out, err := json.MarshalIndent(ent, "", "  ")
 		if err == nil {
 			fmt.Printf("\n%v\n\n", string(out))
@@ -172,8 +162,7 @@ func (l *lql) watch() {
 	}
 }
 
-// Convert a slice of bytes into an array by ensuring it is wrapped
-//  with []
+// Convert a slice of bytes into an array by ensuring it is wrapped with []
 func MakeJsonList(b []byte) []byte {
 	if !bytes.HasPrefix(b, []byte{'['}) {
 		b = append([]byte{'['}, b...)
