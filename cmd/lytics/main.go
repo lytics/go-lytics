@@ -37,10 +37,9 @@ func init() {
 		usageExit()
 	}
 
-	flag.StringVar(&apikey, "apikey", os.Getenv("LIOKEY"), "Lytics API Key")
-	flag.StringVar(&dataapikey, "dataapikey", os.Getenv("LIODATAKEY"), "Lytics Data API Key")
-	flag.StringVar(&method, "method", "", "Method Name")
-	flag.StringVar(&id, "id", "", "Method Name")
+	flag.StringVar(&apikey, "apikey", os.Getenv("LIOKEY"), "Lytics API Key - Or use env LIOKEY")
+	flag.StringVar(&dataapikey, "dataapikey", os.Getenv("LIODATAKEY"), "Lytics Data API Key - Or use env LIODATAKEY")
+	flag.StringVar(&id, "id", "", "Id of object")
 	flag.StringVar(&segments, "segments", "", "Comma Separated Segments")
 	flag.StringVar(&fields, "fields", "", "Comma Separated Fields")
 	flag.StringVar(&fieldname, "fieldname", "", "Field Name")
@@ -53,12 +52,26 @@ func init() {
 }
 
 func main() {
-	if (apikey == "" && dataapikey == "") || method == "" {
-		fmt.Println("Missing -apikey and/or -method: use -help for assistance")
+	if apikey == "" && dataapikey == "" {
+		fmt.Println(`Missing -apikey and/or -method: use -help for assistance
+
+    LIOKEY env variable will fullfill api key needs
+    `)
 		os.Exit(1)
 	}
 
-	// estblish cli client
+	if len(os.Args) < 2 {
+		fmt.Println(`Missing command use -help for assistance.
+
+    export LIOKEY="mykey"
+
+    lytics schema
+    `)
+		os.Exit(1)
+	}
+	method = os.Args[1]
+
+	// create lytics client with auth info
 	c := Cli{
 		Client: lytics.NewLytics(apikey, dataapikey, nil),
 	}
@@ -148,8 +161,13 @@ func (c *Cli) handleFunction(method string) (string, error) {
 	case "user":
 		result, err = c.getUsers(id)
 
+	case "query":
+		result, err = c.getQueries(id)
+
+	case "watch":
+		c.watch()
 	default:
-		output = "Unknown Method"
+		usageExit()
 	}
 
 	if err != nil {
@@ -195,6 +213,10 @@ GLOBAL PARAMS:
     <dataapikey>                 OPTIONAL       string
     <limit>                      OPTIONAL       int
 
+ENV Vars:
+    export LIOKEY="your_api_key"
+    export LIODATAKEY="your_api_key"
+
 METHODS:
     [account]
          retrieves account information based upon api key.
@@ -206,8 +228,8 @@ METHODS:
          -------
          example:
          -------
-              lyticscmd -apikey=<apikey> -method=account
-              lyticscmd -apikey=<apikey> -method=account -id=<id>
+              lytics account
+              lytics account -id=<id>
 
     [auth]
          retrieves auth information based upon api key.
@@ -219,8 +241,8 @@ METHODS:
          -------
          example:
          -------
-              lyticscmd -apikey=<apikey> -method=auth
-              lyticscmd -apikey=<apikey> -method=auth -id=<id>
+              lytics auth
+              lytics auth -id=<id>
 
     [schema]
          retrieves table schema based upon api key.
@@ -232,8 +254,8 @@ METHODS:
          -------
          example:
          -------
-              lyticscmd -apikey=<apikey> -method=schema
-              lyticscmd -apikey=<apikey> -method=schema -limit=<limit>
+              lytics schema
+              lytics schema -limit=<limit>
 
     [fieldinfo]
          retrieves detailed field info based upon api key.
@@ -246,8 +268,8 @@ METHODS:
          -------
          example:
          -------
-              lyticscmd -apikey=<apikey> -method=fieldinfo -table=user
-              lyticscmd -apikey=<apikey> -method=fieldinfo -table=user -fields=one,two -limit=2
+              lytics fieldinfo -table=user
+              lytics fieldinfo -table=user -fields=one,two -limit=2
 
     [entity]
          retrieves entity information based upon api key.
@@ -261,8 +283,8 @@ METHODS:
          -------
          example:
          -------
-              lyticscmd -apikey=<apikey> -method=entity -entitytype=user -fieldname=email -fieldvalue="me@me.com"
-              lyticscmd -apikey=<apikey> -method=entity -entitytype=user -fieldname=email -fieldvalue="me@me.com" -fields=email
+              lytics entity -entitytype=user -fieldname=email -fieldvalue="me@me.com"
+              lytics entity -entitytype=user -fieldname=email -fieldvalue="me@me.com" -fields=email
 
     [provider]
          retrieves provider information based upon api key.
@@ -274,8 +296,8 @@ METHODS:
          -------
          example:
          -------
-              lyticscmd -apikey=<apikey> -method=provider
-              lyticscmd -apikey=<apikey> -method=provider -id=<id>
+              lytics provider
+              lytics provider -id=<id>
 
     [segment]
          retrieves segment information based upon api key.
@@ -287,8 +309,8 @@ METHODS:
          -------
          example:
          -------
-              lyticscmd -apikey=<apikey> -method=segment
-              lyticscmd -apikey=<apikey> -method=segment -segments=one
+              lytics segment
+              lytics segment -segments=one
 
     [segmentsize]
          retrieves segment sizes information based upon api key.
@@ -300,8 +322,8 @@ METHODS:
          -------
          example:
          -------
-              lyticscmd -apikey=<apikey> -method=segmentsize
-              lyticscmd -apikey=<apikey> -method=segmentsize -segmentes=one,two
+              lytics segmentsize
+              lytics segmentsize -segmentes=one,two
 
     [segmentattribution]
          retrieves segment information based upon api key.
@@ -314,8 +336,8 @@ METHODS:
          -------
          example:
          -------
-              lyticscmd -apikey=<apikey> -method=segmentattribution
-              lyticscmd -apikey=<apikey> -method=segmentattribution -segments=one,two -limit=5
+              lytics segmentattribution
+              lytics segmentattribution -segments=one,two -limit=5
 
     [user]
          retrieves user information based upon api key.
@@ -327,8 +349,8 @@ METHODS:
          -------
          example:
          -------
-              lyticscmd -apikey=<apikey> -method=user
-              lyticscmd -apikey=<apikey> -method=user -id=<id>
+              lytics user
+              lytics user -id=<id>
 
     [work]
          retrieves work information based upon api key.
@@ -340,8 +362,37 @@ METHODS:
          -------
          example:
          -------
-              lyticscmd -apikey=<apikey> -method=work
-              lyticscmd -apikey=<apikey> -method=work -id=<id>
+              lytics work
+              lytics work -id=<id>
+
+    [query]
+         retrieves query information
+         -------
+         params:
+         -------
+              <alias>               OPTIONAL       string
+         -------
+         example:
+         -------
+              lytics query
+              lytics query -id=<alias>
+
+    [watch]
+         watch the current folder for .lql, .json files to evaluate
+         the .lql query against the data in .json to preview output.
+
+         .lql file name must match the json file name.
+
+         For Example: 
+            cd /tmp 
+            ls *.lql       # assume a temp.lql
+            cat temp.json  # file of data
+
+         -------
+         example:
+         -------
+              lytics watch
+
 `, os.Args[0])
 	os.Exit(1)
 }
