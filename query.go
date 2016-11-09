@@ -45,6 +45,21 @@ func (l *Client) GetQueries() ([]Query, error) {
 	return data, nil
 }
 
+// GetQueries returns a list of all queries associated with this account
+// https://www.getlytics.com/developers/rest-api#query
+func (l *Client) GetQuery(alias string) (Query, error) {
+	res := ApiResp{}
+	data := Query{}
+
+	// make the request
+	err := l.Get(parseLyticsURL(queryEndpoint, map[string]string{"id": alias}), nil, nil, &res, &data)
+	if err != nil {
+		return data, err
+	}
+
+	return data, nil
+}
+
 // GetQueryTest returns the evaluated entity from given query
 // https://www.getlytics.com/developers/rest-api#segment-sizes
 func (l *Client) GetQueryTest(qs url.Values, query string) (Entity, error) {
