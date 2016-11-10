@@ -1,12 +1,10 @@
 package main
 
-import (
-	"errors"
-)
+import ()
 
 func (c *Cli) getSchema(table string) (interface{}, error) {
 	if table == "" {
-		return nil, errors.New("Missing '-table' (e.g. user, content).")
+		table = "user"
 	}
 
 	schema, err := c.Client.GetSchema(table)

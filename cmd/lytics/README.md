@@ -8,7 +8,7 @@ Or install from source.
 
 ```
 # Or if you have go installed
-go install github.com/lytics/go-lytics/cmd/lytics
+go get github.com/lytics/go-lytics/cmd/lytics
 
 ```
 
@@ -17,22 +17,15 @@ go install github.com/lytics/go-lytics/cmd/lytics
 ```
 
 export LIOKEY="your_api_key"
-lytics -help
+lytics --help
 
 
-
-# Watch A folder of lql files and .json files
-# will output any lql syntax errors upon edit
-# as well as the evaluated output of .lql + .json files
-
-
-lytics watch
 ```
 
 **Lytics Watch Usage**
 
 1.  Create NAME.lql (any name) file in a folder.
-2.  Create NAME.lql (any name, must match lql file name) in folder.
+2.  Create NAME.json (any name, must match lql file name) in folder.
 3.  run the `lytics watch` command from the folder with files.
 4.  Edit .lql, or .json files, upon change the evaluated result of .lql, json will be output.
 
@@ -46,9 +39,11 @@ export LIOKEY="your_api_key"
 
 cd /tmp
 
-# start watching
+# start watching in background
 lytics watch &
 
+
+# create an lql file
 echo '
 SELECT 
    user_id,
@@ -62,10 +57,12 @@ BY user_id
 ALIAS hello
 ' > hello.lql
 
+# Create a Json data of events to feed into lql query
 echo '[
     {"user_id":"dump123","name":"Down With","company":"Trump", "event":"project.create"},
     {"user_id":"another234","name":"No More","company":"Trump", "event":"project.signup","user.city":"Portland","user.state":"Or"}
 ]' > hello.json
+
 
 
 ```

@@ -109,14 +109,14 @@ func (l *lql) handleFile(of string, showOutput bool) {
 	}
 	switch {
 	case strings.HasSuffix(f, ".lql"):
-		log.Println("handle lql file ", f)
+		//log.Println("handle lql file ", f)
 		by, err := ioutil.ReadFile("./" + of)
 		exitIfErr(err, fmt.Sprintf("Could not read file %v", of))
 		df.lql = string(by)
 	case strings.HasSuffix(f, ".csv"):
-		log.Println("handle csv file ", f)
+		//log.Println("handle csv file ", f)
 	case strings.HasSuffix(f, ".json"):
-		log.Println("handle json file ", f)
+		//log.Println("handle json file ", f)
 		df.loadJson(of)
 	default:
 		return

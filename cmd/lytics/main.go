@@ -34,6 +34,7 @@ type Cli struct {
 
 func init() {
 	flag.Usage = func() {
+		flag.PrintDefaults()
 		usageExit()
 	}
 
@@ -60,16 +61,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	if len(os.Args) < 2 {
-		fmt.Println(`Missing command use -help for assistance.
-
-    export LIOKEY="mykey"
-
-    lytics schema
-    `)
-		os.Exit(1)
+	if len(flag.Args()) < 1 {
+		flag.Usage()
+		return
 	}
-	method = os.Args[1]
+	method = flag.Args()[0]
 
 	// create lytics client with auth info
 	c := Cli{
@@ -167,7 +163,8 @@ func (c *Cli) handleFunction(method string) (string, error) {
 	case "watch":
 		c.watch()
 	default:
-		usageExit()
+		flag.Usage()
+		return "", nil
 	}
 
 	if err != nil {
@@ -208,11 +205,6 @@ func usageExit() {
 **************  LYTICS COMMAND LINE HELP  **************
 --------------------------------------------------------
 
-GLOBAL PARAMS:
-    <apikey>                     REQUIRED       string
-    <dataapikey>                 OPTIONAL       string
-    <limit>                      OPTIONAL       int
-
 ENV Vars:
     export LIOKEY="your_api_key"
     export LIODATAKEY="your_api_key"
@@ -229,23 +221,10 @@ METHODS:
          example:
          -------
               lytics account
-              lytics account -id=<id>
-
-    [auth]
-         retrieves auth information based upon api key.
-         if no id is passed, all auths returned.
-         -------
-         params:
-         -------
-              <id>               OPTIONAL       string
-         -------
-         example:
-         -------
-              lytics auth
-              lytics auth -id=<id>
+              lytics --id=<id> account
 
     [schema]
-         retrieves table schema based upon api key.
+         retrieves table schema (fields, types)
          -------
          params:
          -------
@@ -255,24 +234,10 @@ METHODS:
          example:
          -------
               lytics schema
-              lytics schema -limit=<limit>
-
-    [fieldinfo]
-         retrieves detailed field info based upon api key.
-         -------
-         params:
-         -------
-              <table>            REQUIRED       string
-              <fields>           OPTIONAL       string (comma separated list of fields)
-              <limit>            OPTIONAL       int
-         -------
-         example:
-         -------
-              lytics fieldinfo -table=user
-              lytics fieldinfo -table=user -fields=one,two -limit=2
+              lytics --limit=<limit> --table=user schema
 
     [entity]
-         retrieves entity information based upon api key.
+         retrieves entity (a single user) information
          -------
          params:
          -------
@@ -283,21 +248,8 @@ METHODS:
          -------
          example:
          -------
-              lytics entity -entitytype=user -fieldname=email -fieldvalue="me@me.com"
-              lytics entity -entitytype=user -fieldname=email -fieldvalue="me@me.com" -fields=email
-
-    [provider]
-         retrieves provider information based upon api key.
-         if no id is passed, all providers returned.
-         -------
-         params:
-         -------
-              <id>               OPTIONAL       string
-         -------
-         example:
-         -------
-              lytics provider
-              lytics provider -id=<id>
+              lytics -entitytype=user -fieldname=email -fieldvalue="me@me.com" entity
+              lytics -entitytype=user -fieldname=email -fieldvalue="me@me.com" -fields=email entity
 
     [segment]
          retrieves segment information based upon api key.
@@ -310,7 +262,7 @@ METHODS:
          example:
          -------
               lytics segment
-              lytics segment -segments=one
+              lytics -segments=slug_of_segment segment
 
     [segmentsize]
          retrieves segment sizes information based upon api key.
@@ -323,7 +275,7 @@ METHODS:
          example:
          -------
               lytics segmentsize
-              lytics segmentsize -segmentes=one,two
+              lytics -segmentes=one,two segmentsize
 
     [segmentattribution]
          retrieves segment information based upon api key.
@@ -337,10 +289,10 @@ METHODS:
          example:
          -------
               lytics segmentattribution
-              lytics segmentattribution -segments=one,two -limit=5
+              lytics -segments=one,two -limit=5 segmentattribution
 
     [user]
-         retrieves user information based upon api key.
+         retrieves administrative user information based upon api key.
          if no id is passed, all users returned.
          -------
          params:
@@ -350,20 +302,7 @@ METHODS:
          example:
          -------
               lytics user
-              lytics user -id=<id>
-
-    [work]
-         retrieves work information based upon api key.
-         if no id is passed, all works returned.
-         -------
-         params:
-         -------
-              <id>               OPTIONAL       string
-         -------
-         example:
-         -------
-              lytics work
-              lytics work -id=<id>
+              lytics -id=<id> user
 
     [query]
          retrieves query information
@@ -375,7 +314,7 @@ METHODS:
          example:
          -------
               lytics query
-              lytics query -id=<alias>
+              lytics --id=<alias> query
 
     [watch]
          watch the current folder for .lql, .json files to evaluate
@@ -393,6 +332,6 @@ METHODS:
          -------
               lytics watch
 
-`, os.Args[0])
+`)
 	os.Exit(1)
 }
