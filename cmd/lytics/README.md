@@ -49,7 +49,8 @@ SELECT
    user_id,
    name,
    todate(ts),
-   match("user.") AS user_attributes
+   match("user.") AS user_attributes,
+   map(event, todate(ts))   as event_times   KIND map[string]time  MERGEOP LATEST
 
 FROM data
 INTO USER
@@ -59,8 +60,8 @@ ALIAS hello
 
 # Create a Json data of events to feed into lql query
 echo '[
-    {"user_id":"dump123","name":"Down With","company":"Trump", "event":"project.create"},
-    {"user_id":"another234","name":"No More","company":"Trump", "event":"project.signup","user.city":"Portland","user.state":"Or"}
+    {"user_id":"dump123","name":"Down With","company":"Trump", "event":"project.create", "ts":"2016-11-09"},
+    {"user_id":"another234","name":"No More","company":"Trump", "event":"project.signup","user.city":"Portland","user.state":"Or", "ts":"2016-11-09"}
 ]' > hello.json
 
 
