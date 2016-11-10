@@ -7,6 +7,9 @@ Overview of supported methods outlined below.
 ## Full REST API Documentation
 https://www.getlytics.com/developers/rest-api
 
+## Command Line Tool Doc
+https://github.com/lytics/go-lytics/blob/master/cmd/lytics/README.md
+
 
 ## Getting Started
 1. Import the library. `go get github.com/lytics/go-lytics`
@@ -72,23 +75,6 @@ func main() {
 	* All `GET`
 	* Test Evaluation `POST`
 
-## Command Line Tool
-We have built out a simple command line tool that lets you test 
-many of the endpoints as well as write the results to files. 
-This is a work in progress and will continue to evolve.
-
-### Installation
-
-```
-go install github.com/lytics/go-lytics/cmd/lytics
-```
-
-### Usage
-
-```
-lytics -help
-```
-	
 ## Contributing
 Want to add something? Go for it, just fork the repo and 
 send us a PR. Please make sure all tests run `go test -v` 
