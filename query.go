@@ -20,6 +20,7 @@ type Query struct {
 	Text    string                `json:"text"`
 	Fields  map[string]QueryField `json:"fields"`
 }
+
 type QueryField struct {
 	As         string   `json:"as"`
 	IsBy       bool     `json:"is_by"`

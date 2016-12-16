@@ -12,6 +12,8 @@ const (
 )
 
 // Entity is the main data source for Lytics. All users, content, etc. are referred to as "entities"
+// An Entity is made up of a series of key/value pairs, where the key is a string, and the value may
+// be one of a few basic data types, depending on the queries used to create it
 type Entity map[string]interface{}
 
 // GetEntity returns all the availble attributes for a single entity (user, content, etc)
@@ -56,6 +58,8 @@ func (l *Client) GetEntity(entitytype, fieldname, fieldval string, fields []stri
 	return data, nil
 }
 
+// PrettyJson returns an indented/newlined JSON string representation of the
+// entity
 func (e *Entity) PrettyJson() string {
 	by, _ := json.MarshalIndent(e, "", "  ")
 	return string(by)

@@ -22,9 +22,9 @@ const (
 	segmentValidateEndpoint       = "segment/validate"
 )
 
-// Segment is a logical expression to filter entity
-//  The normal concept is logical filter to find users, but the
-//  table also allows logical filter on content, or other entity types.
+// Segment is a logical expression to filter entities
+// Often this applies to user profiles, but can also be
+// applied to other tables such as content
 type Segment struct {
 	Id            string    `json:"id"`
 	AccountId     string    `json:"account_id"`

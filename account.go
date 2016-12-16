@@ -9,25 +9,59 @@ const (
 	accountListEndpoint = "account"
 )
 
+// Account provides the metadata for an account
 type Account struct {
-	Id               string    `json:"id"`
-	Created          time.Time `json:"created"`
-	Updated          time.Time `json:"updated"`
-	Fid              string    `json:"fid"`
-	Domain           string    `json:"domain"`
-	Aid              int       `json:"aid"`
-	ParentAid        int       `json:"parentaid"`
-	ParentId         string    `json:"parent_id"`
-	PartnerId        string    `json:"partner_id"`
-	PackageId        string    `json:"package_id"`
-	Email            string    `json:"email"`
-	ApiKey           string    `json:"apikey"`
-	DataApiKey       string    `json:"dataapikey"`
-	Name             string    `json:"name"`
-	TimeZone         string    `json:"timezone,omitempty"`
-	PubUsers         bool      `json:"pubusers"`
-	WhitelistFields  []string  `json:"whitelist_fields"`
-	WhitelistDomains []string  `json:"whitelist_domains"`
+	// Unique identifier for this account
+	Id string `json:"id"`
+
+	// Fid is an optional user-assigned unique identifier
+	Fid string `json:"fid"`
+
+	// Domain is the unique domain associated with this account
+	Domain string `json:"domain"`
+
+	// Aid is a simple numeric id for the account
+	Aid int `json:"aid"`
+
+	// ParentAid points to the parent Aid if this account is a child
+	// otherwise it is the same as Aid
+	ParentAid int `json:"parentaid"`
+
+	// ParentId points to the parent Id if this account is a child
+	// otherwise it is the same as Id
+	ParentId string `json:"parent_id"`
+
+	// Email address for primary contact of this account
+	Email string `json:"email"`
+
+	// ApiKey contains the key to use for management API access
+	ApiKey string `json:"apikey"`
+
+	// DataApiKey contains the key to use for data read/write access
+	DataApiKey string `json:"dataapikey"`
+
+	// Account name
+	Name string `json:"name"`
+
+	// Primary time zone for the account
+	TimeZone string `json:"timezone,omitempty"`
+
+	// PubUsers defines whether auth is required for entity read requests
+	PubUsers bool `json:"pubusers"`
+
+	// WhitelistFields defines the fields which are provided in an entity read
+	// request
+	WhitelistFields []string `json:"whitelist_fields"`
+
+	// WhitelistDomains defines the list of domains which are able to perform
+	// an entity read request
+	WhitelistDomains []string `json:"whitelist_domains"`
+
+	// Account creation time
+	Created time.Time `json:"created"`
+
+	// Account update time
+	Updated time.Time `json:"updated"`
 }
 
 // GetAccounts returns a list of all accounts associated with master account
