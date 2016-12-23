@@ -212,6 +212,11 @@ func (l *Client) Get(endpoint string, params url.Values, body interface{}, respo
 
 // Get prepares a post request and then executes using the Do method
 func (l *Client) Post(endpoint string, params url.Values, body interface{}, response, data interface{}) error {
+	return l.PostType("application/json", endpoint, params, body, response, data)
+}
+
+// Get prepares a post request and then executes using the Do method
+func (l *Client) PostType(contentType, endpoint string, params url.Values, body interface{}, response, data interface{}) error {
 	method := "POST"
 
 	// get the formatted endpoint url
@@ -227,6 +232,8 @@ func (l *Client) Post(endpoint string, params url.Values, body interface{}, resp
 
 	// build the request
 	r, _ := http.NewRequest(method, path, payload)
+
+	r.Header.Set("Content-Type", contentType)
 
 	// execute the request
 	err = l.Do(r, response, data)
