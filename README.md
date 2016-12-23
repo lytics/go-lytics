@@ -53,22 +53,13 @@ func main() {
 * **Account**
 	* Single `GET`
 	* All `GET`
-* **Auth**
-	* Single `GET`
-	* All `GET`
 * **Admin User**
 	* Single `GET`
 	* All `GET`
-* **Provider**
-	* Single `GET`
-	* All `GET`
-* **Work**
-	* Single `GET`
-	* All `GET` 	
 * **Segment**
 	* Single `GET`
 	* All `GET` 
-* **Entity API** `GET`
+* **Entity (end users) API** `GET`
 * **Catalog**
 	* Schema `GET`
 * **Query**

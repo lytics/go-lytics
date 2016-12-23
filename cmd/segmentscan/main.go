@@ -23,7 +23,7 @@ func main() {
 	client := lytics.NewLytics(apikey, nil, nil)
 
 	// create the scanner
-	scan := client.PageSegmentId(os.Args[1])
+	scan := client.PageSegment(os.Args[1])
 
 	// handle processing the entities
 	for {
@@ -32,7 +32,7 @@ func main() {
 			break
 		}
 
-		fmt.Printf("%v\n\n", e.PrettyJson())
+		fmt.Println(e.PrettyJson())
 	}
 
 	fmt.Printf("*** COMPLETED SCAN: Loaded %d total entities\n\n", scan.Total)

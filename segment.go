@@ -374,17 +374,31 @@ func (s *SegmentScanner) run(c *Client) {
 	}
 }
 
+// PageSegment Pages by either SegmentId or QL
+func (l *Client) PageSegment(qlOrId string) *SegmentScanner {
+	return l.pageSegment(qlOrId)
+}
+
 // PageSegmentId pages through each user in segment
 func (l *Client) PageSegmentId(segmentid string) *SegmentScanner {
-	return l.pageSegment(segmentid, "")
+	return l.pageSegment(segmentid)
 }
-func (l *Client) pageSegment(segmentid, ql string) *SegmentScanner {
+func (l *Client) pageSegment(qlOrId string) *SegmentScanner {
+
+	segmentId, ql := "", ""
+
+	if strings.Contains(qlOrId, " ") {
+		// segmentql
+		ql = qlOrId
+	} else {
+		segmentId = qlOrId
+	}
 
 	scanner := &SegmentScanner{
 		buffer:    make(chan []Entity, 1),
 		nextChan:  make(chan Entity, 1),
 		shutdown:  make(chan bool),
-		SegmentID: segmentid,
+		SegmentID: segmentId,
 		SegmentQl: ql,
 	}
 
@@ -396,7 +410,7 @@ func (l *Client) pageSegment(segmentid, ql string) *SegmentScanner {
 // PageAdHocSegment sets the ad-hoc segment ql on the master scanner and initiates
 // the main go routine for paging
 func (l *Client) PageAdHocSegment(ql string) *SegmentScanner {
-	return l.pageSegment("", ql)
+	return l.pageSegment(ql)
 }
 
 // CreateSegment creates a new segment from a Segment QL logic expression

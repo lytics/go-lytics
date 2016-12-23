@@ -11,6 +11,9 @@ const (
 	entityEndpoint = "entity" // :entitytype/:fieldname/:fieldval, fields
 )
 
+// EntityHandler for use in paging
+type EntityHandler func(*Entity)
+
 // Entity is the main data source for Lytics. All users, content, etc. are referred to as "entities"
 type Entity map[string]interface{}
 

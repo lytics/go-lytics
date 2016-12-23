@@ -1,5 +1,9 @@
 package main
 
+import (
+	lytics "github.com/lytics/go-lytics"
+)
+
 func (c *Cli) getSegments(table string, segments []string) (interface{}, error) {
 	if len(segments) == 1 {
 		segment, err := c.Client.GetSegment(segments[0])
@@ -43,4 +47,18 @@ func (c *Cli) getSegmentAttributions(segments []string, limit int) (interface{},
 	}
 
 	return attributions, nil
+}
+
+func (c *Cli) getEntityScan(segmentIdOrQl string, handler lytics.EntityHandler) {
+
+	scan := c.Client.PageSegment(segmentIdOrQl)
+
+	// handle processing the entities
+	for {
+		e := scan.Next()
+		if e == nil {
+			break
+		}
+		handler(&e)
+	}
 }
