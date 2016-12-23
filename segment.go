@@ -22,82 +22,96 @@ const (
 	segmentValidateEndpoint       = "segment/validate"
 )
 
-// Segment is a logical expression to filter entity
-//  The normal concept is logical filter to find users, but the
-//  table also allows logical filter on content, or other entity types.
-type Segment struct {
-	Id            string    `json:"id"`
-	AccountId     string    `json:"account_id"`
-	Name          string    `json:"name"`
-	IsPublic      bool      `json:"is_public"`
-	SlugName      string    `json:"slug_name"`
-	Description   string    `json:"description,omitempty"`
-	SegKind       string    `json:"kind,omitempty"`
-	Table         string    `json:"table,omitempty"`
-	AuthorId      string    `json:"author_id"`
-	Updated       time.Time `json:"updated"`
-	Created       time.Time `json:"created"`
-	Tags          []string  `json:"tags"`
-	Category      string    `json:category,omitempty`
-	Invalid       bool      `json:"invalid"`
-	InvalidReason string    `json:"invalid_reason"`
-	FilterQL      string    `json:"segment_ql,omitempty"`
-}
+type (
+	// Segment is a logical expression to filter entity
+	//  The normal concept is logical filter to find users, but the
+	//  table also allows logical filter on content, or other entity types.
+	Segment struct {
+		Id            string    `json:"id"`
+		AccountId     string    `json:"account_id"`
+		Name          string    `json:"name"`
+		IsPublic      bool      `json:"is_public"`
+		SlugName      string    `json:"slug_name"`
+		Description   string    `json:"description,omitempty"`
+		SegKind       string    `json:"kind,omitempty"`
+		Table         string    `json:"table,omitempty"`
+		AuthorId      string    `json:"author_id"`
+		Updated       time.Time `json:"updated"`
+		Created       time.Time `json:"created"`
+		Tags          []string  `json:"tags"`
+		Category      string    `json:category,omitempty`
+		Invalid       bool      `json:"invalid"`
+		InvalidReason string    `json:"invalid_reason"`
+		FilterQL      string    `json:"segment_ql,omitempty"`
+		AST           *Expr     `json:"ast,omitempty"`
+	}
+	// SegmentSize request is just name, slug, id, size
+	// - also filters out any non Kind="Segment" segments
+	SegmentSize struct {
+		Id       string  `json:"id"`
+		Name     string  `json:"name"`
+		SlugName string  `json:"slug_name"`
+		Size     float64 `json:"size"`
+	}
+	// SegmentAttribution is segment size history
+	SegmentAttribution struct {
+		Id      string                      `json:"id"`
+		Metrics []SegmentAttributionMetrics `json:"metrics"`
+	}
+	// Specific metric point for a segment at a given time
+	SegmentAttributionMetrics struct {
+		Value   int64   `json:"value"`
+		Ts      string  `json:"ts"`
+		Anomaly float64 `json:"anomaly"`
+	}
+	// SegmentCollection is a set of Segments logically grouped
+	// and containing relations (ordering)
+	SegmentCollection struct {
+		AccountId     string            `json:"account_id"`
+		Id            string            `json:"id"`
+		Name          string            `json:"name"`
+		Slug          string            `json:"slug_name"`
+		Description   string            `json:"description,omitempty"`
+		Table         string            `json:"table,omitempty"`
+		AuthorId      string            `json:"author_id"`
+		Updated       time.Time         `json:"updated"`
+		Created       time.Time         `json:"created"`
+		Internal      bool              `json:"internal"`
+		Collection    []*SegColRelation `json:"collection""`
+		ParentSegment string            `json:"parent_segment"`
+	}
+	// SegColRelation maps a segment relationship to a collection
+	SegColRelation struct {
+		Id    string `json:"id"`
+		Order int    `json:"order"`
+	}
+	// SegmentScanner is a stateful, forward only pager to iterate through
+	// entities in a Segment
+	SegmentScanner struct {
+		SegmentID string
+		SegmentQl string
+		next      string
+		previous  string
+		buffer    chan []Entity
+		nextChan  chan Entity
+		shutdown  chan bool
+		Total     int
+		Batches   []int
+		err       error
+	}
 
-type SegmentSize struct {
-	Id       string  `json:"id"`
-	Name     string  `json:"name"`
-	SlugName string  `json:"slug_name"`
-	Size     float64 `json:"size"`
-}
+	// Expr is the AST structures of a SegmentQL statement
+	Expr struct {
+		// The token, and node expressions are non
+		// nil if it is an expression
+		Op   string  `json:"op,omitempty"`
+		Args []*Expr `json:"args,omitempty"`
 
-type SegmentAttribution struct {
-	Id      string                      `json:"id"`
-	Metrics []SegmentAttributionMetrics `json:"metrics"`
-}
-
-type SegmentAttributionMetrics struct {
-	Value   int64   `json:"value"`
-	Ts      string  `json:"ts"`
-	Anomaly float64 `json:"anomaly"`
-}
-
-// SegmentCollection is a set of Segments logically grouped
-// and containing relations (ordering)
-type SegmentCollection struct {
-	AccountId     string            `json:"account_id"`
-	Id            string            `json:"id"`
-	Name          string            `json:"name"`
-	Slug          string            `json:"slug_name"`
-	Description   string            `json:"description,omitempty"`
-	Table         string            `json:"table,omitempty"`
-	AuthorId      string            `json:"author_id"`
-	Updated       time.Time         `json:"updated"`
-	Created       time.Time         `json:"created"`
-	Internal      bool              `json:"internal"`
-	Collection    []*SegColRelation `json:"collection""`
-	ParentSegment string            `json:"parent_segment"`
-}
-
-type SegColRelation struct {
-	Id    string `json:"id"`
-	Order int    `json:"order"`
-}
-
-// SegmentScanner is a stateful, forward only pager to iterate through
-// entities in a Segment
-type SegmentScanner struct {
-	SegmentID string
-	SegmentQl string
-	next      string
-	previous  string
-	buffer    chan []Entity
-	nextChan  chan Entity
-	shutdown  chan bool
-	Total     int
-	Batches   []int
-	err       error
-}
+		// If op is 0, and args nil then exactly one of these should be set
+		Identity string `json:"ident,omitempty"`
+		Value    string `json:"val,omitempty"`
+	}
+)
 
 func (s *SegmentScanner) Stop() {
 	defer func() { recover() }()
@@ -123,6 +137,22 @@ func (s *SegmentScanner) Next() Entity {
 // Created is a helper method to convert the timestamp into human readable format for metrics
 func (s *SegmentAttributionMetrics) Created() (time.Time, error) {
 	return parseLyticsTime(s.Ts)
+}
+
+// PostSegment creates a Segment
+// https://www.getlytics.com/developers/rest-api#segment
+func (l *Client) PostSegment(segmentQL string) (Segment, error) {
+	res := ApiResp{}
+	data := Segment{}
+
+	// make the request
+	err := l.PostType("text/plain", "segment", nil, segmentQL, &res, &data)
+
+	if err != nil {
+		return data, err
+	}
+
+	return data, nil
 }
 
 // GetSegment returns the details for a single segment based on id
@@ -246,8 +276,6 @@ func (l *Client) GetSegmentCollectionList() ([]SegmentCollection, error) {
 }
 
 // Other Available Endpoints
-// * POST    create segment
-// * PUT     update segment
 // * DELETE  remove segment
 
 // **************************** START OF SEGMENT SCAN METHODS ****************************

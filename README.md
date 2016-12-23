@@ -71,14 +71,23 @@ func main() {
 	// create the client
 	client := lytics.NewLytics(key, nil, nil)
 
-	// list all accounts for key
-	accounts, err := client.GetAccounts()
-	if err != nil {
-		panic(err)
-	}
+	// create a scanner for All Users in a Segment 
+	scan := client.PageSegment(`
+		FILTER AND (
+		    lastvisit_ts > "now-2d"
+		    EXISTS email
+		)
+		FROM user
+	`)
 
-	for _, acct := range accounts {
-		fmt.Println(acct.Name)
+	// handle processing the users
+	for {
+		e := scan.Next()
+		if e == nil {
+			break
+		}
+
+		fmt.Println(e.PrettyJson())
 	}
 }
 ```
