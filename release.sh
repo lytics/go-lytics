@@ -44,6 +44,7 @@ cd cmd/lytics
 
 TAG=$(git describe $(git rev-list --tags --max-count=1))
 
+TAG="latest"
 echo "releasing $TAG"
 
 # if we are re-running, lets delete it first

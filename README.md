@@ -10,6 +10,46 @@ https://www.getlytics.com/developers/rest-api
 ## Command Line Tool Doc
 https://github.com/lytics/go-lytics/blob/master/cmd/lytics/README.md
 
+**Segment Scan Usage from CLI**
+
+Exporting CSV files, with JQ https://stedolan.github.io/jq/ usage.
+
+```
+
+# Scan a segment by id
+lytics --id=ab93a9801a72871d689342556b0de2e9 segmentscan | jq '.'
+
+# Scan a segment by Slug
+lytics --id=last_2_hours segmentscan | jq '.'
+
+# write out this segment to temp file so we can play with jq
+
+lytics --id=last_2_hours segmentscan > /tmp/users.json
+
+# same thing but with "Ad hoc query"
+lytics --id='
+
+FILTER AND (
+    lastvisit_ts > "now-2d"
+    EXISTS email
+)
+FROM user
+
+' segmentscan > /tmp/users.json
+
+
+# use JQ to output a few fields
+
+cat /tmp/users.json | \
+ jq -c ' {country: .country, city: .city, org: .org, uid: ._uid, visitct: .visitct} '
+
+# create a csv file from these users
+echo "country,city,org,uid,visitct\n" > /tmp/users.csv
+cat /tmp/users.json | \
+ jq -r ' [ .country, .city, .org,  ._uid, .visitct ] | @csv ' >> /tmp/users.csv
+
+```
+
 
 ## Getting Started
 1. Import the library. `go get github.com/lytics/go-lytics`
@@ -31,14 +71,23 @@ func main() {
 	// create the client
 	client := lytics.NewLytics(key, nil, nil)
 
-	// list all accounts for key
-	accounts, err := client.GetAccounts()
-	if err != nil {
-		panic(err)
-	}
+	// create a scanner for All Users in a Segment 
+	scan := client.PageSegment(`
+		FILTER AND (
+		    lastvisit_ts > "now-2d"
+		    EXISTS email
+		)
+		FROM user
+	`)
 
-	for _, acct := range accounts {
-		fmt.Println(acct.Name)
+	// handle processing the users
+	for {
+		e := scan.Next()
+		if e == nil {
+			break
+		}
+
+		fmt.Println(e.PrettyJson())
 	}
 }
 ```
@@ -53,22 +102,13 @@ func main() {
 * **Account**
 	* Single `GET`
 	* All `GET`
-* **Auth**
-	* Single `GET`
-	* All `GET`
 * **Admin User**
 	* Single `GET`
 	* All `GET`
-* **Provider**
-	* Single `GET`
-	* All `GET`
-* **Work**
-	* Single `GET`
-	* All `GET` 	
 * **Segment**
 	* Single `GET`
 	* All `GET` 
-* **Entity API** `GET`
+* **Entity (end users) API** `GET`
 * **Catalog**
 	* Schema `GET`
 * **Query**

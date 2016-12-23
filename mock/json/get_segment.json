@@ -8,12 +8,10 @@
     "short_id": "Short ID",
     "name": "Lytics Test Segment",
     "is_public": true,
-    "public_name": "lytics_test_segment",
     "slug_name": "lytics_test_segment",
     "table": "user",
+    "segment_ql":"FILTER *",
     "author_id": "a6dsga789dg69adg6a9g22",
-    "modified_ms": 1418341739630,
-    "created_ms": 1400000000000,
     "updated": "2014-05-13T16:53:20Z",
     "created": "2014-05-13T16:53:20Z",
     "tags": []

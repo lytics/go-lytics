@@ -62,7 +62,7 @@ func (l *Client) GetQuery(alias string) (Query, error) {
 }
 
 // GetQueryTest returns the evaluated entity from given query
-// https://www.getlytics.com/developers/rest-api#segment-sizes
+// https://www.getlytics.com/developers/rest-api#query
 func (l *Client) GetQueryTest(qs url.Values, query string) (Entity, error) {
 	res := ApiResp{}
 	data := Entity{}
@@ -76,8 +76,3 @@ func (l *Client) GetQueryTest(qs url.Values, query string) (Entity, error) {
 
 	return data, nil
 }
-
-// Other Available Endpoints
-// * POST    create account
-// * PUT     upate account
-// * DELETE  remove account

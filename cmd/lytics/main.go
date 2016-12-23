@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	lytics "github.com/lytics/go-lytics"
 	"io/ioutil"
 	"os"
 	"strings"
+
+	lytics "github.com/lytics/go-lytics"
 )
 
 var (
@@ -89,7 +90,9 @@ func main() {
 		return
 	}
 
-	fmt.Println(output)
+	if len(output) > 0 {
+		fmt.Println(output)
+	}
 }
 
 func writeToFile(file, data string) error {
@@ -139,20 +142,20 @@ func (c *Cli) handleFunction(method string) (string, error) {
 	case "entity":
 		result, err = c.getEntity(entitytype, fieldname, fieldvalue, fieldsSlice)
 
-	case "provider":
-		result, err = c.getProviders(id)
-
 	case "segment":
 		result, err = c.getSegments("user", segmentsSlice)
 
+	case "segmentscan":
+		c.getEntityScan(id, func(e *lytics.Entity) {
+			fmt.Println(e.PrettyJson())
+		})
+		return "", nil
+
 	case "segmentsize":
-		result, err = c.getSegmentSizes(segmentsSlice)
+		result, err = c.getSegments("user", segmentsSlice)
 
 	case "segmentattribution":
 		result, err = c.getSegmentAttributions(segmentsSlice, limit)
-
-	case "work":
-		result, err = c.getWorks(id)
 
 	case "user":
 		result, err = c.getUsers(id)
@@ -250,6 +253,18 @@ METHODS:
          -------
               lytics -entitytype=user -fieldname=email -fieldvalue="me@me.com" entity
               lytics -entitytype=user -fieldname=email -fieldvalue="me@me.com" -fields=email entity
+
+    [segmentscan]
+         retrieves a list of users (actually entities, could be content, etc).
+         
+         -------
+         params:
+         -------
+              <id>   id=id_or_slug
+         -------
+         example:
+         -------
+              lytics --id=slug_of_segment segmentscan
 
     [segment]
          retrieves segment information based upon api key.
