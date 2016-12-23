@@ -155,7 +155,7 @@ func (c *Cli) handleFunction(method string) (string, error) {
 		return "", nil
 
 	case "segmentsize":
-		result, err = c.getSegments("user", segmentsSlice)
+		result, err = c.getSegmentSizes(segmentsSlice)
 
 	case "segmentattribution":
 		result, err = c.getSegmentAttributions(segmentsSlice, limit)
