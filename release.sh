@@ -44,7 +44,7 @@ cd cmd/lytics
 
 TAG=$(git describe $(git rev-list --tags --max-count=1))
 
-TAG="latest"
+# TAG="latest"
 echo "releasing $TAG"
 
 # if we are re-running, lets delete it first
@@ -55,11 +55,8 @@ github-release release \
     --user lytics \
     --repo go-lytics \
     --tag $TAG \
-    --name "Watch lql helper" \
-    --description 'Watch a folder and evaluate lql/json aid
-
-download and save the binary and rename to lytics
-'
+    --name "Lytics CLI Latest" \
+    --description 'tbd'
 
 # upload a file, the mac osx amd64 binary
 echo "Creating and uploading mac client"
