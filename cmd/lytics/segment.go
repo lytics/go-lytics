@@ -49,10 +49,11 @@ func (c *Cli) getSegmentAttributions(segments []string, limit int) (interface{},
 	return attributions, nil
 }
 
-func (c *Cli) getEntityScan(segmentIdOrQl string, handler lytics.EntityHandler) {
+func (c *Cli) getEntityScan(segmentIdOrQl string, limit int, handler lytics.EntityHandler) {
 
 	scan := c.Client.PageSegment(segmentIdOrQl)
 
+	ct := 0
 	// handle processing the entities
 	for {
 		e := scan.Next()
@@ -60,5 +61,9 @@ func (c *Cli) getEntityScan(segmentIdOrQl string, handler lytics.EntityHandler) 
 			break
 		}
 		handler(&e)
+		ct++
+		if limit > 0 && ct == limit {
+			return
+		}
 	}
 }

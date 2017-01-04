@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/url"
+	"os"
 	"strings"
 
 	"github.com/fsnotify/fsnotify"
@@ -22,9 +23,10 @@ func (c *Cli) watch() (interface{}, error) {
 }
 
 type datafile struct {
-	name string
-	lql  string
-	data []url.Values
+	name          string
+	lql           string
+	data          []url.Values
+	checkedRecent bool
 }
 
 func (d *datafile) loadJson(of string) {
@@ -96,6 +98,21 @@ func (l *lql) print(d *datafile) {
 
 }
 
+func (l *lql) findRecent(d *datafile) {
+	d.checkedRecent = true
+	ss, err := l.c.Client.GetStreams("")
+	if err != nil {
+		log.Printf("Could not load streams data: %v \n\n", err)
+		return
+	}
+	for _, s := range ss {
+		if s.Name == d.name {
+			//fmt.Printf("found data %#v \n\n", s.Recent)
+			d.data = s.Recent
+		}
+	}
+}
+
 func (l *lql) handleFile(of string, showOutput bool) {
 	if strings.Index(of, ".") < 1 {
 		return
@@ -113,6 +130,14 @@ func (l *lql) handleFile(of string, showOutput bool) {
 		by, err := ioutil.ReadFile("./" + of)
 		exitIfErr(err, fmt.Sprintf("Could not read file %v", of))
 		df.lql = string(by)
+
+		if _, err := os.Stat("./" + name + ".json"); os.IsNotExist(err) {
+			// ./name.json does not exist lets use recent
+			if !df.checkedRecent {
+				l.findRecent(df)
+			}
+		}
+
 	case strings.HasSuffix(f, ".csv"):
 		//log.Println("handle csv file ", f)
 	case strings.HasSuffix(f, ".json"):

@@ -7,6 +7,7 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // Given a set of bytes, convert to json map[string]interface{}, then
@@ -193,4 +194,103 @@ func flattenJsonValue(into url.Values, toFlatten interface{}, key string) error 
 		//  []interface{}
 	}
 	return nil
+}
+
+// Specialized Embeddable time that formats to Lytics Standard Api format
+//   which is string unix milliseconds since eopch
+//
+//    http://stackoverflow.com/questions/20475321/override-the-layout-used-by-json-marshal-to-format-time-time
+//    https://github.com/lytics/lio/wiki/api
+type JsonTime struct {
+	time.Time
+}
+
+func NewJsonTime(t time.Time) JsonTime {
+	return JsonTime{t}
+}
+func (t *JsonTime) UnmarshalJSON(by []byte) error {
+	var tsval string
+	err := json.Unmarshal(by, &tsval)
+	if err == nil {
+		ts, err := strconv.ParseInt(tsval, 10, 64)
+		if err == nil {
+			t.Time = time.Unix(0, ts*1e6)
+		}
+	}
+	return err
+}
+
+func (t JsonTime) MarshalJSON() ([]byte, error) {
+	return []byte(`"` + strconv.FormatInt(t.Time.UnixNano()/1e6, 10) + `"`), nil
+}
+
+// Timestamp in secs
+type JsonUnixTime struct {
+	time.Time
+}
+
+func NewJsonUnixTime(t time.Time) JsonUnixTime {
+	return JsonUnixTime{t}
+}
+
+func (t *JsonUnixTime) UnmarshalJSON(by []byte) error {
+	var tsint int64
+	err := json.Unmarshal(by, &tsint)
+
+	if err == nil {
+		t.Time = time.Unix(tsint, 0)
+		return nil
+	} else {
+		var tsval string
+		err := json.Unmarshal(by, &tsval)
+		if err == nil {
+			ts, err := strconv.ParseInt(tsval, 10, 64)
+			if err == nil {
+				t.Time = time.Unix(ts, 0)
+				return nil
+			}
+		}
+	}
+
+	return err
+}
+
+func (t JsonUnixTime) MarshalJSON() ([]byte, error) {
+	return []byte(`"` + strconv.FormatInt(t.Time.UnixNano()/1e6, 10) + `"`), nil
+}
+
+// Timestamp type handles json timestamp values
+type Timestamp struct {
+	time.Time
+}
+
+func (t *Timestamp) MarshalJSON() ([]byte, error) {
+	return []byte(t.String()), nil
+}
+
+func (t *Timestamp) UnmarshalJSON(b []byte) error {
+	var tsint int64
+
+	err := json.Unmarshal(b, &tsint)
+	if err != nil {
+		var tsval string
+		if err = json.Unmarshal(b, &tsval); err != nil {
+			return err
+		}
+		tsint, err = strconv.ParseInt(tsval, 10, 64)
+		if err != nil {
+			return err
+		}
+	}
+	t.Time = time.Unix(tsint, 0)
+
+	return nil
+}
+
+func (t *Timestamp) String() string {
+	if t.IsZero() {
+		return ""
+	}
+	ts := t.Unix()
+	return fmt.Sprint(ts)
 }

@@ -69,6 +69,51 @@ cat /tmp/users.json | \
 **Lytics Watch Usage**
 
 1.  Create NAME.lql (any name) file in a folder.
+2.  Assuming you already have data collected, it will use our api to show recent examples against that lql.
+
+You can open and edit in an editor.  Every time you edit it will print resulting
+users it interpreted from recent data to our api.
+
+
+### Example
+
+```
+
+# get your api key from web app account settings
+export LIOKEY="your_api_key"
+
+cd /path/to/your/project
+
+# create an lql file
+# - name it "default.lql" same name as "stream" which
+#   you can find in App under Data -> "streams"
+echo '
+SELECT 
+   user_id,
+   name,
+   todate(ts),
+   match("user.") AS user_attributes,
+   map(event, todate(ts))   as event_times   KIND map[string]time  MERGEOP LATEST
+
+FROM default
+INTO USER
+BY user_id
+ALIAS my_query
+' > default.lql
+
+
+# start watching in background
+lytics watch
+
+# now edit, see output
+
+
+```
+
+
+
+**Lytics Watch With Custom Data**
+1.  Create NAME.lql (any name) file in a folder.
 2.  Create NAME.json (any name, must match lql file name) in folder.
 3.  run the `lytics watch` command from the folder with files.
 4.  Edit .lql, or .json files, upon change the evaluated result of .lql, json will be output.
