@@ -27,6 +27,7 @@ type datafile struct {
 	lql           string
 	data          []url.Values
 	checkedRecent bool
+	stream        string
 }
 
 func (d *datafile) loadJson(of string) {
@@ -73,6 +74,7 @@ func (l *lql) start() {
 	l.watch()
 	<-done
 }
+
 func (l *lql) print(d *datafile) {
 	if len(d.data) == 0 {
 		log.Printf("No data found for %v \n\n", d.name)
@@ -82,7 +84,7 @@ func (l *lql) print(d *datafile) {
 		log.Printf("No lql found for %v \n\n", d.name)
 		return
 	}
-	for _, qs := range d.data {
+	for i, qs := range d.data {
 		ent, err := l.c.Client.GetQueryTest(qs, d.lql)
 		if err != nil {
 			log.Printf("Could not evaluate query/entity: %v \n\n", err)
@@ -94,8 +96,25 @@ func (l *lql) print(d *datafile) {
 		if err == nil {
 			fmt.Printf("\n%v\n\n", string(out))
 		}
+		if i > 1 {
+			return
+		}
 	}
 
+}
+
+func (l *lql) verifyLql(d *datafile) error {
+	if d.lql != "" {
+		q, err := l.c.Client.PostQueryValidate(d.lql)
+		if err != nil {
+			log.Printf("error validating stream\n%v\n\n", err)
+			return err
+		}
+		if q.From != "" {
+			d.stream = q.From
+		}
+	}
+	return nil
 }
 
 func (l *lql) findRecent(d *datafile) {
@@ -106,7 +125,7 @@ func (l *lql) findRecent(d *datafile) {
 		return
 	}
 	for _, s := range ss {
-		if s.Name == d.name {
+		if s.Name == d.name || s.Name == d.stream {
 			//fmt.Printf("found data %#v \n\n", s.Recent)
 			d.data = s.Recent
 		}
@@ -130,6 +149,12 @@ func (l *lql) handleFile(of string, showOutput bool) {
 		by, err := ioutil.ReadFile("./" + of)
 		exitIfErr(err, fmt.Sprintf("Could not read file %v", of))
 		df.lql = string(by)
+
+		// Parse the lql to get stream name
+		// and validate the lql syntax
+		if err := l.verifyLql(df); err != nil {
+			return
+		}
 
 		if _, err := os.Stat("./" + name + ".json"); os.IsNotExist(err) {
 			// ./name.json does not exist lets use recent

@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"strings"
 
@@ -67,6 +68,8 @@ func main() {
 		return
 	}
 	method = flag.Args()[0]
+
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
 	// create lytics client with auth info
 	c := Cli{
