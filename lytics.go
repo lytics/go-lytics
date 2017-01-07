@@ -148,6 +148,7 @@ func (l *Client) PrepUrl(endpoint string, params url.Values, dataKey bool) (stri
 // the response into the master api struct as well as a specific data type.
 func (l *Client) Do(r *http.Request, response, data interface{}) error {
 	// make the request
+
 	res, err := l.client.Do(r)
 	if err != nil {
 		return err
@@ -225,6 +226,7 @@ func (l *Client) PostType(contentType, endpoint string, params url.Values, body 
 		return err
 	}
 
+	//log.Printf("prep %s  %T \n", path, body)
 	payload, err := prepRequestBody(body)
 	if err != nil {
 		return err

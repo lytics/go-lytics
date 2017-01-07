@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"strings"
 
@@ -57,8 +58,8 @@ func main() {
 	if apikey == "" && dataapikey == "" {
 		fmt.Println(`Missing -apikey and/or -method: use -help for assistance
 
-    LIOKEY env variable will fullfill api key needs
-    `)
+	LIOKEY env variable will fullfill api key needs
+	`)
 		os.Exit(1)
 	}
 
@@ -67,6 +68,8 @@ func main() {
 		return
 	}
 	method = flag.Args()[0]
+
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
 	// create lytics client with auth info
 	c := Cli{
@@ -149,7 +152,10 @@ func (c *Cli) handleFunction(method string) (string, error) {
 		result, err = c.getSegments("user", segmentsSlice)
 
 	case "segmentscan":
-		c.getEntityScan(id, func(e *lytics.Entity) {
+		if id == "" && len(flag.Args()) == 2 {
+			id = flag.Args()[1]
+		}
+		c.getEntityScan(id, limit, func(e *lytics.Entity) {
 			fmt.Println(e.PrettyJson())
 		})
 		return "", nil
@@ -271,6 +277,20 @@ METHODS:
          example:
          -------
               lytics --id=slug_of_segment segmentscan
+
+              # use a segment QL query
+              lytics segmentscan '
+                  FILTER AND (
+                     EXISTS email 
+                     last_active_ts > "now-7d"
+                  )
+              '
+              
+              # see what single user looks like
+              lytics --limit=1 segmentscan ' FILTER * FROM user'
+
+              # see what content looks like 
+              lytics --limit=1 segmentscan ' FILTER * FROM content'
 
     [segment]
          retrieves segment information based upon api key.
