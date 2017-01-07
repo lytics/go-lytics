@@ -1,7 +1,6 @@
 package lytics
 
 import (
-	"log"
 	"net/url"
 	"time"
 )
@@ -94,7 +93,6 @@ func (l *Client) PostQueryValidate(query string) (Query, error) {
 	err := l.PostType("text/plain", queryValidateEndpoint, nil, query, &res, &data)
 
 	if err != nil {
-		log.Println("could not post/_validate query ", query)
 		return data, err
 	}
 

@@ -107,7 +107,7 @@ func (l *lql) verifyLql(d *datafile) error {
 	if d.lql != "" {
 		q, err := l.c.Client.PostQueryValidate(d.lql)
 		if err != nil {
-			log.Printf("error validating stream\n%v\n\n", err)
+			log.Printf("error validating lql statement\n%v\n\n", err)
 			return err
 		}
 		if q.From != "" {
