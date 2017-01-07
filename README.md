@@ -8,47 +8,9 @@ Overview of supported methods outlined below.
 https://www.getlytics.com/developers/rest-api
 
 ## Command Line Tool Doc
-https://github.com/lytics/go-lytics/blob/master/cmd/lytics/README.md
-
-**Segment Scan Usage from CLI**
-
-Exporting CSV files, with JQ https://stedolan.github.io/jq/ usage.
-
-```
-
-# Scan a segment by id
-lytics --id=ab93a9801a72871d689342556b0de2e9 segmentscan | jq '.'
-
-# Scan a segment by Slug
-lytics --id=last_2_hours segmentscan | jq '.'
-
-# write out this segment to temp file so we can play with jq
-
-lytics --id=last_2_hours segmentscan > /tmp/users.json
-
-# same thing but with "Ad hoc query"
-lytics --id='
-
-FILTER AND (
-    lastvisit_ts > "now-2d"
-    EXISTS email
-)
-FROM user
-
-' segmentscan > /tmp/users.json
 
 
-# use JQ to output a few fields
-
-cat /tmp/users.json | \
- jq -c ' {country: .country, city: .city, org: .org, uid: ._uid, visitct: .visitct} '
-
-# create a csv file from these users
-echo "country,city,org,uid,visitct\n" > /tmp/users.csv
-cat /tmp/users.json | \
- jq -r ' [ .country, .city, .org,  ._uid, .visitct ] | @csv ' >> /tmp/users.csv
-
-```
+The [Lytics CLI](https://github.com/lytics/lytics) utilizes this library.
 
 
 ## Getting Started
@@ -121,5 +83,5 @@ send us a PR. Please make sure all tests run `go test -v`
 and that all new functionality comes with well documented and thorough testing.
 
 ## License
-[Apache Version 2.0 ](LICENSE.md)   
-Copyright (c) 2015, 2016 Lytics
+[MIT](LICENSE.md)
+Copyright (c) 2017, 2016, 2015 Lytics
