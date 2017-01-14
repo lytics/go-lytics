@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -27,11 +28,20 @@ import (
 //  Version:         0.0.2
 //
 const (
-	apiBase        = "https://api.lytics.io/api"
-	updated        = "2016-11-09" // AGH
+	updated        = "2017-01-12"
 	apiVersion     = "1.1.0"
-	libraryVersion = "0.0.2"
+	libraryVersion = "0.0.3"
 )
+
+var (
+	apiBase = "https://api.lytics.io/api"
+)
+
+func init() {
+	if apiEnv := os.Getenv("LIOAPI"); apiEnv != "" {
+		apiBase = apiEnv
+	}
+}
 
 // Client bundles the data necessary to interact with the vast majority of Lytics REST endpoints.
 type Client struct {
