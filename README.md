@@ -1,17 +1,17 @@
 #Lytics SDK for Go
-The Lytics SDK for go offers easy integration with all public REST API endpoints. This library is actively being managed and every effort will be made to ensure that all handling reflects the best methods available. Overview of supported methods outlined below.
-
-## Version
-0.0.1
+The Lytics SDK for go offers easy integration with our public REST API endpoints. 
+This library is actively being managed and every effort will be made to ensure 
+that all handling reflects the best methods available. 
+Overview of supported methods outlined below.
 
 ## Full REST API Documentation
 https://www.getlytics.com/developers/rest-api
 
-## Roadmap
-* Command line tool
-* Data upload (single and bulk)
-* AppEngine specific docs
-* More detailed examples
+## Command Line Tool Doc
+
+
+The [Lytics CLI](https://github.com/lytics/lytics) utilizes this library.
+
 
 ## Getting Started
 1. Import the library. `go get github.com/lytics/go-lytics`
@@ -33,14 +33,23 @@ func main() {
 	// create the client
 	client := lytics.NewLytics(key, nil, nil)
 
-	// list all accounts for key
-	accounts, err := client.GetAccounts()
-	if err != nil {
-		panic(err)
-	}
+	// create a scanner for All Users in a Segment 
+	scan := client.PageSegment(`
+		FILTER AND (
+		    lastvisit_ts > "now-2d"
+		    EXISTS email
+		)
+		FROM user
+	`)
 
-	for _, acct := range accounts {
-		fmt.Println(acct.Name)
+	// handle processing the users
+	for {
+		e := scan.Next()
+		if e == nil {
+			break
+		}
+
+		fmt.Println(e.PrettyJson())
 	}
 }
 ```
@@ -55,43 +64,24 @@ func main() {
 * **Account**
 	* Single `GET`
 	* All `GET`
-* **Auth**
+* **Admin User**
 	* Single `GET`
 	* All `GET`
-* **User**
-	* Single `GET`
-	* All `GET`
-* **Provider**
-	* Single `GET`
-	* All `GET`
-* **Work**
-	* Single `GET`
-	* All `GET` 	
 * **Segment**
 	* Single `GET`
 	* All `GET` 
-* **Entity API** `GET`
+* **Entity (end users) API** `GET`
 * **Catalog**
 	* Schema `GET`
+* **Query**
+	* All `GET`
+	* Test Evaluation `POST`
 
-## Command Line Tool
-We have built out a simple command line tool that lets you test many of the endpoints as well as write the results to files. This is a work in progress and will continue to evolve.
-
-### Installation
-
-```
-go install github.com/lytics/go-lytics/cmd/lytics
-```
-
-### Usage
-
-```
-lyticscmd -help
-```
-	
 ## Contributing
-Want to add something? Go for it, just fork the repo and send us a PR. Please make sure all tests run `go test -v` and that all new functionality comes with well documented and thorough testing.
+Want to add something? Go for it, just fork the repo and 
+send us a PR. Please make sure all tests run `go test -v` 
+and that all new functionality comes with well documented and thorough testing.
 
 ## License
-[Apache Version 2.0 ](LICENSE.md)   
-Copyright (c) 2015 Lytics
+[MIT](LICENSE.md)
+Copyright (c) 2017, 2016, 2015 Lytics

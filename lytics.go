@@ -3,12 +3,12 @@ package lytics
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -25,17 +25,23 @@ import (
 //
 //  Original Author: Mark Hayden
 //  Contributions:   Mark Hayden
-//  Version:         0.0.1
+//  Version:         0.0.2
 //
-// Examples
-// Coming Soon
-
 const (
-	apiBase        = "https://api.lytics.io/api"
-	updated        = "2015-09-15"
-	apiVersion     = "Beta 1.0.0"
-	libraryVersion = "0.0.1"
+	updated        = "2017-01-12"
+	apiVersion     = "1.1.0"
+	libraryVersion = "0.0.3"
 )
+
+var (
+	apiBase = "https://api.lytics.io/api"
+)
+
+func init() {
+	if apiEnv := os.Getenv("LIOAPI"); apiEnv != "" {
+		apiBase = apiEnv
+	}
+}
 
 // Client bundles the data necessary to interact with the vast majority of Lytics REST endpoints.
 type Client struct {
@@ -43,7 +49,6 @@ type Client struct {
 	apiKey     string
 	dataApiKey string
 	client     *http.Client
-	Scan       *SegmentScanner
 }
 
 // ApiResp is the core api response for all Lytics endpoints. In some instances the "Status" is returned
@@ -153,6 +158,7 @@ func (l *Client) PrepUrl(endpoint string, params url.Values, dataKey bool) (stri
 // the response into the master api struct as well as a specific data type.
 func (l *Client) Do(r *http.Request, response, data interface{}) error {
 	// make the request
+
 	res, err := l.client.Do(r)
 	if err != nil {
 		return err
@@ -165,14 +171,24 @@ func (l *Client) Do(r *http.Request, response, data interface{}) error {
 		return err
 	}
 
-	// if we have an invalid response code error out
-	if res.StatusCode >= 301 {
-		return errors.New(fmt.Sprintf("Received non-successful response: %d", res.StatusCode))
-	}
-
 	// if we have some struct to unmarshal body into, do that and return
 	if response != nil {
-		return buildRespJSON(b, response, data)
+		err = buildRespJSON(b, response, data)
+		if err != nil {
+			return err
+		}
+		switch rt := response.(type) {
+		case *ApiResp:
+			// if we have an invalid response code error out
+			if res.StatusCode >= 301 {
+				return fmt.Errorf(rt.Message)
+			}
+		}
+	}
+
+	// if we have an invalid response code error out
+	if res.StatusCode >= 301 {
+		return fmt.Errorf("Received non-successful response: %d", res.StatusCode)
 	}
 
 	return nil
@@ -207,6 +223,11 @@ func (l *Client) Get(endpoint string, params url.Values, body interface{}, respo
 
 // Get prepares a post request and then executes using the Do method
 func (l *Client) Post(endpoint string, params url.Values, body interface{}, response, data interface{}) error {
+	return l.PostType("application/json", endpoint, params, body, response, data)
+}
+
+// Get prepares a post request and then executes using the Do method
+func (l *Client) PostType(contentType, endpoint string, params url.Values, body interface{}, response, data interface{}) error {
 	method := "POST"
 
 	// get the formatted endpoint url
@@ -215,6 +236,7 @@ func (l *Client) Post(endpoint string, params url.Values, body interface{}, resp
 		return err
 	}
 
+	//log.Printf("prep %s  %T \n", path, body)
 	payload, err := prepRequestBody(body)
 	if err != nil {
 		return err
@@ -222,6 +244,8 @@ func (l *Client) Post(endpoint string, params url.Values, body interface{}, resp
 
 	// build the request
 	r, _ := http.NewRequest(method, path, payload)
+
+	r.Header.Set("Content-Type", contentType)
 
 	// execute the request
 	err = l.Do(r, response, data)
@@ -261,9 +285,14 @@ func buildRespJSON(b []byte, response, data interface{}) error {
 		return err
 	}
 
-	err = json.Unmarshal(response.(*ApiResp).Data, &data)
-	if err != nil {
-		return err
+	switch rt := response.(type) {
+	case *ApiResp:
+		if len(rt.Data) > 0 {
+			err = json.Unmarshal(rt.Data, &data)
+			if err != nil {
+				return err
+			}
+		}
 	}
 
 	return nil

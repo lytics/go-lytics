@@ -1,6 +1,7 @@
 package lytics
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/url"
 	"strings"
@@ -9,6 +10,9 @@ import (
 const (
 	entityEndpoint = "entity" // :entitytype/:fieldname/:fieldval, fields
 )
+
+// EntityHandler for use in paging
+type EntityHandler func(*Entity)
 
 // Entity is the main data source for Lytics. All users, content, etc. are referred to as "entities"
 type Entity map[string]interface{}
@@ -53,4 +57,9 @@ func (l *Client) GetEntity(entitytype, fieldname, fieldval string, fields []stri
 	}
 
 	return data, nil
+}
+
+func (e *Entity) PrettyJson() string {
+	by, _ := json.MarshalIndent(e, "", "  ")
+	return string(by)
 }
