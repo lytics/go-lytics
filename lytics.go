@@ -39,7 +39,7 @@ var (
 
 func init() {
 	if apiEnv := os.Getenv("LIOAPI"); apiEnv != "" {
-		apiBase = apiEnv
+		apiBase = apiEnv + "/api"
 	}
 }
 
