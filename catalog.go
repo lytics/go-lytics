@@ -2,6 +2,8 @@ package lytics
 
 import (
 	"net/url"
+	"strconv"
+	"strings"
 )
 
 const (
@@ -42,6 +44,32 @@ const (
           ],
           "Html": [
 
+
+
+
+curl -s -H "Authorization: $LIOKEY"   -XGET "$LIOAPI/api/schema/user/fieldinfo?fields=utm_campaigns" | jq '.'
+{
+  "data": {
+    "table": "user",
+    "fields": [
+      {
+        "field": "utm_campaigns",
+        "terms_counts": {
+          "mycampaign": 2956,
+          "email_week_22": 2532
+        },
+        "more_terms": true,
+        "ents_present": 318308,
+        "ents_absent": 2324726,
+        "approx_cardinality": 1215
+      }
+    ]
+  },
+  "message": "success",
+  "status": 200
+}
+
+
 */
 
 type (
@@ -68,6 +96,18 @@ type (
 		LastUpdateTime JsonTime     `json:"last_update_ts,omitempty"`
 		Recent         []url.Values `json:"recent_events,omitempty"`
 	}
+	SchemaFieldInfo struct {
+		Table  string      `json:"table"`
+		Fields []FieldInfo `json:"fields"`
+	}
+	FieldInfo struct {
+		Field             string         `json:"field"`
+		More              bool           `json:"more_terms"`
+		EntsPresent       int64          `json:"ents_present"`
+		EntsAbsent        int64          `json:"ents_absent"`
+		ApproxCardinality int64          `json:"approx_cardinality"`
+		TermCounts        map[string]int `json:"terms_counts"`
+	}
 )
 
 // GetSchema returns the data schema for an account
@@ -93,6 +133,25 @@ func (l *Client) GetStreams(stream string) ([]*Stream, error) {
 
 	// make the request
 	err := l.Get(parseLyticsURL(routeSchemaStreams, nil), nil, nil, &res, &data)
+	if err != nil {
+		return data, err
+	}
+
+	return data, nil
+}
+
+// GetFieldInfo returns the metadata about a single field
+// https://www.getlytics.com/developers/rest-api#schema
+func (l *Client) GetSchemaFieldInfo(table string, fields []string, limit int) (SchemaFieldInfo, error) {
+	res := ApiResp{}
+	data := SchemaFieldInfo{}
+
+	qs := make(url.Values)
+	qs.Set("fields", strings.Join(fields, ","))
+	qs.Set("limit", strconv.Itoa(limit))
+
+	// make the request
+	err := l.Get(parseLyticsURL(schemaTableFieldinfoEndpoint, map[string]string{"table": table}), qs, nil, &res, &data)
 	if err != nil {
 		return data, err
 	}
