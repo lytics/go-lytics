@@ -339,13 +339,13 @@ func (s *SegmentScanner) run(c *Client) {
 				// we are shutdown
 				return
 			case el, ok := <-s.buffer:
-				if !ok {
-					// we have closed buffer, we are done
-					close(s.shutdown)
-					return
-				}
-				for _, e := range el {
-					s.nextChan <- e
+				if ok {
+					for _, e := range el {
+						s.nextChan <- e
+					}
+				} else {
+					// buffer is closed, no more entities
+					close(s.nextChan)
 				}
 			}
 		}
