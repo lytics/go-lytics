@@ -20,11 +20,16 @@ type Entity map[string]interface{}
 // GetEntity returns all the availble attributes for a single entity (user, content, etc)
 // https://www.getlytics.com/developers/rest-api#entity-a-p-i
 func (l *Client) GetEntity(entitytype, fieldname, fieldval string, fields []string) (Entity, error) {
+	return l.GetEntityParams(entitytype, fieldname, fieldval, fields, url.Values{})
+}
+
+// GetEntity returns all the availble attributes for a single entity (user, content, etc)
+// https://www.getlytics.com/developers/rest-api#entity-a-p-i
+func (l *Client) GetEntityParams(entitytype, fieldname, fieldval string, fields []string, params url.Values) (Entity, error) {
 	res := ApiResp{}
 	data := Entity{}
 	toAppend := ""
 	endpointParams := map[string]string{}
-	params := url.Values{}
 
 	// handle optional endpointParams
 	if entitytype != "" {
