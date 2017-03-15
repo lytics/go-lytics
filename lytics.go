@@ -12,6 +12,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	u "github.com/araddon/gou"
 )
 
 // Client defines the supported subset of the Lytics API. The Lytics API may contain other features
@@ -282,6 +284,7 @@ func buildRespJSON(b []byte, response, data interface{}) error {
 
 	err = json.Unmarshal(b, response)
 	if err != nil {
+		u.Errorf("Error %v", err)
 		return err
 	}
 
@@ -290,6 +293,7 @@ func buildRespJSON(b []byte, response, data interface{}) error {
 		if len(rt.Data) > 0 {
 			err = json.Unmarshal(rt.Data, &data)
 			if err != nil {
+				u.Warnf("bad data %v  \n\n%s", err, string(rt.Data))
 				return err
 			}
 		}

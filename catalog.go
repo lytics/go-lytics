@@ -7,7 +7,8 @@ import (
 )
 
 const (
-	schemaEndpoint               = "schema/:table"           // limit
+	schemaEndpoint               = "schema"
+	schemaTableEndpoint          = "schema/:table"           // limit
 	schemaTableFieldinfoEndpoint = "schema/:table/fieldinfo" // limit, fields
 	routeSchemaStreams           = "schema/_streams"
 )
@@ -112,12 +113,27 @@ type (
 
 // GetSchema returns the data schema for an account
 // https://www.getlytics.com/developers/rest-api#schema
-func (l *Client) GetSchema(table string) (Schema, error) {
+func (l *Client) GetSchema() (map[string]*Schema, error) {
+	res := ApiResp{}
+	data := make(map[string]*Schema)
+
+	// make the request
+	err := l.Get(parseLyticsURL(schemaEndpoint, nil), nil, nil, &res, &data)
+	if err != nil {
+		return data, err
+	}
+
+	return data, nil
+}
+
+// GetSchema returns the data schema for an account
+// https://www.getlytics.com/developers/rest-api#schema
+func (l *Client) GetSchemaTable(table string) (Schema, error) {
 	res := ApiResp{}
 	data := Schema{}
 
 	// make the request
-	err := l.Get(parseLyticsURL(schemaEndpoint, map[string]string{"table": table}), nil, nil, &res, &data)
+	err := l.Get(parseLyticsURL(schemaTableEndpoint, map[string]string{"table": table}), nil, nil, &res, &data)
 	if err != nil {
 		return data, err
 	}
