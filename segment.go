@@ -312,7 +312,7 @@ func (l *Client) GetAdHocSegmentEntities(ql, next string, limit int) (interface{
 	params.Add("start", next)
 	params.Add("limit", strconv.Itoa(limit))
 
-	err := l.Get(adHocsegmentScanEndpoint, params, ql, &res, &data)
+	err := l.PostType("text/plain", adHocsegmentScanEndpoint, params, ql, &res, &data)
 	if err != nil {
 		return "", "", data, err
 	}
