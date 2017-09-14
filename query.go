@@ -85,9 +85,9 @@ func (l *Client) GetQueryTest(qs url.Values, query string) (Entity, error) {
 
 // PostQueryValidate returns the query and how it is interpreted
 // https://www.getlytics.com/developers/rest-api#query
-func (l *Client) PostQueryValidate(query string) (Query, error) {
+func (l *Client) PostQueryValidate(query string) ([]Query, error) {
 	res := ApiResp{}
-	data := Query{}
+	data := []Query{}
 
 	// make the request
 	err := l.PostType("text/plain", queryValidateEndpoint, nil, query, &res, &data)
