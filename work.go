@@ -7,12 +7,15 @@ import (
 )
 
 const (
-	workEndpoint     = "work/:id" // state
-	workListEndpoint = "work"
+	workEndpoint       = "work/:id" // state
+	workListEndpoint   = "work"
+	workCreateEndpoint = "work"
 )
 
 type Work struct {
 	Id               string          `json:"id"`
+	Name             string          `json:"name,omitempty"`
+	Description      string          `json:"description,omitempty"`
 	Aid              int             `json:"aid"`
 	AccountId        string          `json:"account_id"`
 	UserId           string          `json:"user_id"`
@@ -60,6 +63,19 @@ func (l *Client) GetWorks() ([]Work, error) {
 	return data, nil
 }
 
-// Other Available Endpoints
-// * POST    create work
-// * DELETE  remove work
+// CreateWork creates a single work from config
+func (l *Client) CreateWork(work Work) (Work, error) {
+	var (
+		err error
+	)
+
+	res := ApiResp{}
+	data := Work{}
+
+	err = l.Post(workCreateEndpoint, nil, work, &res, &data)
+	if err != nil {
+		return work, err
+	}
+
+	return data, nil
+}

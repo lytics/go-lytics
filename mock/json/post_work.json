@@ -1,0 +1,38 @@
+{
+  "data": {
+    "id": "18594ed78384fc48056c5650d6ffe56f",
+    "aid": 1,
+    "account_id": "224y234ywerhwerhw345y2",
+    "work_state_version": 0,
+    "config": {
+      "ads_account_id": "223423423462462436",
+      "audience_description": null,
+      "audience_name": null,
+      "city_field": null,
+      "country_field": null,
+      "first_name_field": null,
+      "gender_field": null,
+      "hashed_email_field": null,
+      "identifier_field": "email",
+      "last_name_field": null,
+      "opt_out_link": null,
+      "phone_field": null,
+      "segment_id": "9090c9c7f540418a9ee8eb4c62935c56",
+      "state_field": null,
+      "version": "1",
+      "withbackfill": true,
+      "zip_field": null
+    },
+    "workflow_id": "9151ddcc8961d4bf7ec1cba02899c123",
+    "workflow": "facebook_audience_populate",
+    "updated": "2017-09-30T23:14:28.775986338Z",
+    "created": "2017-09-30T23:14:28.697945168Z",
+    "auth_ids": [
+      "84a151a3c32aa2ee9c5479076b20c411"
+    ],
+    "hidden": false,
+    "verbose_logging": false
+  },
+  "message": "success",
+  "status": 201
+}

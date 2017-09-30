@@ -221,7 +221,7 @@ func (l *Client) Get(endpoint string, params url.Values, body interface{}, respo
 	return nil
 }
 
-// Get prepares a post request and then executes using the Do method
+// Post prepares a post request and then executes using the Do method
 func (l *Client) Post(endpoint string, params url.Values, body interface{}, response, data interface{}) error {
 	return l.PostType("application/json", endpoint, params, body, response, data)
 }
