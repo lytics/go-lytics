@@ -1,0 +1,11 @@
+{
+  "data": {
+    "delivery_status": {
+      "code": 200,
+      "description": "This audience is ready for use."
+    },
+    "id": "6082073235818"
+  },
+  "message": "success",
+  "status": 200
+}
