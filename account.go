@@ -31,7 +31,7 @@ type Account struct {
 }
 
 // GetAccounts returns a list of all accounts associated with master account
-// https://www.getlytics.com/developers/rest-api#accounts-list
+// https://learn.lytics.com/api-docs/account#accounts-list
 func (l *Client) GetAccounts() ([]Account, error) {
 	res := ApiResp{}
 	data := []Account{}
@@ -46,7 +46,7 @@ func (l *Client) GetAccounts() ([]Account, error) {
 }
 
 // GetAccount returns the details of a single account based on id
-// https://www.getlytics.com/developers/rest-api#account
+// http://learn.lytics.com/api-docs/account#account
 func (l *Client) GetAccount(id string) (Account, error) {
 	res := ApiResp{}
 	data := Account{}
