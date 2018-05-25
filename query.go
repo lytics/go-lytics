@@ -85,12 +85,29 @@ func (l *Client) GetQueryTest(qs url.Values, query string) (Entity, error) {
 
 // PostQueryValidate returns the query and how it is interpreted
 // https://www.getlytics.com/developers/rest-api#query
-func (l *Client) PostQueryValidate(query string) (Query, error) {
+func (l *Client) PostQueryValidate(query string) ([]Query, error) {
 	res := ApiResp{}
-	data := Query{}
+	data := []Query{}
 
 	// make the request
 	err := l.PostType("text/plain", queryValidateEndpoint, nil, query, &res, &data)
+
+	if err != nil {
+		return data, err
+	}
+
+	return data, nil
+}
+
+// PostQueryValidateSegment checks query interpretation & validates query against existing segments/ schemas
+func (l *Client) PostQueryValidateSegment(query string) ([]Query, error) {
+	res := ApiResp{}
+	data := []Query{}
+	v := url.Values{}
+	v.Set("segments", "true")
+
+	// make the request
+	err := l.PostType("text/plain", queryValidateEndpoint, v, query, &res, &data)
 
 	if err != nil {
 		return data, err
