@@ -1,6 +1,7 @@
 package lytics
 
 import (
+	"encoding/json"
 	"net/url"
 	"time"
 )
@@ -100,18 +101,30 @@ func (l *Client) PostQueryValidate(query string) ([]Query, error) {
 }
 
 // PostQueryValidateSegment checks query interpretation & validates query against existing segments/ schemas
-func (l *Client) PostQueryValidateSegment(query string) ([]Query, error) {
+func (l *Client) PostQueryValidateSegment(query string) (interface{}, error) {
 	res := ApiResp{}
-	data := []Query{}
+	djson := json.RawMessage{}
 	v := url.Values{}
 	v.Set("segments", "true")
 
 	// make the request
-	err := l.PostType("text/plain", queryValidateEndpoint, v, query, &res, &data)
-
+	err := l.PostType("text/plain", queryValidateEndpoint, v, query, &res, &djson)
+	var data interface{}
+	// unmarshal response `data` field into appropriate type depending on response status & message
+	// add cases?
+	switch res.Status {
+	case float64(400):
+		if res.Message == "Invalid schema errors" {
+			d := []string{}
+			e := json.Unmarshal(djson, &d)
+			if e != nil {
+				return nil, e
+			}
+			data = d
+		}
+	}
 	if err != nil {
 		return data, err
 	}
-
 	return data, nil
 }
