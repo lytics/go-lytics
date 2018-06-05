@@ -72,16 +72,23 @@ curl -s -H "Authorization: $LIOKEY"   -XGET "$LIOAPI/api/schema/user/fieldinfo?f
 
 
 */
+var (
+	// Ensure we can write out as a table
+	_ TableWriter = (*Schema)(nil)
+	_ TableWriter = (*Column)(nil)
+)
 
 type (
 	Schema struct {
-		Name     string   `json:"name"`
-		ByFields []string `json:"by_fields"`
-		Columns  Columns  `json:"columns"`
+		Name        string   `json:"name"`
+		ByFields    []string `json:"by_fields"`
+		Description string   `json:"description,omitempty"`
+		Columns     Columns  `json:"columns"`
 	}
 
 	Columns []Column
 	Column  struct {
+		Table      string   `json:"table,omitempty"`
 		As         string   `json:"as"`
 		IsBy       bool     `json:"is_by"`
 		Type       string   `json:"type"`
@@ -110,6 +117,27 @@ type (
 		TermCounts        map[string]int `json:"terms_counts"`
 	}
 )
+
+func (m *Schema) Headers() []interface{} {
+	return []interface{}{
+		"table", "by_fields",
+	}
+}
+func (m *Schema) Row() []interface{} {
+	return []interface{}{
+		m.Name, m.ByFields,
+	}
+}
+func (m *Column) Headers() []interface{} {
+	return []interface{}{
+		"name", "type", "shortdesc", "description", "is_by", "froms", "identities",
+	}
+}
+func (m *Column) Row() []interface{} {
+	return []interface{}{
+		m.As, m.Type, m.ShortDesc, m.LongDesc, m.IsBy, m.Froms, m.Identities,
+	}
+}
 
 // GetSchema returns the data schema for an account
 // https://www.getlytics.com/developers/rest-api#schema

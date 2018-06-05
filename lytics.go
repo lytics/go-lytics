@@ -43,6 +43,11 @@ func init() {
 	}
 }
 
+type TableWriter interface {
+	Headers() []interface{}
+	Row() []interface{}
+}
+
 // Client bundles the data necessary to interact with the vast majority of Lytics REST endpoints.
 type Client struct {
 	baseURL    string

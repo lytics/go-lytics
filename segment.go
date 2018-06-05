@@ -8,6 +8,11 @@ import (
 	"time"
 )
 
+var (
+	// Ensure we can write out as a table
+	_ TableWriter = (*Segment)(nil)
+)
+
 const (
 	segmentEndpoint               = "segment/:id"
 	segmentListEndpoint           = "segment"
@@ -113,6 +118,17 @@ type (
 	}
 )
 
+func (m *Segment) Headers() []interface{} {
+	return []interface{}{
+		"ID", "alias", "table", "name", "description", "is_public", "kind", "invalid", "invalid_reason", "created", "updated",
+	}
+}
+func (m *Segment) Row() []interface{} {
+	return []interface{}{
+		m.Id, m.SlugName, m.Table, m.Name, m.Description, m.IsPublic, m.SegKind, m.Invalid, m.InvalidReason, m.Created.Format(time.RFC3339), m.Updated.Format(time.RFC3339),
+	}
+}
+
 func (s *SegmentScanner) Stop() {
 	defer func() { recover() }()
 	close(s.shutdown)
@@ -140,7 +156,7 @@ func (s *SegmentAttributionMetrics) Created() (time.Time, error) {
 }
 
 // PostSegment creates a Segment
-// https://www.getlytics.com/developers/rest-api#segment
+// https://learn.lytics.com/api-docs/segment
 func (l *Client) PostSegment(segmentQL string) (Segment, error) {
 	res := ApiResp{}
 	data := Segment{}
@@ -156,7 +172,7 @@ func (l *Client) PostSegment(segmentQL string) (Segment, error) {
 }
 
 // GetSegment returns the details for a single segment based on id
-// https://www.getlytics.com/developers/rest-api#segment
+// https://learn.lytics.com/api-docs/segment
 func (l *Client) GetSegment(id string) (Segment, error) {
 	res := ApiResp{}
 	data := Segment{}
@@ -171,10 +187,10 @@ func (l *Client) GetSegment(id string) (Segment, error) {
 }
 
 // GetSegments returns a list of all segments for an account
-// https://www.getlytics.com/developers/rest-api#segment-list
-func (l *Client) GetSegments(table string) ([]Segment, error) {
+// https://learn.lytics.com/api-docs/segment
+func (l *Client) GetSegments(table string) ([]*Segment, error) {
 	res := ApiResp{}
-	data := []Segment{}
+	data := []*Segment{}
 	params := url.Values{}
 
 	params.Add("table", table)
@@ -189,7 +205,7 @@ func (l *Client) GetSegments(table string) ([]Segment, error) {
 }
 
 // GetSegmentSize returns the segment size information for a single segment
-// https://www.getlytics.com/developers/rest-api#segment-sizes
+// https://learn.lytics.com/api-docs/segment
 func (l *Client) GetSegmentSize(id string) (SegmentSize, error) {
 	res := ApiResp{}
 	data := SegmentSize{}
@@ -204,7 +220,7 @@ func (l *Client) GetSegmentSize(id string) (SegmentSize, error) {
 }
 
 // GetSegmentSizes returns the segment sizes for all segments on an account
-// https://www.getlytics.com/developers/rest-api#segment-sizes
+// https://learn.lytics.com/api-docs/segment
 func (l *Client) GetSegmentSizes(segments []string) ([]SegmentSize, error) {
 	params := url.Values{}
 	res := ApiResp{}
