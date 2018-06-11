@@ -1,11 +1,34 @@
 package mock
 
 import (
-	"github.com/jarcoal/httpmock"
 	"net/http"
+
+	"github.com/jarcoal/httpmock"
 )
 
 func RegisterAccountMocks() {
+
+	// *******************************************************
+	// GET SINGLE ACCOUNT
+	// *******************************************************
+	httpmock.RegisterResponder("GET", "https://api.lytics.io/api/account/current",
+		func(req *http.Request) (*http.Response, error) {
+			var fail bool
+
+			queries := req.URL.Query()
+
+			if queries.Get("key") != MockApiKey {
+				fail = true
+			}
+
+			if fail {
+				return httpmock.NewStringResponse(401, readJsonFile("get_error")), nil
+			}
+
+			return httpmock.NewStringResponse(200, readJsonFile("get_account")), nil
+		},
+	)
+
 	// *******************************************************
 	// GET SINGLE ACCOUNT
 	// *******************************************************

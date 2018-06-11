@@ -59,18 +59,12 @@ type Client struct {
 // ApiResp is the core api response for all Lytics endpoints. In some instances the "Status" is returned
 // as a string rather than an int. This is a known but and will be addressed / updated.
 type ApiResp struct {
-	Status  interface{}     `json:"status"`
-	Message string          `json:"message"`
-	Meta    Meta            `json:"meta"`
-	Next    string          `json:"_next"`
-	Total   int             `json:"total"`
-	Data    json.RawMessage `json:"data"`
-}
-
-type Meta struct {
-	Format   string   `json:"name"`
-	Name     []string `json:"by_fields"`
-	ByFields []string `json:"by_fields"`
+	Status  interface{}            `json:"status"`
+	Message string                 `json:"message"`
+	Meta    map[string]interface{} `json:"meta"`
+	Next    string                 `json:"_next"`
+	Total   int                    `json:"total"`
+	Data    json.RawMessage        `json:"data"`
 }
 
 // NewLytics creates a new client instance. This contains the segment pager, segment details

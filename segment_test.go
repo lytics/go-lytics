@@ -2,10 +2,11 @@ package lytics
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/bmizerany/assert"
 	"github.com/jarcoal/httpmock"
 	"github.com/lytics/go-lytics/mock"
-	"testing"
 )
 
 func TestGetSegments(t *testing.T) {
@@ -14,7 +15,7 @@ func TestGetSegments(t *testing.T) {
 	mock.RegisterSegmentMocks()
 
 	// user segment
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 	segs, err := client.GetSegments("user")
 	assert.Equal(t, err, nil)
 	assert.T(t, len(segs) > 1)
@@ -32,7 +33,7 @@ func TestGetSegment(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterSegmentMocks()
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 	seg, err := client.GetSegment(mock.MockSegmentID1)
 	assert.Equal(t, err, nil)
 	assert.T(t, seg.Id == mock.MockSegmentID1)
@@ -43,7 +44,7 @@ func TestGetSegmentSize(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterSegmentMocks()
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 	seg, err := client.GetSegmentSize(mock.MockSegmentID1)
 
 	assert.Equal(t, err, nil)
@@ -57,7 +58,7 @@ func TestGetSegmentSizes(t *testing.T) {
 
 	var segments []string
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 
 	segments = []string{
 		mock.MockSegmentID1,
@@ -88,7 +89,7 @@ func TestGetSegmentAttribution(t *testing.T) {
 		mock.MockSegmentID2,
 	}
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 	attr, err := client.GetSegmentAttribution(segments)
 
 	assert.Equal(t, err, nil)
@@ -101,7 +102,7 @@ func TestGetSegmentCollection(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterSegmentMocks()
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 	collection, err := client.GetSegmentCollection(mock.MockSegmentCollection)
 
 	assert.Equal(t, err, nil)
@@ -116,7 +117,7 @@ func TestGetSegmentCollectionList(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterSegmentMocks()
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 	collections, err := client.GetSegmentCollectionList()
 
 	assert.Equal(t, err, nil)
@@ -137,7 +138,7 @@ func TestSegmentPager(t *testing.T) {
 		countEntities int
 	)
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 
 	// start the paging routine
 	scan := client.PageSegmentId(mock.MockSegmentID1)
@@ -151,7 +152,7 @@ func TestSegmentPager(t *testing.T) {
 			break
 		}
 		countEntities++
-		assert.Equal(t, e["email"], fmt.Sprintf("email%d@email.com", countEntities))
+		assert.Equal(t, e.Fields["email"], fmt.Sprintf("email%d@email.com", countEntities))
 	}
 	assert.Equal(t, countEntities, 13)
 	assert.Equal(t, completed, true)
@@ -163,7 +164,7 @@ func TestCreateSegment(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterSegmentMocks()
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 
 	ql := "FILTER AND (created >= \"now-30d\", aspects = \"articles\") FROM content"
 
@@ -181,7 +182,7 @@ func TestValidateSegment(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterSegmentMocks()
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 
 	valid, err := client.ValidateSegment("FILTER AND (created >= \"now-30d\", aspects = \"articles\") FROM content")
 	assert.Equal(t, err, nil)

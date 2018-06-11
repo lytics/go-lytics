@@ -97,8 +97,8 @@ type (
 		SegmentQl string
 		next      string
 		previous  string
-		buffer    chan []Entity
-		nextChan  chan Entity
+		buffer    chan []*Entity
+		nextChan  chan *Entity
 		shutdown  chan bool
 		Total     int
 		Batches   []int
@@ -138,7 +138,7 @@ func (s *SegmentScanner) Err() error {
 	return s.err
 }
 
-func (s *SegmentScanner) Next() Entity {
+func (s *SegmentScanner) Next() *Entity {
 	select {
 	case e, ok := <-s.nextChan:
 		if !ok {
@@ -299,18 +299,23 @@ func (l *Client) GetSegmentCollectionList() ([]SegmentCollection, error) {
 // GetSegmentEntities returns a single page of entities for the given segment
 // also returns the next value if there are more than limit entities in the segment
 // https://www.getlytics.com/developers/rest-api#segment-scan
-func (l *Client) GetSegmentEntities(segment, next string, limit int) (interface{}, string, []Entity, error) {
+func (l *Client) GetSegmentEntities(segment, next string, limit int) (interface{}, string, []*Entity, error) {
 	res := ApiResp{}
-	data := []Entity{}
+	data := make([]*Entity, 0)
+	dataTemp := make([]map[string]interface{}, 0)
 	params := url.Values{}
 
 	params.Add("start", next)
 	params.Add("limit", strconv.Itoa(limit))
 
 	// make the request
-	err := l.Get(parseLyticsURL(segmentScanEndpoint, map[string]string{"id": segment}), params, nil, &res, &data)
+	err := l.Get(parseLyticsURL(segmentScanEndpoint, map[string]string{"id": segment}), params, nil, &res, &dataTemp)
 	if err != nil {
-		return "", "", data, err
+		return "", "", nil, err
+	}
+
+	for _, row := range dataTemp {
+		data = append(data, &Entity{Fields: row})
 	}
 
 	return res.Status, res.Next, data, nil
@@ -319,18 +324,23 @@ func (l *Client) GetSegmentEntities(segment, next string, limit int) (interface{
 // GetAdHocSegmentEntities returns a single page of entities for the given Ad Hoc segment
 // also returns the next value if there are more than limit entities in the segment
 // https://www.getlytics.com/developers/rest-api#segment-scan
-func (l *Client) GetAdHocSegmentEntities(ql, next string, limit int) (interface{}, string, []Entity, error) {
+func (l *Client) GetAdHocSegmentEntities(ql, next string, limit int) (interface{}, string, []*Entity, error) {
 
 	res := ApiResp{}
-	data := []Entity{}
+	data := make([]*Entity, 0)
+	dataTemp := make([]map[string]interface{}, 0)
 	params := url.Values{}
 
 	params.Add("start", next)
 	params.Add("limit", strconv.Itoa(limit))
 
-	err := l.PostType("text/plain", adHocsegmentScanEndpoint, params, ql, &res, &data)
+	err := l.PostType("text/plain", adHocsegmentScanEndpoint, params, ql, &res, &dataTemp)
 	if err != nil {
-		return "", "", data, err
+		return "", "", nil, err
+	}
+
+	for _, row := range dataTemp {
+		data = append(data, &Entity{Fields: row})
 	}
 
 	return res.Status, res.Next, data, nil
@@ -338,7 +348,7 @@ func (l *Client) GetAdHocSegmentEntities(ql, next string, limit int) (interface{
 
 func (s *SegmentScanner) run(c *Client) {
 	var (
-		entities []Entity
+		entities []*Entity
 		fails    int
 		maxTries int
 		err      error
@@ -439,8 +449,8 @@ func (l *Client) pageSegment(qlOrId string) *SegmentScanner {
 	}
 
 	scanner := &SegmentScanner{
-		buffer:    make(chan []Entity, 1),
-		nextChan:  make(chan Entity, 1),
+		buffer:    make(chan []*Entity, 1),
+		nextChan:  make(chan *Entity, 1),
 		shutdown:  make(chan bool),
 		SegmentID: segmentId,
 		SegmentQl: ql,

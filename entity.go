@@ -5,48 +5,55 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
+
+	"github.com/araddon/gou"
 )
 
 const (
-	entityEndpoint = "entity" // :entitytype/:fieldname/:fieldval, fields
+	entityEndpoint = "entity"
 )
 
 // EntityHandler for use in paging
 type EntityHandler func(*Entity)
 
-// Entity is the main data source for Lytics. All users, content, etc. are referred to as "entities"
-type Entity map[string]interface{}
+// Entity is the main data source for Lytics User Profiles/Entities.
+// All users, content, etc. are referred to as "entities".
+type Entity struct {
+	Fields map[string]interface{}
+	Meta   map[string]interface{}
+}
 
 // GetEntity returns all the availble attributes for a single entity (user, content, etc)
-// https://www.getlytics.com/developers/rest-api#entity-a-p-i
-func (l *Client) GetEntity(entitytype, fieldname, fieldval string, fields []string) (Entity, error) {
+// https://learn.lytics.com/api-docs/personalization
+func (l *Client) GetEntity(entitytype, fieldname, fieldval string, fields []string) (*Entity, error) {
 	return l.GetEntityParams(entitytype, fieldname, fieldval, fields, url.Values{})
 }
 
 // GetEntity returns all the availble attributes for a single entity (user, content, etc)
-// https://www.getlytics.com/developers/rest-api#entity-a-p-i
-func (l *Client) GetEntityParams(entitytype, fieldname, fieldval string, fields []string, params url.Values) (Entity, error) {
+// https://learn.lytics.com/api-docs/personalization
+func (l *Client) GetEntityParams(entitytype, fieldname, fieldval string, fields []string, params url.Values) (*Entity, error) {
 	res := ApiResp{}
 	data := Entity{}
 	toAppend := ""
 	endpointParams := map[string]string{}
 
 	// handle optional endpointParams
-	if entitytype != "" {
-		toAppend = fmt.Sprintf("/%s", ":entitytype")
-		endpointParams["entitytype"] = entitytype
-
-		if fieldname != "" {
-			toAppend = fmt.Sprintf("%s/%s", toAppend, ":fieldname")
-			endpointParams["fieldname"] = fieldname
-
-			if fieldval != "" {
-				toAppend = fmt.Sprintf("%s/%s", toAppend, ":fieldval")
-				endpointParams["fieldval"] = fieldval
-			}
-		}
+	if entitytype == "" {
+		entitytype = "user"
 	}
 
+	toAppend = fmt.Sprintf("/%s", ":entitytype")
+	endpointParams["entitytype"] = entitytype
+
+	if fieldname != "" {
+		toAppend = fmt.Sprintf("%s/%s", toAppend, ":fieldname")
+		endpointParams["fieldname"] = fieldname
+
+		if fieldval != "" {
+			toAppend = fmt.Sprintf("%s/%s", toAppend, ":fieldval")
+			endpointParams["fieldval"] = fieldval
+		}
+	}
 	// build dynamic endpoint
 	endpoint := fmt.Sprintf("%s%s", entityEndpoint, toAppend)
 
@@ -56,15 +63,16 @@ func (l *Client) GetEntityParams(entitytype, fieldname, fieldval string, fields 
 	}
 
 	// make the request
-	err := l.Get(parseLyticsURL(endpoint, endpointParams), params, nil, &res, &data)
+	err := l.Get(parseLyticsURL(endpoint, endpointParams), params, nil, &res, &data.Fields)
 	if err != nil {
-		return data, err
+		gou.Errorf("wtf %v", err)
+		return nil, err
 	}
-
-	return data, nil
+	data.Meta = res.Meta
+	return &data, nil
 }
 
 func (e *Entity) PrettyJson() string {
-	by, _ := json.MarshalIndent(e, "", "  ")
+	by, _ := json.MarshalIndent(e.Fields, "", "  ")
 	return string(by)
 }

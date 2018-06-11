@@ -1,10 +1,11 @@
 package lytics
 
 import (
+	"testing"
+
 	"github.com/bmizerany/assert"
 	"github.com/jarcoal/httpmock"
 	"github.com/lytics/go-lytics/mock"
-	"testing"
 )
 
 func TestGetUserContentRecommendation(t *testing.T) {
@@ -19,7 +20,7 @@ func TestGetUserContentRecommendation(t *testing.T) {
 		Visited: false,
 	}
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 	recs, err := client.GetUserContentRecommendation("user_id", mock.MockUserID, filter)
 
 	assert.Equal(t, err, nil)
@@ -38,7 +39,7 @@ func TestGetSegmentContentRecommendation(t *testing.T) {
 		Rank:  "popular",
 	}
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 	recs, err := client.GetSegmentContentRecommendation(mock.MockSegmentID1, filter)
 
 	assert.Equal(t, err, nil)
@@ -52,7 +53,7 @@ func TestGetDocuments(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterContentMocks()
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 	docs, err := client.GetDocuments([]string{}, 1)
 
 	assert.Equal(t, err, nil)
@@ -73,7 +74,7 @@ func TestGetTopicSummary(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterContentMocks()
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 	topicSummary, err := client.GetTopicSummary(mock.MockTopicID, 0)
 
 	assert.Equal(t, err, nil)
@@ -87,7 +88,7 @@ func TestGetContentTaxonomy(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterContentMocks()
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 	taxonomy, err := client.GetContentTaxonomy()
 
 	assert.Equal(t, err, nil)
@@ -101,7 +102,7 @@ func TestGetTopicRollups(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterContentMocks()
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 	rollups, err := client.GetTopicRollups()
 
 	assert.Equal(t, err, nil)

@@ -1,10 +1,11 @@
 package lytics
 
 import (
+	"testing"
+
 	"github.com/bmizerany/assert"
 	"github.com/jarcoal/httpmock"
 	"github.com/lytics/go-lytics/mock"
-	"testing"
 )
 
 func TestGetSchema(t *testing.T) {
@@ -12,7 +13,7 @@ func TestGetSchema(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterCatalogMocks()
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 	data, err := client.GetSchemaTable("user")
 
 	assert.Equal(t, err, nil)

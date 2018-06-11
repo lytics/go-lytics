@@ -2,8 +2,6 @@ package lytics
 
 import (
 	"time"
-
-	"github.com/araddon/gou"
 )
 
 var (
@@ -90,7 +88,6 @@ func (l *Client) GetUsers() ([]*AccountUser, error) {
 	acct, err := l.GetAccount("current")
 	if err != nil {
 		// hm......
-		gou.Warnf("wtf %v", err)
 		return data, err
 	}
 

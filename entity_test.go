@@ -1,10 +1,11 @@
 package lytics
 
 import (
-	"github.com/bmizerany/assert"
+	"testing"
+
 	"github.com/jarcoal/httpmock"
 	"github.com/lytics/go-lytics/mock"
-	"testing"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetEntity(t *testing.T) {
@@ -12,7 +13,7 @@ func TestGetEntity(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterEntityMocks()
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 
 	fields := []string{}
 	entitytype := "user"
@@ -21,13 +22,14 @@ func TestGetEntity(t *testing.T) {
 
 	entity, err := client.GetEntity(entitytype, fieldname, fieldval, fields)
 	assert.Equal(t, err, nil)
-	assert.T(t, len(entity) > 5)
-	assert.T(t, entity["email"].(string) == "sample@sample.com")
+	assert.NotEqual(t, nil, entity)
+	assert.True(t, len(entity.Fields) > 5)
+	assert.Equal(t, "sample@sample.com", entity.Fields["email"])
 
 	fields = []string{
 		"score_intensity",
 	}
 	entity, err = client.GetEntity(entitytype, fieldname, fieldval, fields)
 	assert.Equal(t, err, nil)
-	assert.Equal(t, entity["score_intensity"].(string), "83")
+	assert.Equal(t, "83", entity.Fields["score_intensity"])
 }
