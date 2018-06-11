@@ -91,7 +91,7 @@ func (l *Client) GetQueryTest(qs url.Values, query string) (Entity, error) {
 	data := Entity{}
 
 	// make the request
-	err := l.Post(queryTestEndpoint, qs, query, &res, &data)
+	err := l.Post(queryTestEndpoint, qs, query, &res, &data.Fields)
 
 	if err != nil {
 		return data, err

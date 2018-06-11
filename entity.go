@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
-
-	"github.com/araddon/gou"
 )
 
 const (
@@ -34,6 +32,7 @@ func (l *Client) GetEntity(entitytype, fieldname, fieldval string, fields []stri
 func (l *Client) GetEntityParams(entitytype, fieldname, fieldval string, fields []string, params url.Values) (*Entity, error) {
 	res := ApiResp{}
 	data := Entity{}
+	entFields := make(map[string]interface{})
 	toAppend := ""
 	endpointParams := map[string]string{}
 
@@ -63,9 +62,9 @@ func (l *Client) GetEntityParams(entitytype, fieldname, fieldval string, fields 
 	}
 
 	// make the request
-	err := l.Get(parseLyticsURL(endpoint, endpointParams), params, nil, &res, &data.Fields)
+	entityUrl := parseLyticsURL(endpoint, endpointParams)
+	err := l.Get(entityUrl, params, nil, &res, &entFields)
 	if err != nil {
-		gou.Errorf("wtf %v", err)
 		return nil, err
 	}
 	data.Meta = res.Meta
