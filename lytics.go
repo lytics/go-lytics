@@ -43,6 +43,11 @@ func init() {
 	}
 }
 
+type TableWriter interface {
+	Headers() []interface{}
+	Row() []interface{}
+}
+
 // Client bundles the data necessary to interact with the vast majority of Lytics REST endpoints.
 type Client struct {
 	baseURL    string
@@ -54,23 +59,17 @@ type Client struct {
 // ApiResp is the core api response for all Lytics endpoints. In some instances the "Status" is returned
 // as a string rather than an int. This is a known but and will be addressed / updated.
 type ApiResp struct {
-	Status  interface{}     `json:"status"`
-	Message string          `json:"message"`
-	Meta    Meta            `json:"meta"`
-	Next    string          `json:"_next"`
-	Total   int             `json:"total"`
-	Data    json.RawMessage `json:"data"`
-}
-
-type Meta struct {
-	Format   string   `json:"name"`
-	Name     []string `json:"by_fields"`
-	ByFields []string `json:"by_fields"`
+	Status  interface{}            `json:"status"`
+	Message string                 `json:"message"`
+	Meta    map[string]interface{} `json:"meta"`
+	Next    string                 `json:"_next"`
+	Total   int                    `json:"total"`
+	Data    json.RawMessage        `json:"data"`
 }
 
 // NewLytics creates a new client instance. This contains the segment pager, segment details
 // and maintains all core data used throughout this SDK
-func NewLytics(apiKey, dataApiKey interface{}, httpclient *http.Client) *Client {
+func NewLytics(apiKey string, httpclient *http.Client) *Client {
 	l := Client{
 		baseURL: apiBase,
 	}
@@ -82,14 +81,7 @@ func NewLytics(apiKey, dataApiKey interface{}, httpclient *http.Client) *Client 
 	}
 
 	// set the apikey if not null
-	if apiKey != nil {
-		l.apiKey = apiKey.(string)
-	}
-
-	// set the dataapikey if not null
-	if dataApiKey != nil {
-		l.dataApiKey = dataApiKey.(string)
-	}
+	l.apiKey = apiKey
 
 	return &l
 }

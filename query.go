@@ -6,6 +6,11 @@ import (
 	"time"
 )
 
+var (
+	// Ensure we can write out as a table
+	_ TableWriter = (*Query)(nil)
+)
+
 const (
 	queryEndpoint         = "query/:id"
 	queryListEndpoint     = "query"
@@ -38,11 +43,22 @@ type (
 	}
 )
 
+func (m *Query) Headers() []interface{} {
+	return []interface{}{
+		"ID", "table", "alias", "from", "created", "updated",
+	}
+}
+func (m *Query) Row() []interface{} {
+	return []interface{}{
+		m.Id, m.Table, m.Alias, m.From, m.Created.Format(time.RFC3339), m.Updated.Format(time.RFC3339),
+	}
+}
+
 // GetQueries returns a list of all queries associated with this account
 // https://www.getlytics.com/developers/rest-api#query
-func (l *Client) GetQueries() ([]Query, error) {
+func (l *Client) GetQueries() ([]*Query, error) {
 	res := ApiResp{}
-	data := []Query{}
+	data := []*Query{}
 
 	// make the request
 	err := l.Get(queryListEndpoint, nil, nil, &res, &data)
@@ -75,7 +91,7 @@ func (l *Client) GetQueryTest(qs url.Values, query string) (Entity, error) {
 	data := Entity{}
 
 	// make the request
-	err := l.Post(queryTestEndpoint, qs, query, &res, &data)
+	err := l.Post(queryTestEndpoint, qs, query, &res, &data.Fields)
 
 	if err != nil {
 		return data, err
@@ -86,9 +102,9 @@ func (l *Client) GetQueryTest(qs url.Values, query string) (Entity, error) {
 
 // PostQueryValidate returns the query and how it is interpreted
 // https://www.getlytics.com/developers/rest-api#query
-func (l *Client) PostQueryValidate(query string) ([]Query, error) {
+func (l *Client) PostQueryValidate(query string) ([]*Query, error) {
 	res := ApiResp{}
-	data := []Query{}
+	data := []*Query{}
 
 	// make the request
 	err := l.PostType("text/plain", queryValidateEndpoint, nil, query, &res, &data)

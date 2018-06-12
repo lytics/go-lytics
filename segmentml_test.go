@@ -1,10 +1,11 @@
 package lytics
 
 import (
+	"testing"
+
 	"github.com/bmizerany/assert"
 	"github.com/jarcoal/httpmock"
 	"github.com/lytics/go-lytics/mock"
-	"testing"
 )
 
 func TestGetSegmentMLModel(t *testing.T) {
@@ -12,7 +13,7 @@ func TestGetSegmentMLModel(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterSegmentMLMocks()
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 	model, err := client.GetSegmentMLModel(mock.MockSegmentMLID)
 
 	assert.Equal(t, err, nil)
@@ -26,7 +27,7 @@ func TestGetSegmentMLModels(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterSegmentMLMocks()
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 	models, err := client.GetSegmentMLModels()
 
 	assert.Equal(t, err, nil)

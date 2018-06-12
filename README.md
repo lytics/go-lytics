@@ -5,7 +5,7 @@ that all handling reflects the best methods available.
 Overview of supported methods outlined below.
 
 ## Full REST API Documentation
-https://www.getlytics.com/developers/rest-api
+https://learn.lytics.com/api-docs
 
 ## Command Line Tool Doc
 
@@ -23,6 +23,8 @@ package main
 
 import (
 	"fmt"
+	"encoding/json"
+	
 	lytics "github.com/lytics/go-lytics"
 )
 
@@ -31,7 +33,7 @@ func main() {
 	key := "<YOUR API KEY>"
 
 	// create the client
-	client := lytics.NewLytics(key, nil, nil)
+	client := lytics.NewLytics(key, nil)
 
 	// create a scanner for All Users in a Segment 
 	scan := client.PageSegment(`
@@ -49,7 +51,12 @@ func main() {
 			break
 		}
 
-		fmt.Println(e.PrettyJson())
+		by, err := json.Marshal(e.Fields)
+		if err != nil {
+			fmt.Println("ERROR: ", err)
+			continue
+		}
+		fmt.Println(string(by))
 	}
 }
 ```
@@ -84,4 +91,4 @@ and that all new functionality comes with well documented and thorough testing.
 
 ## License
 [MIT](LICENSE.md)
-Copyright (c) 2017, 2016, 2015 Lytics
+Copyright (c) 2018, 2017, 2016, 2015 Lytics

@@ -1,10 +1,11 @@
 package lytics
 
 import (
+	"testing"
+
 	"github.com/bmizerany/assert"
 	"github.com/jarcoal/httpmock"
 	"github.com/lytics/go-lytics/mock"
-	"testing"
 )
 
 func TestGetCampaign(t *testing.T) {
@@ -12,7 +13,7 @@ func TestGetCampaign(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterCampaignMocks()
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 	data, err := client.GetCampaign(mock.MockCampaignID)
 
 	assert.Equal(t, err, nil)
@@ -26,7 +27,7 @@ func TestGetCampaignList(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterCampaignMocks()
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 	data, err := client.GetCampaignList([]string{})
 
 	assert.Equal(t, err, nil)
@@ -47,7 +48,7 @@ func TestGetVariation(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterCampaignMocks()
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 	data, err := client.GetVariation(mock.MockVariationID)
 
 	assert.Equal(t, err, nil)
@@ -61,7 +62,7 @@ func TestGetVariationList(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 	mock.RegisterCampaignMocks()
 
-	client := NewLytics(mock.MockApiKey, nil, nil)
+	client := NewLytics(mock.MockApiKey, nil)
 	data, err := client.GetVariationList()
 
 	assert.Equal(t, err, nil)

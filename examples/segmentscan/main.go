@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 
@@ -20,7 +21,7 @@ func main() {
 	}
 
 	// create the client
-	client := lytics.NewLytics(apikey, nil, nil)
+	client := lytics.NewLytics(apikey, nil)
 
 	// create the scanner
 	scan := client.PageSegment(os.Args[1])
@@ -32,7 +33,8 @@ func main() {
 			break
 		}
 
-		fmt.Println(e.PrettyJson())
+		by, _ := json.MarshalIndent(e.Fields, "", "  ")
+		fmt.Println(string(by))
 	}
 
 	fmt.Printf("*** COMPLETED SCAN: Loaded %d total entities\n\n", scan.Total)
