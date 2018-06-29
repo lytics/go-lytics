@@ -29,8 +29,8 @@ const (
 
 type (
 	// Segment is a logical expression to filter entity
-	//  The normal concept is logical filter to find users, but the
-	//  table also allows logical filter on content, or other entity types.
+	// The normal concept is logical filter to find users, but the
+	// table also allows logical filter on content, or other entity types.
 	Segment struct {
 		Id            string    `json:"id"`
 		AccountId     string    `json:"account_id"`
@@ -298,7 +298,7 @@ func (l *Client) GetSegmentCollectionList() ([]SegmentCollection, error) {
 
 // GetSegmentEntities returns a single page of entities for the given segment
 // also returns the next value if there are more than limit entities in the segment
-// https://www.getlytics.com/developers/rest-api#segment-scan
+// https://learn.lytics.com/api-docs/segment#segment-scan-resource
 func (l *Client) GetSegmentEntities(segment, next string, limit int) (interface{}, string, []*Entity, error) {
 	res := ApiResp{}
 	data := make([]*Entity, 0)
@@ -468,7 +468,7 @@ func (l *Client) PageAdHocSegment(ql string) *SegmentScanner {
 }
 
 // CreateSegment creates a new segment from a Segment QL logic expression
-// https://www.getlytics.com/developers/rest-api#segment
+// https://learn.lytics.com/api-docs/segment
 func (l *Client) CreateSegment(name, ql, slug string) (Segment, error) {
 	res := ApiResp{}
 	data := Segment{}
@@ -489,7 +489,7 @@ func (l *Client) CreateSegment(name, ql, slug string) (Segment, error) {
 }
 
 // ValidateSegment validates a single segment QL statement
-// https://www.getlytics.com/developers/rest-api#segment-validate
+// https://learn.lytics.com/api-docs/segment#segment-validate-resource
 func (l *Client) ValidateSegment(ql string) (bool, error) {
 	res := ApiResp{}
 

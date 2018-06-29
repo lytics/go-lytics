@@ -55,7 +55,7 @@ func (m *Query) Row() []interface{} {
 }
 
 // GetQueries returns a list of all queries associated with this account
-// https://www.getlytics.com/developers/rest-api#query
+// https://learn.lytics.com/api-docs/query
 func (l *Client) GetQueries() ([]*Query, error) {
 	res := ApiResp{}
 	data := []*Query{}
@@ -70,7 +70,7 @@ func (l *Client) GetQueries() ([]*Query, error) {
 }
 
 // GetQueries returns a list of all queries associated with this account
-// https://www.getlytics.com/developers/rest-api#query
+// https://learn.lytics.com/api-docs/query
 func (l *Client) GetQuery(alias string) (Query, error) {
 	res := ApiResp{}
 	data := Query{}
@@ -85,7 +85,7 @@ func (l *Client) GetQuery(alias string) (Query, error) {
 }
 
 // GetQueryTest returns the evaluated entity from given query
-// https://www.getlytics.com/developers/rest-api#query
+// https://learn.lytics.com/api-docs/query
 func (l *Client) GetQueryTest(qs url.Values, query string) (Entity, error) {
 	res := ApiResp{}
 	data := Entity{}
@@ -101,7 +101,7 @@ func (l *Client) GetQueryTest(qs url.Values, query string) (Entity, error) {
 }
 
 // PostQueryValidate returns the query and how it is interpreted
-// https://www.getlytics.com/developers/rest-api#query
+// https://learn.lytics.com/api-docs/query
 func (l *Client) PostQueryValidate(query string) ([]*Query, error) {
 	res := ApiResp{}
 	data := []*Query{}
