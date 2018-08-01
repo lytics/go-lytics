@@ -68,6 +68,7 @@ func (l *Client) GetEntityParams(entitytype, fieldname, fieldval string, fields 
 		return nil, err
 	}
 	data.Meta = res.Meta
+	data.Fields = entFields
 	return &data, nil
 }
 
