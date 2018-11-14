@@ -17,22 +17,15 @@ const (
 // Account represents a Lytics Account.  For customers that have more than one
 // Account it is probably an "Environment" (production, test, dev, etc).
 type Account struct {
-	Id               string    `json:"id"`
-	Created          time.Time `json:"created"`
-	Updated          time.Time `json:"updated"`
-	Fid              string    `json:"fid"`
-	Domain           string    `json:"domain"`
-	ParentId         string    `json:"parent_id"`
-	PartnerId        string    `json:"partner_id"`
-	PackageId        string    `json:"package_id"`
-	Email            string    `json:"email"`
-	ApiKey           string    `json:"apikey"`
-	DataApiKey       string    `json:"dataapikey"`
-	Name             string    `json:"name"`
-	TimeZone         string    `json:"timezone,omitempty"`
-	PubUsers         bool      `json:"pubusers"`
-	WhitelistFields  []string  `json:"whitelist_fields"`
-	WhitelistDomains []string  `json:"whitelist_domains"`
+	Id       string    `json:"id"`
+	Created  time.Time `json:"created"`
+	Updated  time.Time `json:"updated"`
+	Fid      string    `json:"fid"`
+	Domain   string    `json:"domain"`
+	Email    string    `json:"email"`
+	Name     string    `json:"name"`
+	TimeZone string    `json:"timezone,omitempty"`
+	PubUsers bool      `json:"pubusers"`
 }
 
 func (m *Account) Headers() []interface{} {
