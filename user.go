@@ -16,17 +16,18 @@ const (
 
 // AccountUser describes a user that has access to an account.
 type AccountUser struct {
-	Id        string          `json:"id"`
-	Email     string          `json:"email"`
-	Name      string          `json:"name"`
-	AuthType  string          `json:"auth_type"`
-	Password  string          `json:"password"`
-	AccountId string          `json:"account_id"`
-	Roles     []string        `json:"roles"`
-	Accounts  []AccountAccess `json:"accounts"`
-	Created   time.Time       `json:"created"`
-	Updated   time.Time       `json:"updated"`
-	LastLogon time.Time       `json:"last_logon"`
+	Id         string          `json:"id"`
+	Email      string          `json:"email"`
+	Name       string          `json:"name"`
+	AuthType   string          `json:"auth_type"`
+	Password   string          `json:"password"`
+	AccountId  string          `json:"account_id"`
+	Roles      []string        `json:"roles"`
+	Accounts   []AccountAccess `json:"accounts"`
+	Created    time.Time       `json:"created"`
+	Updated    time.Time       `json:"updated"`
+	LastLogon  time.Time       `json:"last_logon"`
+	IsSysadmin bool            `json:"is_sysadmin"`
 }
 
 // AccountAccess describes relationship between user and that account (roles)

@@ -18,6 +18,7 @@ const (
 // Account it is probably an "Environment" (production, test, dev, etc).
 type Account struct {
 	Id       string    `json:"id"`
+	Aid      int       `json:"aid"`
 	Created  time.Time `json:"created"`
 	Updated  time.Time `json:"updated"`
 	Fid      string    `json:"fid"`
