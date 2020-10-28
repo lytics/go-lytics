@@ -1,4 +1,5 @@
-#Lytics SDK for Go
+[![Build Status](https://travis-ci.org/lytics/go-lytics.svg?branch=master)](https://travis-ci.org/lytics/go-lytics)
+# Lytics SDK for Go
 The Lytics SDK for go offers easy integration with our public REST API endpoints. 
 This library is actively being managed and every effort will be made to ensure 
 that all handling reflects the best methods available. 
