@@ -7,12 +7,7 @@ import (
 const (
 	mlEndpoint     = "ml/:id"
 	mlListEndpoint = "ml"
-	// MLDepEndpoint  = "segmentml/:id/_dependencies"
 )
-
-// type MLConfigs struct {
-// 	mlConfigs []ML
-// }
 
 // ML Struct
 type ML struct {
@@ -45,7 +40,7 @@ type ML struct {
 }
 
 // GetMLModel returns the details for a single ML Model based on id
-// https://www.getlytics.com/developers/rest-api#segment-m-l
+// https://learn.lytics.com/documentation/developer/api-docs/ml
 func (l *Client) GetMLModel(id string) (ML, error) {
 	res := ApiResp{}
 	data := ML{}
@@ -59,7 +54,7 @@ func (l *Client) GetMLModel(id string) (ML, error) {
 }
 
 // GetMLModels returns all ML models for the account
-// https://www.getlytics.com/developers/rest-api#segment-m-l
+// https://learn.lytics.com/documentation/developer/api-docs/ml
 func (l *Client) GetMLModels() ([]ML, error) {
 	res := ApiResp{}
 	data := []ML{}
