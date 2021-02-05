@@ -1,0 +1,34 @@
+{
+    "data": {
+        "aid": 1,
+        "config": {
+            "auto_tune": false,
+            "build_only": false,
+            "collect": 0,
+            "custom_segment_ids": null,
+            "internal": false,
+            "model_type": "",
+            "re_run": false,
+            "tune_model": false,
+            "use_content": false,
+            "use_ent_store": false,
+            "use_scores": false
+        },
+        "created": "2020-10-24T00:11:22.842Z",
+        "id": "d3df420e45ed9ce36d95d5ad89b0ff37",
+        "is_active": false,
+        "is_healthy": false,
+        "label": "",
+        "name": "test01",
+        "source": "0d560ecb1d6024ceb0d738d114a6bc1a",
+        "state": "building",
+        "target": "c15f12e27b791652845c05458c95e5a3",
+        "type": "",
+        "updated": "2020-10-24T04:27:24.827Z",
+        "work_ids": [
+            "829c1088092e59189c4c4f52488b3fc4"
+        ]
+    },
+    "message": "success",
+    "status": 200
+}
