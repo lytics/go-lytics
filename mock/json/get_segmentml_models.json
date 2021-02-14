@@ -1,94 +1,924 @@
 {
-  "data": {
-    "all::active_prospects": {
-      "fieldtypes": {
-        "aspect_aspect_mobile_android": "numeric", 
-        "aspect_aspect_mobile_ios": "numeric", 
-        "aspect_aspect_mobile_opened": "numeric", 
-        "aspect_aspect_web_multisession": "numeric", 
-        "aspect_aspect_web_singlepage": "numeric", 
-        "aspect_aspect_web_visit_mobileweb": "numeric", 
-        "aspect_aspect_web_visit_web": "numeric", 
-        "lytics_score_frequency": "numeric", 
-        "lytics_score_intensity": "numeric", 
-        "lytics_score_momentum": "numeric", 
-        "lytics_score_propensity": "numeric", 
-        "lytics_score_quantity": "numeric", 
-        "lytics_score_recency": "numeric", 
-        "rob_masters_20_outreach": "numeric"
-      }, 
-      "importance": {
-        "aspect_aspect_mobile_android": 0, 
-        "aspect_aspect_mobile_ios": 0, 
-        "aspect_aspect_mobile_opened": 0, 
-        "aspect_aspect_web_multisession": 0.16233333333333333, 
-        "aspect_aspect_web_singlepage": 0, 
-        "aspect_aspect_web_visit_mobileweb": 0, 
-        "aspect_aspect_web_visit_web": 0, 
-        "lytics_score_frequency": 0.5850666666666667, 
-        "lytics_score_intensity": 0.4132333333333339, 
-        "lytics_score_momentum": 0.42413333333333275, 
-        "lytics_score_propensity": 0, 
-        "lytics_score_quantity": 0.36269999999999963, 
-        "lytics_score_recency": 0.10316666666666663, 
-        "rob_masters_20_outreach": 0
-      }, 
+  "data": [{
+      "name": "all::ly_binge_user",
+      "state": "complete",
+      "reason": "",
+      "created": "2020-10-23T22:06:52.456759746Z",
+      "author_id": "",
+      "conf": {
+          "source": {
+              "id": "757157f2b33143c04a247d93e71e390b",
+              "updated": "2020-10-23T17:01:29.766Z",
+              "created": "2018-05-22T17:24:01.764Z",
+              "aid": 2693,
+              "account_id": "96ffe26fec8cdf891e3d5c728a4da866",
+              "short_id": "AQ",
+              "name": "All",
+              "kind": "segment",
+              "is_public": true,
+              "public_name": "all",
+              "slug_name": "all",
+              "description": "",
+              "table": "user",
+              "author_id": "",
+              "invalid": false,
+              "invalid_reason": "",
+              "deleted": false,
+              "datemath_calc": false,
+              "forward_datemath": false,
+              "save_hist": true,
+              "field_updates": false,
+              "field_changes_fields": null,
+              "schedule_exit": false,
+              "segment_ql": "FILTER *",
+              "tags": ["default", "predefined"],
+              "ast": {
+                  "ident": "*"
+              },
+              "fields": null
+          },
+          "target": {
+              "id": "22188a35b22888715066812682af8d3c",
+              "updated": "2020-10-23T17:00:42.062Z",
+              "created": "2018-05-22T17:24:02.141Z",
+              "aid": 2693,
+              "account_id": "96ffe26fec8cdf891e3d5c728a4da866",
+              "short_id": "Hg",
+              "name": "Behavior: Binge Users",
+              "kind": "aspect",
+              "is_public": false,
+              "slug_name": "ly_binge_user",
+              "description": "People who show a lot of activity when they do interact with your brand.",
+              "table": "user",
+              "author_id": "",
+              "invalid": false,
+              "invalid_reason": "",
+              "deleted": false,
+              "datemath_calc": false,
+              "forward_datemath": false,
+              "save_hist": true,
+              "field_updates": false,
+              "field_changes_fields": null,
+              "schedule_exit": false,
+              "segment_ql": "FILTER AND ( (score_frequency \u003c= \"20\"), (score_intensity \u003e= \"50\") )",
+              "tags": ["aspect", "predefined"],
+              "ast": {
+                  "op": "and",
+                  "args": [{
+                      "op": "\u003c=",
+                      "args": [{
+                          "ident": "score_frequency"
+                      }, {
+                          "val": "20"
+                      }]
+                  }, {
+                      "op": "\u003e=",
+                      "args": [{
+                          "ident": "score_intensity"
+                      }, {
+                          "val": "50"
+                      }]
+                  }]
+              },
+              "fields": ["score_frequency", "score_intensity"]
+          },
+          "additional": null,
+          "collections": null,
+          "custom_segment_ids": null,
+          "collect": 5000,
+          "use_scores": true,
+          "use_content": true,
+          "build_only": true,
+          "auto_tune": false,
+          "model_name": "",
+          "model_type": "rf",
+          "re_run": false
+      },
+      "features": [{
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::Retro Gaming",
+          "importance": 0.03761499492078325,
+          "field_prevalence": {
+              "source": 0.8157894736842105,
+              "target": 0.9556198745779064
+          },
+          "correlation": -0.03289457805935716,
+          "impact": {
+              "lift": -0.0005286360354190833,
+              "threshold": 0.031268
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::Blog",
+          "importance": 0.23699271134895233,
+          "field_prevalence": {
+              "source": 0.8157894736842105,
+              "target": 0.9556198745779064
+          },
+          "correlation": 0.030146038654616257,
+          "impact": {
+              "lift": -0.0002085872693405877,
+              "threshold": 0.10588199999999999
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::PC",
+          "importance": 0.39957472739672606,
+          "field_prevalence": {
+              "source": 0.8157894736842105,
+              "target": 0.9556198745779064
+          },
+          "correlation": 0.06212960047904024,
+          "impact": {
+              "lift": 0.0017776844291649274,
+              "threshold": 0.467116
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::Guild Wars 2",
+          "importance": 0.4237554742132201,
+          "field_prevalence": {
+              "source": 0.8157894736842105,
+              "target": 0.9556198745779064
+          },
+          "correlation": -0.06811678668606591,
+          "impact": {
+              "lift": -0.0005987895716915714,
+              "threshold": 1
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::Now Playing",
+          "importance": 0.04255226364256483,
+          "field_prevalence": {
+              "source": 0.8157894736842105,
+              "target": 0.9556198745779064
+          },
+          "correlation": 0.06251680491599053,
+          "impact": {
+              "lift": -0.0003780982784168385,
+              "threshold": 0.026699999999999998
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::Titan Quest",
+          "importance": 0.9155605539530207,
+          "field_prevalence": {
+              "source": 0.8157894736842105,
+              "target": 0.9556198745779064
+          },
+          "correlation": -0.09441756173889557,
+          "impact": {
+              "lift": -0.0010930603431192898,
+              "threshold": 0.9400000000000001
+          }
+      }, {
+          "kind": "score",
+          "type": "numeric",
+          "name": "score_recency",
+          "importance": 7.274479525117588,
+          "field_prevalence": {
+              "source": 1,
+              "target": 1
+          },
+          "correlation": -0.7413526907557925,
+          "impact": {
+              "lift": -0.18780871266506338,
+              "threshold": 49.5
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::PSP - PlayStation Portable",
+          "importance": 0.1635184864195109,
+          "field_prevalence": {
+              "source": 0.8157894736842105,
+              "target": 0.9556198745779064
+          },
+          "correlation": -0.037711453154012385,
+          "impact": {
+              "lift": -0.0027412838816461838,
+              "threshold": 0.05578799999999999
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::podcasting",
+          "importance": 0.4787408089383662,
+          "field_prevalence": {
+              "source": 0.8157894736842105,
+              "target": 0.9556198745779064
+          },
+          "correlation": 0.018662094262692372,
+          "impact": {
+              "lift": -0.0021367384942754253,
+              "threshold": 0.03672
+          }
+      }, {
+          "kind": "score",
+          "type": "numeric",
+          "name": "score_momentum",
+          "importance": 0.3006048113957729,
+          "field_prevalence": {
+              "source": 1,
+              "target": 1
+          },
+          "correlation": -0.5469448229233235,
+          "impact": {
+              "lift": -0.01321677670560506,
+              "threshold": 9
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::Guild Wars",
+          "importance": 0.024784848530310263,
+          "field_prevalence": {
+              "source": 0.8157894736842105,
+              "target": 0.9556198745779064
+          },
+          "correlation": 0.04003813239010295,
+          "impact": {
+              "lift": -0.00039563598089198404,
+              "threshold": 0.05940999999999999
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::Steam",
+          "importance": 0.3115676766373301,
+          "field_prevalence": {
+              "source": 0.8157894736842105,
+              "target": 0.9556198745779064
+          },
+          "correlation": -0.003523042790605506,
+          "impact": {
+              "lift": -0.0016633354024391256,
+              "threshold": 0.8229599999999999
+          }
+      }, {
+          "kind": "score",
+          "type": "numeric",
+          "name": "score_intensity",
+          "importance": 0.44852117737756997,
+          "field_prevalence": {
+              "source": 1,
+              "target": 1
+          },
+          "correlation": 0.22403317859812275,
+          "impact": {
+              "lift": 0.1124572217962283,
+              "threshold": 60
+          }
+      }, {
+          "kind": "score",
+          "type": "numeric",
+          "name": "score_quantity",
+          "importance": 2.73078746134237,
+          "field_prevalence": {
+              "source": 1,
+              "target": 1
+          },
+          "correlation": -0.25423595324734816,
+          "impact": {
+              "lift": 0.05163692116697616,
+              "threshold": 2
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::Gaming",
+          "importance": 0.592137323920497,
+          "field_prevalence": {
+              "source": 0.8157894736842105,
+              "target": 0.9556198745779064
+          },
+          "correlation": 0.07209915777019357,
+          "impact": {
+              "lift": 0.0013982741656425324,
+              "threshold": 0.9400000000000001
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::YouTube",
+          "importance": 2.360316209907225,
+          "field_prevalence": {
+              "source": 0.8157894736842105,
+              "target": 0.9556198745779064
+          },
+          "correlation": -0.12001763983886966,
+          "impact": {
+              "lift": -0.002884338144008458,
+              "threshold": 0.037062
+          }
+      }, {
+          "kind": "score",
+          "type": "numeric",
+          "name": "score_propensity",
+          "importance": 0.18507133768463815,
+          "field_prevalence": {
+              "source": 1,
+              "target": 1
+          },
+          "correlation": -0.3812663598374157,
+          "impact": {
+              "lift": -0.020490007546346556,
+              "threshold": 4.181818181818182
+          }
+      }, {
+          "kind": "score",
+          "type": "numeric",
+          "name": "score_frequency",
+          "importance": 14.28805413144383,
+          "field_prevalence": {
+              "source": 1,
+              "target": 1
+          },
+          "correlation": -0.8277526926111678,
+          "impact": {
+              "lift": -0.5491807164190805,
+              "threshold": 22.73170731707317
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::Middle-earth: Shadow of Mordor",
+          "importance": 2.864472199372144,
+          "field_prevalence": {
+              "source": 0.8157894736842105,
+              "target": 0.9556198745779064
+          },
+          "correlation": -0.0962932921318108,
+          "impact": {
+              "lift": 0.003955049132085442,
+              "threshold": 0.62713
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::time",
+          "importance": 0.8054531415173394,
+          "field_prevalence": {
+              "source": 0.8157894736842105,
+              "target": 0.9556198745779064
+          },
+          "correlation": 0.03406390643053083,
+          "impact": {
+              "lift": 0.0016876791209363695,
+              "threshold": 0.08
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::MMO",
+          "importance": 0.4687498049028543,
+          "field_prevalence": {
+              "source": 0.8157894736842105,
+              "target": 0.9556198745779064
+          },
+          "correlation": 0.03922338711521174,
+          "impact": {
+              "lift": -0.0012193404042856182,
+              "threshold": 0.05189
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::Site News",
+          "importance": 0.5477178251726506,
+          "field_prevalence": {
+              "source": 0.8157894736842105,
+              "target": 0.9556198745779064
+          },
+          "correlation": 0.0280821091173928,
+          "impact": {
+              "lift": -0.0006470376892566687,
+              "threshold": 0.1
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::50 Cent",
+          "importance": 1.6199305617562745,
+          "field_prevalence": {
+              "source": 0.8157894736842105,
+              "target": 0.9556198745779064
+          },
+          "correlation": -0.07854775238484757,
+          "impact": {
+              "lift": -0.002158460435696341,
+              "threshold": 0.7868280000000001
+          }
+      }],
       "summary": {
-        "Conf": {
-          "FalseNegative": 3, 
-          "FalsePositive": 1, 
-          "TrueNegative": 2, 
-          "TruePositive": 2
-        }, 
-        "Mse": 0.27024152611111113, 
-        "Rsq": -0.008901697481481508
+          "conf": {
+              "FalsePositive": 2,
+              "TruePositive": 1041,
+              "FalseNegative": 0,
+              "TrueNegative": 32
+          },
+          "mse": 0.002072189145635414,
+          "rsq": 0.9324053235550249,
+          "success": {
+              "0.70": 1,
+              "0.90": 1,
+              "0.93": 3,
+              "0.94": 2,
+              "0.95": 2,
+              "0.96": 4,
+              "0.97": 9,
+              "0.98": 35,
+              "0.99": 63,
+              "1.00": 921
+          },
+          "fail": {
+              "0.00": 1,
+              "0.02": 1,
+              "0.03": 1,
+              "0.04": 2,
+              "0.05": 2,
+              "0.06": 1,
+              "0.07": 2,
+              "0.08": 4,
+              "0.09": 1,
+              "0.10": 3,
+              "0.11": 2,
+              "0.12": 1,
+              "0.14": 1,
+              "0.17": 1,
+              "0.18": 1,
+              "0.19": 1,
+              "0.25": 1,
+              "0.26": 1,
+              "0.28": 1,
+              "0.30": 1,
+              "0.33": 1,
+              "0.37": 1,
+              "0.50": 1,
+              "0.56": 1,
+              "0.84": 1
+          },
+          "auc": 0.9999717466237216,
+          "threshold": 0.7000000000000001,
+          "accuracy": 9,
+          "reach": 1,
+          "audience_similarity": 0.9206484641638225,
+          "model_health": "healthy",
+          "msgs": [{
+              "text": "The following features were removed due to a high number of missing values: ",
+              "tags": ["autotune", "summary", "prevalance"],
+              "severity": "debug"
+          }, {
+              "text": "The following features were removed due to a high number of missing values in the source or target audience: ",
+              "tags": ["autotune", "summary", "audience-prevalence"],
+              "severity": "debug"
+          }, {
+              "text": "The following features were removed due to colinearity: lql_lytics_content::Sayaka Kanda, lql_lytics_content::anniversary",
+              "tags": ["autotune", "summary", "correlation"],
+              "severity": "debug"
+          }, {
+              "text": "The following features were removed as they have very high or very low correlation with th target: lql_lytics_content::game, lql_lytics_content::video game",
+              "tags": ["autotune", "summary", "target-correlation"],
+              "severity": "debug"
+          }, {
+              "text": "Removed features: lql_lytics_content::anniversary, lql_lytics_content::Sayaka Kanda, lql_lytics_content::video game, lql_lytics_content::game",
+              "tags": ["collinearity", "feature"],
+              "severity": "debug"
+          }, {
+              "text": "The reach of this model is low, but its accuracy is high.  For better targeting, try adjusting the decision threshold to somewhere around 0.70.",
+              "tags": ["verdict"],
+              "severity": "info"
+          }]
+      }
+  }, {
+      "name": "all::ly_infrequent_user",
+      "state": "complete",
+      "reason": "",
+      "created": "2020-10-23T22:07:08.123467518Z",
+      "author_id": "",
+      "conf": {
+          "source": {
+              "id": "757157f2b33143c04a247d93e71e390b",
+              "updated": "2020-10-23T17:01:29.766Z",
+              "created": "2018-05-22T17:24:01.764Z",
+              "aid": 2693,
+              "account_id": "96ffe26fec8cdf891e3d5c728a4da866",
+              "short_id": "AQ",
+              "name": "All",
+              "kind": "segment",
+              "is_public": true,
+              "public_name": "all",
+              "slug_name": "all",
+              "description": "",
+              "table": "user",
+              "author_id": "",
+              "invalid": false,
+              "invalid_reason": "",
+              "deleted": false,
+              "datemath_calc": false,
+              "forward_datemath": false,
+              "save_hist": true,
+              "field_updates": false,
+              "field_changes_fields": null,
+              "schedule_exit": false,
+              "segment_ql": "FILTER *",
+              "tags": ["default", "predefined"],
+              "ast": {
+                  "ident": "*"
+              },
+              "fields": null
+          },
+          "target": {
+              "id": "0d560ecb1d6024ceb0d738d114a6bc1a",
+              "updated": "2020-10-23T16:58:46.022Z",
+              "created": "2018-05-22T17:24:02.173Z",
+              "aid": 2693,
+              "account_id": "96ffe26fec8cdf891e3d5c728a4da866",
+              "short_id": "IQ",
+              "name": "Behavior: Infrequent Users",
+              "kind": "aspect",
+              "is_public": false,
+              "slug_name": "ly_infrequent_user",
+              "description": "Peole occasionally interacting with your brand.",
+              "table": "user",
+              "author_id": "",
+              "invalid": false,
+              "invalid_reason": "",
+              "deleted": false,
+              "datemath_calc": false,
+              "forward_datemath": false,
+              "save_hist": true,
+              "field_updates": false,
+              "field_changes_fields": null,
+              "schedule_exit": false,
+              "segment_ql": "FILTER score_frequency \u003c 35",
+              "tags": ["aspect", "predefined"],
+              "ast": {
+                  "op": "\u003c",
+                  "args": [{
+                      "ident": "score_frequency"
+                  }, {
+                      "val": "35"
+                  }]
+              },
+              "fields": ["score_frequency"]
+          },
+          "additional": null,
+          "collections": null,
+          "custom_segment_ids": null,
+          "collect": 5000,
+          "use_scores": true,
+          "use_content": true,
+          "build_only": true,
+          "auto_tune": false,
+          "model_name": "",
+          "model_type": "rf",
+          "re_run": false
       },
-      "name": "all::active_prospects"
-    },
-    "goal_anonymous::goal_known": {
-      "fieldtypes": {
-        "aspect_aspect_mobile_android": "numeric",
-        "aspect_aspect_mobile_ios": "numeric",
-        "aspect_aspect_mobile_opened": "numeric",
-        "aspect_aspect_web_multisession": "numeric",
-        "aspect_aspect_web_singlepage": "numeric",
-        "aspect_aspect_web_visit_mobileweb": "numeric",
-        "aspect_aspect_web_visit_web": "numeric",
-        "goal_known": "numeric",
-        "lytics_score_frequency": "numeric",
-        "lytics_score_intensity": "numeric",
-        "lytics_score_momentum": "numeric",
-        "lytics_score_propensity": "numeric",
-        "lytics_score_quantity": "numeric",
-        "lytics_score_recency": "numeric"
-      },
-      "importance": {
-        "aspect_aspect_mobile_android": 8.127099047943227,
-        "aspect_aspect_mobile_ios": 7.518081859508983,
-        "aspect_aspect_mobile_opened": 0,
-        "aspect_aspect_web_multisession": 91.3110364383969,
-        "aspect_aspect_web_singlepage": 272.07765566819063,
-        "aspect_aspect_web_visit_mobileweb": 37.32749903607868,
-        "aspect_aspect_web_visit_web": 783.6958328795527,
-        "goal_known": 0,
-        "lytics_score_frequency": 337.6674383905453,
-        "lytics_score_intensity": 302.3740871195806,
-        "lytics_score_momentum": 71.39605799224827,
-        "lytics_score_propensity": 0.11292621219728304,
-        "lytics_score_quantity": 263.53361468636353,
-        "lytics_score_recency": 388.1416150904331
-      },
+      "features": [{
+          "kind": "score",
+          "type": "numeric",
+          "name": "score_propensity",
+          "importance": 0.13494642712417473,
+          "field_prevalence": {
+              "source": 1,
+              "target": 1
+          },
+          "correlation": -0.5217617577307319,
+          "impact": {
+              "lift": -0.017855234657035535,
+              "threshold": 4.6
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::Site News",
+          "importance": 0.17932044714259798,
+          "field_prevalence": {
+              "source": 0.803921568627451,
+              "target": 0.9515235457063712
+          },
+          "correlation": 0.008951233543474674,
+          "impact": {
+              "lift": 0.00018810968584137555,
+              "threshold": 0.08
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::YouTube",
+          "importance": 1.4225501954403683,
+          "field_prevalence": {
+              "source": 0.803921568627451,
+              "target": 0.9515235457063712
+          },
+          "correlation": -0.1124464386203762,
+          "impact": {
+              "lift": -0.0091174083084824,
+              "threshold": 0.061770000000000005
+          }
+      }, {
+          "kind": "score",
+          "type": "numeric",
+          "name": "score_quantity",
+          "importance": 0.9746894266348622,
+          "field_prevalence": {
+              "source": 1,
+              "target": 1
+          },
+          "correlation": -0.18475029317524877,
+          "impact": {
+              "lift": -0.007645066185315241,
+              "threshold": 100
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::50 Cent",
+          "importance": 0.30628540692219586,
+          "field_prevalence": {
+              "source": 0.803921568627451,
+              "target": 0.9515235457063712
+          },
+          "correlation": -0.08245072805107276,
+          "impact": {
+              "lift": -0.0033884811342711485,
+              "threshold": 0.5803820000000001
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::Blog",
+          "importance": 0.0723722288070623,
+          "field_prevalence": {
+              "source": 0.803921568627451,
+              "target": 0.9515235457063712
+          },
+          "correlation": 0.006187154938388057,
+          "impact": {
+              "lift": 0.000054296028881628544,
+              "threshold": 0.019950000000000002
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::Gaming",
+          "importance": 0.09795662092265177,
+          "field_prevalence": {
+              "source": 0.803921568627451,
+              "target": 0.9515235457063712
+          },
+          "correlation": 0.04495059163899577,
+          "impact": {
+              "lift": -0.0006560920577649565,
+              "threshold": 1
+          }
+      }, {
+          "kind": "score",
+          "type": "numeric",
+          "name": "score_recency",
+          "importance": 4.6199742683676375,
+          "field_prevalence": {
+              "source": 1,
+              "target": 1
+          },
+          "correlation": -0.6733350620503156,
+          "impact": {
+              "lift": -0.2921525301207807,
+              "threshold": 75.24
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::PC",
+          "importance": 0.20085993257735585,
+          "field_prevalence": {
+              "source": 0.803921568627451,
+              "target": 0.9515235457063712
+          },
+          "correlation": 0.05909269477117144,
+          "impact": {
+              "lift": 0.003572804793859019,
+              "threshold": 0.39371200000000006
+          }
+      }, {
+          "kind": "score",
+          "type": "numeric",
+          "name": "score_frequency",
+          "importance": 7.4546311731714745,
+          "field_prevalence": {
+              "source": 1,
+              "target": 1
+          },
+          "correlation": -0.9011766035809339,
+          "impact": {
+              "lift": -0.4901678366091755,
+              "threshold": 38.29787234042553
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::Steam",
+          "importance": 0.18296330816991632,
+          "field_prevalence": {
+              "source": 0.803921568627451,
+              "target": 0.9515235457063712
+          },
+          "correlation": -0.013492592573297716,
+          "impact": {
+              "lift": 0.0012193323491989094,
+              "threshold": 0.23808200000000002
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::Guild Wars",
+          "importance": 0.002666666666666667,
+          "field_prevalence": {
+              "source": 0.803921568627451,
+              "target": 0.9515235457063712
+          },
+          "correlation": 0.03497803708130383,
+          "impact": {
+              "lift": 0.000012488027702151072,
+              "threshold": 0.022463999999999998
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::time",
+          "importance": 0.23286327098664328,
+          "field_prevalence": {
+              "source": 0.803921568627451,
+              "target": 0.9515235457063712
+          },
+          "correlation": 0.03316317035725734,
+          "impact": {
+              "lift": 0.0005330558542627761,
+              "threshold": 0.08
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::Guild Wars 2",
+          "importance": 0.08713913481676752,
+          "field_prevalence": {
+              "source": 0.803921568627451,
+              "target": 0.9515235457063712
+          },
+          "correlation": -0.06559804002008086,
+          "impact": {
+              "lift": 0.0005916425992765761,
+              "threshold": 1
+          }
+      }, {
+          "kind": "score",
+          "type": "numeric",
+          "name": "score_momentum",
+          "importance": 1.6865831420614623,
+          "field_prevalence": {
+              "source": 1,
+              "target": 1
+          },
+          "correlation": -0.74339524072061,
+          "impact": {
+              "lift": -0.12132445848375495,
+              "threshold": 7.6923076923076925
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::Now Playing",
+          "importance": 0.01620329792909455,
+          "field_prevalence": {
+              "source": 0.803921568627451,
+              "target": 0.9515235457063712
+          },
+          "correlation": 0.06307002697694941,
+          "impact": {
+              "lift": 0.00011770014865153389,
+              "threshold": 0.22382200000000002
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::Middle-earth: Shadow of Mordor",
+          "importance": 0.6303798379650086,
+          "field_prevalence": {
+              "source": 0.803921568627451,
+              "target": 0.9515235457063712
+          },
+          "correlation": -0.08831754074848434,
+          "impact": {
+              "lift": -0.0020386981507337643,
+              "threshold": 0.035728
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::Titan Quest",
+          "importance": 0.25999917556487184,
+          "field_prevalence": {
+              "source": 0.803921568627451,
+              "target": 0.9515235457063712
+          },
+          "correlation": -0.08308907719063492,
+          "impact": {
+              "lift": 0.0001565884476575352,
+              "threshold": 0.9
+          }
+      }, {
+          "kind": "content",
+          "type": "numeric",
+          "name": "lytics_content::MMO",
+          "importance": 0.11978955953847824,
+          "field_prevalence": {
+              "source": 0.803921568627451,
+              "target": 0.9515235457063712
+          },
+          "correlation": 0.024846273618019023,
+          "impact": {
+              "lift": -0.00008132161356122491,
+              "threshold": 0.05189
+          }
+      }],
       "summary": {
-        "Conf": {
-          "FalsePositive": 81,
-          "TruePositive": 2342,
-          "FalseNegative": 159,
-          "TrueNegative": 2418
-        },
-        "Mse": 0.03513942730537103,
-        "Rsq": 0.8594703798356188
-      },
-      "name": "goal_anonymous::goal_known"
-    }
-  }
+          "conf": {
+              "FalsePositive": 0,
+              "TruePositive": 1082,
+              "FalseNegative": 0,
+              "TrueNegative": 27
+          },
+          "mse": 0.0014520484271499483,
+          "rsq": 0.9389252943819426,
+          "success": {
+              "0.94": 1,
+              "0.96": 1,
+              "0.97": 3,
+              "0.98": 3,
+              "0.99": 48,
+              "1.00": 1026
+          },
+          "fail": {
+              "0.00": 1,
+              "0.02": 2,
+              "0.04": 4,
+              "0.05": 2,
+              "0.07": 1,
+              "0.08": 1,
+              "0.09": 1,
+              "0.10": 3,
+              "0.11": 1,
+              "0.12": 1,
+              "0.13": 1,
+              "0.15": 1,
+              "0.33": 1,
+              "0.39": 1,
+              "0.43": 2,
+              "0.44": 1,
+              "0.45": 2,
+              "0.49": 1
+          },
+          "auc": 1,
+          "threshold": 0.49,
+          "accuracy": 9,
+          "reach": 0,
+          "audience_similarity": 0.9453924914675768,
+          "model_health": "healthy",
+          "msgs": [{
+              "text": "The following features were removed due to a high number of missing values: ",
+              "tags": ["autotune", "summary", "prevalance"],
+              "severity": "debug"
+          }, {
+              "text": "The following features were removed due to a high number of missing values in the source or target audience: ",
+              "tags": ["autotune", "summary", "audience-prevalence"],
+              "severity": "debug"
+          }, {
+              "text": "The following features were removed due to colinearity: lql_lytics_content::Sayaka Kanda, lql_lytics_content::anniversary",
+              "tags": ["autotune", "summary", "correlation"],
+              "severity": "debug"
+          }, {
+              "text": "The following features were removed as they have very high or very low correlation with th target: lql_lytics_content::podcasting, lql_lytics_content::video game, lql_lytics_content::PSP - PlayStation Portable, lytics_score_intensity, lql_lytics_content::Retro Gaming, lql_lytics_content::game",
+              "tags": ["autotune", "summary", "target-correlation"],
+              "severity": "debug"
+          }, {
+              "text": "Removed features: lql_lytics_content::Sayaka Kanda, lql_lytics_content::video game, lql_lytics_content::anniversary, lql_lytics_content::podcasting, lytics_score_intensity, lql_lytics_content::PSP - PlayStation Portable, lql_lytics_content::Retro Gaming, lql_lytics_content::game",
+              "tags": ["collinearity", "feature"],
+              "severity": "debug"
+          }, {
+              "text": "The reach of this model is low, but its accuracy is high.  For better targeting, try adjusting the decision threshold to somewhere around 0.49.",
+              "tags": ["verdict"],
+              "severity": "info"
+          }]
+      }
+  }],
+  "message": "success",
+  "status": 200
 }
