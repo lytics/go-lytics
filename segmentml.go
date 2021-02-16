@@ -1,6 +1,9 @@
 package lytics
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 const (
 	segmentMLEndpoint     = "segmentml/:id"
@@ -8,6 +11,120 @@ const (
 	segmentMLDepEndpoint  = "segmentml/:id/_dependencies"
 )
 
+type SegmentML struct {
+	Name     string    `json:"name"`
+	State    string    `json:"state"`
+	Reason   string    `json:"reason"`
+	Created  time.Time `json:"created"`
+	AuthorID string    `json:"author_id"`
+	Conf     struct {
+		Source struct {
+			ID                 string      `json:"id"`
+			Updated            time.Time   `json:"updated"`
+			Created            time.Time   `json:"created"`
+			Aid                int         `json:"aid"`
+			AccountID          string      `json:"account_id"`
+			ShortID            string      `json:"short_id"`
+			Name               string      `json:"name"`
+			Kind               string      `json:"kind"`
+			IsPublic           bool        `json:"is_public"`
+			PublicName         string      `json:"public_name"`
+			SlugName           string      `json:"slug_name"`
+			Description        string      `json:"description"`
+			Table              string      `json:"table"`
+			AuthorID           string      `json:"author_id"`
+			Invalid            bool        `json:"invalid"`
+			InvalidReason      string      `json:"invalid_reason"`
+			Deleted            bool        `json:"deleted"`
+			DatemathCalc       bool        `json:"datemath_calc"`
+			ForwardDatemath    bool        `json:"forward_datemath"`
+			SaveHist           bool        `json:"save_hist"`
+			FieldUpdates       bool        `json:"field_updates"`
+			FieldChangesFields interface{} `json:"field_changes_fields"`
+			ScheduleExit       bool        `json:"schedule_exit"`
+			SegmentQl          string      `json:"segment_ql"`
+			Tags               []string    `json:"tags"`
+			Ast                struct {
+				Ident string `json:"ident"`
+			} `json:"ast"`
+			Fields interface{} `json:"fields"`
+		} `json:"source"`
+		Target struct {
+			ID                 string      `json:"id"`
+			Updated            time.Time   `json:"updated"`
+			Created            time.Time   `json:"created"`
+			Aid                int         `json:"aid"`
+			AccountID          string      `json:"account_id"`
+			ShortID            string      `json:"short_id"`
+			Name               string      `json:"name"`
+			Kind               string      `json:"kind"`
+			IsPublic           bool        `json:"is_public"`
+			SlugName           string      `json:"slug_name"`
+			Description        string      `json:"description"`
+			Table              string      `json:"table"`
+			AuthorID           string      `json:"author_id"`
+			Invalid            bool        `json:"invalid"`
+			InvalidReason      string      `json:"invalid_reason"`
+			Deleted            bool        `json:"deleted"`
+			DatemathCalc       bool        `json:"datemath_calc"`
+			ForwardDatemath    bool        `json:"forward_datemath"`
+			SaveHist           bool        `json:"save_hist"`
+			FieldUpdates       bool        `json:"field_updates"`
+			FieldChangesFields interface{} `json:"field_changes_fields"`
+			ScheduleExit       bool        `json:"schedule_exit"`
+			SegmentQl          string      `json:"segment_ql"`
+			Tags               []string    `json:"tags"`
+			Ast                struct {
+				Op   string `json:"op"`
+				Args []struct {
+					Op   string `json:"op"`
+					Args []struct {
+						Ident string `json:"ident,omitempty"`
+						Val   string `json:"val,omitempty"`
+					} `json:"args"`
+				} `json:"args"`
+			} `json:"ast"`
+			Fields []string `json:"fields"`
+		} `json:"target"`
+		Additional       interface{} `json:"additional"`
+		Collections      interface{} `json:"collections"`
+		CustomSegmentIds interface{} `json:"custom_segment_ids"`
+		Collect          int         `json:"collect"`
+		UseScores        bool        `json:"use_scores"`
+		UseContent       bool        `json:"use_content"`
+		BuildOnly        bool        `json:"build_only"`
+		AutoTune         bool        `json:"auto_tune"`
+		ModelName        string      `json:"model_name"`
+		ModelType        string      `json:"model_type"`
+		ReRun            bool        `json:"re_run"`
+	} `json:"conf"`
+	Features []Feature `json:"features"`
+	Summary  struct {
+		Conf struct {
+			FalsePositive int `json:"FalsePositive"`
+			TruePositive  int `json:"TruePositive"`
+			FalseNegative int `json:"FalseNegative"`
+			TrueNegative  int `json:"TrueNegative"`
+		} `json:"conf"`
+		Mse                float64        `json:"mse"`
+		Rsq                float64        `json:"rsq"`
+		Success            map[string]int `json:"success"`
+		Fail               map[string]int `json:"fail"`
+		Auc                float64        `json:"auc"`
+		Threshold          float64        `json:"threshold"`
+		Accuracy           int            `json:"accuracy"`
+		Reach              int            `json:"reach"`
+		AudienceSimilarity float64        `json:"audience_similarity"`
+		ModelHealth        string         `json:"model_health"`
+		Msgs               []struct {
+			Text     string   `json:"text"`
+			Tags     []string `json:"tags"`
+			Severity string   `json:"severity"`
+		} `json:"msgs"`
+	} `json:"summary"`
+}
+
+/*
 type Feature struct {
 	Kind        string  `json:"kind, omitempty"`
 	Type        string  `json:"type, omitempty"`
@@ -61,6 +178,31 @@ type Prediction struct {
 	Val       string `json:"val"`
 	FailCt    int    `json:"fail_ct"`
 	SuccessCt int    `json:"success_ct"`
+}
+*/
+type Prediction struct {
+	Val       string `json:"val"`
+	FailCt    int    `json:"fail_ct"`
+	SuccessCt int    `json:"success_ct"`
+}
+
+type Dependencies struct {
+	Fields map[string][][2]float64 "fields"
+}
+type Feature struct {
+	Kind            string  `json:"kind"`
+	Type            string  `json:"type"`
+	Name            string  `json:"name"`
+	Importance      float64 `json:"importance"`
+	FieldPrevalence struct {
+		Source float64 `json:"source"`
+		Target float64 `json:"target"`
+	} `json:"field_prevalence"`
+	Correlation float64 `json:"correlation"`
+	Impact      struct {
+		Lift      float64 `json:"lift"`
+		Threshold float64 `json:"threshold"`
+	} `json:"impact"`
 }
 
 // GetSegmentMLModel returns the details for a single segmentML Model based on id
@@ -125,7 +267,7 @@ func (s *SegmentML) Row() []interface{} {
 	sum := s.Summary
 	c := s.Conf
 	return []interface{}{
-		s.Name, c.Source.Name, c.Source.Name, sum.Mse, sum.Rsq, sum.AUC, sum.Conf.FalseNegative, sum.Conf.FalsePositive, sum.Conf.TrueNegative, sum.Conf.TruePositive,
+		s.Name, c.Source.Name, c.Source.Name, sum.Mse, sum.Rsq, sum.Auc, sum.Conf.FalseNegative, sum.Conf.FalsePositive, sum.Conf.TrueNegative, sum.Conf.TruePositive,
 	}
 }
 

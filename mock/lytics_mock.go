@@ -17,8 +17,8 @@ const (
 	MockSegmentCollection = "92630989bbea40f7b830f2"
 	MockCampaignID        = "4a5984e1138646bb9d692c"
 	MockVariationID       = "572d930921c447348ed424"
-	MockSegmentMLID       = "all::active_prospects"
 	MockMLID              = "d3df420e45ed9ce36d95d5ad89b0ff37"
+	MockSegmentMLID       = "default_anon_seg::ly_binge_user"
 	MockTopicID           = "mock"
 )
 
