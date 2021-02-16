@@ -1,49 +1,610 @@
 {
   "data": {
-    "all::active_prospects": {
-      "fieldtypes": {
-        "aspect_aspect_mobile_android": "numeric", 
-        "aspect_aspect_mobile_ios": "numeric", 
-        "aspect_aspect_mobile_opened": "numeric", 
-        "aspect_aspect_web_multisession": "numeric", 
-        "aspect_aspect_web_singlepage": "numeric", 
-        "aspect_aspect_web_visit_mobileweb": "numeric", 
-        "aspect_aspect_web_visit_web": "numeric", 
-        "lytics_score_frequency": "numeric", 
-        "lytics_score_intensity": "numeric", 
-        "lytics_score_momentum": "numeric", 
-        "lytics_score_propensity": "numeric", 
-        "lytics_score_quantity": "numeric", 
-        "lytics_score_recency": "numeric", 
-        "rob_masters_20_outreach": "numeric"
-      }, 
-      "importance": {
-        "aspect_aspect_mobile_android": 0, 
-        "aspect_aspect_mobile_ios": 0, 
-        "aspect_aspect_mobile_opened": 0, 
-        "aspect_aspect_web_multisession": 0.16233333333333333, 
-        "aspect_aspect_web_singlepage": 0, 
-        "aspect_aspect_web_visit_mobileweb": 0, 
-        "aspect_aspect_web_visit_web": 0, 
-        "lytics_score_frequency": 0.5850666666666667, 
-        "lytics_score_intensity": 0.4132333333333339, 
-        "lytics_score_momentum": 0.42413333333333275, 
-        "lytics_score_propensity": 0, 
-        "lytics_score_quantity": 0.36269999999999963, 
-        "lytics_score_recency": 0.10316666666666663, 
-        "rob_masters_20_outreach": 0
-      }, 
-      "summary": {
-        "Conf": {
-          "FalseNegative": 3, 
-          "FalsePositive": 1, 
-          "TrueNegative": 2, 
-          "TruePositive": 2
-        }, 
-        "Mse": 0.27024152611111113, 
-        "Rsq": -0.008901697481481508
+      "author_id": "",
+      "conf": {
+          "additional": null,
+          "auto_tune": false,
+          "build_only": true,
+          "collect": 5000,
+          "collections": null,
+          "custom_segment_ids": null,
+          "model_name": "",
+          "model_type": "rf",
+          "re_run": false,
+          "source": {
+              "account_id": "96ffe26fec8cdf891e3d5c728a4da866",
+              "aid": 2693,
+              "ast": {
+                  "args": [
+                      {
+                          "args": [
+                              {
+                                  "ident": "_num_aliases"
+                              },
+                              {
+                                  "val": "1"
+                              }
+                          ],
+                          "op": "="
+                      },
+                      {
+                          "args": [
+                              {
+                                  "ident": "_uids"
+                              }
+                          ],
+                          "op": "exists"
+                      }
+                  ],
+                  "op": "and"
+              },
+              "author_id": "",
+              "created": "2020-06-10T20:16:51.239Z",
+              "datemath_calc": false,
+              "deleted": false,
+              "description": "",
+              "field_changes_fields": null,
+              "field_updates": false,
+              "fields": [
+                  "_num_aliases",
+                  "_uids"
+              ],
+              "forward_datemath": false,
+              "id": "05a7c6bf32c62ee8ac70c0977753c6d2",
+              "invalid": false,
+              "invalid_reason": "",
+              "is_public": true,
+              "kind": "segment",
+              "name": "Anonymous Profiles",
+              "public_name": "default_anon_seg",
+              "save_hist": true,
+              "schedule_exit": false,
+              "segment_ql": "FILTER AND ( _num_aliases = 1, EXISTS '_uids' ) FROM user ALIAS default_anon_seg",
+              "short_id": "AiE",
+              "slug_name": "default_anon_seg",
+              "table": "user",
+              "tags": [
+                  "default",
+                  "predefined"
+              ],
+              "updated": "2020-09-30T00:00:43.187Z"
+          },
+          "target": {
+              "account_id": "96ffe26fec8cdf891e3d5c728a4da866",
+              "aid": 2693,
+              "ast": {
+                  "args": [
+                      {
+                          "args": [
+                              {
+                                  "ident": "score_frequency"
+                              },
+                              {
+                                  "val": "20"
+                              }
+                          ],
+                          "op": "<="
+                      },
+                      {
+                          "args": [
+                              {
+                                  "ident": "score_intensity"
+                              },
+                              {
+                                  "val": "50"
+                              }
+                          ],
+                          "op": ">="
+                      }
+                  ],
+                  "op": "and"
+              },
+              "author_id": "",
+              "created": "2018-05-22T17:24:02.141Z",
+              "datemath_calc": false,
+              "deleted": false,
+              "description": "People who show a lot of activity when they do interact with your brand.",
+              "field_changes_fields": null,
+              "field_updates": false,
+              "fields": [
+                  "score_frequency",
+                  "score_intensity"
+              ],
+              "forward_datemath": false,
+              "id": "22188a35b22888715066812682af8d3c",
+              "invalid": false,
+              "invalid_reason": "",
+              "is_public": false,
+              "kind": "aspect",
+              "name": "Behavior: Binge Users",
+              "save_hist": true,
+              "schedule_exit": false,
+              "segment_ql": "FILTER AND ( (score_frequency <= \"20\"), (score_intensity >= \"50\") )",
+              "short_id": "Hg",
+              "slug_name": "ly_binge_user",
+              "table": "user",
+              "tags": [
+                  "aspect",
+                  "predefined"
+              ],
+              "updated": "2020-10-23T22:07:04.575Z"
+          },
+          "use_content": true,
+          "use_scores": true
       },
-      "name": "all::active_prospects"
-    }
-  }
+      "created": "2020-10-23T22:46:47.022095012Z",
+      "features": [
+          {
+              "correlation": 0.044412461138227596,
+              "field_prevalence": {
+                  "source": 0.8513513513513513,
+                  "target": 0.9556085918854416
+              },
+              "impact": {
+                  "lift": -4.676582005203045e-05,
+                  "threshold": 0.051176000000000006
+              },
+              "importance": 0.1671249745886582,
+              "kind": "content",
+              "name": "lytics_content::MMO",
+              "type": "numeric"
+          },
+          {
+              "correlation": 0.05432916239636453,
+              "field_prevalence": {
+                  "source": 0.8513513513513513,
+                  "target": 0.9556085918854416
+              },
+              "impact": {
+                  "lift": 2.6752767528170907e-05,
+                  "threshold": 0.32723599999999997
+              },
+              "importance": 0.0011999999999999997,
+              "kind": "content",
+              "name": "lytics_content::Guild Wars",
+              "type": "numeric"
+          },
+          {
+              "correlation": -0.8670191573910665,
+              "field_prevalence": {
+                  "source": 1,
+                  "target": 1
+              },
+              "impact": {
+                  "lift": -0.5601632636326386,
+                  "threshold": 21.72093023255814
+              },
+              "importance": 14.330481926301326,
+              "kind": "score",
+              "name": "score_frequency",
+              "type": "numeric"
+          },
+          {
+              "correlation": -0.08910043378778369,
+              "field_prevalence": {
+                  "source": 0.8513513513513513,
+                  "target": 0.9556085918854416
+              },
+              "impact": {
+                  "lift": 0.00026418522198257133,
+                  "threshold": 0.78
+              },
+              "importance": 0.191610136532316,
+              "kind": "content",
+              "name": "lytics_content::Guild Wars 2",
+              "type": "numeric"
+          },
+          {
+              "correlation": 0.08356900174604918,
+              "field_prevalence": {
+                  "source": 0.8513513513513513,
+                  "target": 0.9556085918854416
+              },
+              "impact": {
+                  "lift": 6.771970780916625e-05,
+                  "threshold": 0.0273
+              },
+              "importance": 0.02623832362432797,
+              "kind": "content",
+              "name": "lytics_content::Now Playing",
+              "type": "numeric"
+          },
+          {
+              "correlation": -0.032652221460437905,
+              "field_prevalence": {
+                  "source": 1,
+                  "target": 1
+              },
+              "impact": {
+                  "lift": 2.3300505464174393e-05,
+                  "threshold": 99
+              },
+              "importance": 0.04741111840242228,
+              "kind": "score",
+              "name": "score_intensity",
+              "type": "numeric"
+          },
+          {
+              "correlation": -0.14282233153178817,
+              "field_prevalence": {
+                  "source": 0.8513513513513513,
+                  "target": 0.9556085918854416
+              },
+              "impact": {
+                  "lift": -0.002367005670065425,
+                  "threshold": 0.7173360000000001
+              },
+              "importance": 1.7817027321352044,
+              "kind": "content",
+              "name": "lytics_content::real-time strategy",
+              "type": "numeric"
+          },
+          {
+              "correlation": 0.010249375217567823,
+              "field_prevalence": {
+                  "source": 0.8513513513513513,
+                  "target": 0.9556085918854416
+              },
+              "impact": {
+                  "lift": 0.0003476266240404202,
+                  "threshold": 0.237952
+              },
+              "importance": 0.08724126285851248,
+              "kind": "content",
+              "name": "lytics_content::Steam",
+              "type": "numeric"
+          },
+          {
+              "correlation": -0.10369753495335839,
+              "field_prevalence": {
+                  "source": 1,
+                  "target": 1
+              },
+              "impact": {
+                  "lift": -0.0026288639243177148,
+                  "threshold": 100
+              },
+              "importance": 0.8997726771651589,
+              "kind": "score",
+              "name": "score_quantity",
+              "type": "numeric"
+          },
+          {
+              "correlation": 0.012402310275321904,
+              "field_prevalence": {
+                  "source": 0.8513513513513513,
+                  "target": 0.9556085918854416
+              },
+              "impact": {
+                  "lift": -0.00016875153751716443,
+                  "threshold": 1
+              },
+              "importance": 0.1751659350192652,
+              "kind": "content",
+              "name": "lytics_content::Gaming",
+              "type": "numeric"
+          },
+          {
+              "correlation": -0.0842628336623803,
+              "field_prevalence": {
+                  "source": 0.8513513513513513,
+                  "target": 0.9556085918854416
+              },
+              "impact": {
+                  "lift": -0.0016250013369770722,
+                  "threshold": 0.70794
+              },
+              "importance": 0.06354889936006046,
+              "kind": "content",
+              "name": "lytics_content::Retro Gaming",
+              "type": "numeric"
+          },
+          {
+              "correlation": -0.12724529458823097,
+              "field_prevalence": {
+                  "source": 0.8513513513513513,
+                  "target": 0.9556085918854416
+              },
+              "impact": {
+                  "lift": -0.0014208379259136317,
+                  "threshold": 0.125146
+              },
+              "importance": 1.0559620970808137,
+              "kind": "content",
+              "name": "lytics_content::Enemy",
+              "type": "numeric"
+          },
+          {
+              "correlation": 0.05648815479281263,
+              "field_prevalence": {
+                  "source": 0.8513513513513513,
+                  "target": 0.9556085918854416
+              },
+              "impact": {
+                  "lift": 0.0019557290361309487,
+                  "threshold": 0.394856
+              },
+              "importance": 0.20569711193041154,
+              "kind": "content",
+              "name": "lytics_content::PC",
+              "type": "numeric"
+          },
+          {
+              "correlation": -0.17270992724271972,
+              "field_prevalence": {
+                  "source": 0.8513513513513513,
+                  "target": 0.9556085918854416
+              },
+              "impact": {
+                  "lift": -0.0061639071841395054,
+                  "threshold": 0.075632
+              },
+              "importance": 2.811330759227664,
+              "kind": "content",
+              "name": "lytics_content::Sayaka Kanda",
+              "type": "numeric"
+          },
+          {
+              "correlation": -0.12621550611578217,
+              "field_prevalence": {
+                  "source": 0.8513513513513513,
+                  "target": 0.9556085918854416
+              },
+              "impact": {
+                  "lift": 6.783517835229347e-05,
+                  "threshold": 0.018734
+              },
+              "importance": 0.39934388003899174,
+              "kind": "content",
+              "name": "lytics_content::50 Cent",
+              "type": "numeric"
+          },
+          {
+              "correlation": -0.11277535241713772,
+              "field_prevalence": {
+                  "source": 0.8513513513513513,
+                  "target": 0.9556085918854416
+              },
+              "impact": {
+                  "lift": -0.00020452502601964184,
+                  "threshold": 0.22281600000000001
+              },
+              "importance": 0.21702477154608538,
+              "kind": "content",
+              "name": "lytics_content::anniversary",
+              "type": "numeric"
+          },
+          {
+              "correlation": 0.02845716757033223,
+              "field_prevalence": {
+                  "source": 0.8513513513513513,
+                  "target": 0.9556085918854416
+              },
+              "impact": {
+                  "lift": 0.0002459778597785345,
+                  "threshold": 0.02
+              },
+              "importance": 0.07907060088303881,
+              "kind": "content",
+              "name": "lytics_content::Blog",
+              "type": "numeric"
+          },
+          {
+              "correlation": 0.02824451181996639,
+              "field_prevalence": {
+                  "source": 0.8513513513513513,
+                  "target": 0.9556085918854416
+              },
+              "impact": {
+                  "lift": -3.4677294825646854e-05,
+                  "threshold": 0.14
+              },
+              "importance": 0.1472694257437505,
+              "kind": "content",
+              "name": "lytics_content::Site News",
+              "type": "numeric"
+          },
+          {
+              "correlation": -0.8388835429687133,
+              "field_prevalence": {
+                  "source": 1,
+                  "target": 1
+              },
+              "impact": {
+                  "lift": -0.26573470344076955,
+                  "threshold": 57.42
+              },
+              "importance": 9.204147533388706,
+              "kind": "score",
+              "name": "score_recency",
+              "type": "numeric"
+          },
+          {
+              "correlation": -0.10642471655674124,
+              "field_prevalence": {
+                  "source": 0.8513513513513513,
+                  "target": 0.9556085918854416
+              },
+              "impact": {
+                  "lift": 0.0002634668258456596,
+                  "threshold": 0.6262800000000001
+              },
+              "importance": 0.37221750290365263,
+              "kind": "content",
+              "name": "lytics_content::clan",
+              "type": "numeric"
+          },
+          {
+              "correlation": 0.04427323265930783,
+              "field_prevalence": {
+                  "source": 0.8513513513513513,
+                  "target": 0.9556085918854416
+              },
+              "impact": {
+                  "lift": 0.0013424488367270726,
+                  "threshold": 0.08
+              },
+              "importance": 0.30454868245902283,
+              "kind": "content",
+              "name": "lytics_content::time",
+              "type": "numeric"
+          },
+          {
+              "correlation": -0.6242709249180488,
+              "field_prevalence": {
+                  "source": 1,
+                  "target": 1
+              },
+              "impact": {
+                  "lift": -0.045494809230395616,
+                  "threshold": 5.2631578947368425
+              },
+              "importance": 1.1578808198298427,
+              "kind": "score",
+              "name": "score_momentum",
+              "type": "numeric"
+          },
+          {
+              "correlation": -0.45025155199506234,
+              "field_prevalence": {
+                  "source": 1,
+                  "target": 1
+              },
+              "impact": {
+                  "lift": -0.019471156211570473,
+                  "threshold": 3
+              },
+              "importance": 0.39299774703495605,
+              "kind": "score",
+              "name": "score_propensity",
+              "type": "numeric"
+          },
+          {
+              "correlation": -0.13756871556796826,
+              "field_prevalence": {
+                  "source": 0.8513513513513513,
+                  "target": 0.9556085918854416
+              },
+              "impact": {
+                  "lift": -0.0010786900369068597,
+                  "threshold": 0.107604
+              },
+              "importance": 1.1351058014465296,
+              "kind": "content",
+              "name": "lytics_content::Middle-earth: Shadow of Mordor",
+              "type": "numeric"
+          },
+          {
+              "correlation": -0.14858387778067675,
+              "field_prevalence": {
+                  "source": 0.8513513513513513,
+                  "target": 0.9556085918854416
+              },
+              "impact": {
+                  "lift": -0.02530320110701223,
+                  "threshold": 0.9301999999999999
+              },
+              "importance": 0.6897128814244927,
+              "kind": "content",
+              "name": "lytics_content::PSP - PlayStation Portable",
+              "type": "numeric"
+          }
+      ],
+      "name": "default_anon_seg::ly_binge_user",
+      "reason": "",
+      "state": "complete",
+      "summary": {
+          "accuracy": 9,
+          "auc": 1,
+          "audience_similarity": 0.9146551724137931,
+          "conf": {
+              "FalseNegative": 0,
+              "FalsePositive": 2,
+              "TrueNegative": 27,
+              "TruePositive": 1056
+          },
+          "fail": {
+              "0.00": 2,
+              "0.02": 2,
+              "0.03": 2,
+              "0.04": 5,
+              "0.05": 4,
+              "0.07": 2,
+              "0.10": 2,
+              "0.15": 1,
+              "0.26": 1,
+              "0.39": 1,
+              "0.40": 4,
+              "0.42": 1,
+              "0.54": 1,
+              "0.66": 1
+          },
+          "model_health": "healthy",
+          "mse": 0.0018974266523686216,
+          "msgs": [
+              {
+                  "severity": "debug",
+                  "tags": [
+                      "autotune",
+                      "summary",
+                      "prevalance"
+                  ],
+                  "text": "The following features were removed due to a high number of missing values: "
+              },
+              {
+                  "severity": "debug",
+                  "tags": [
+                      "autotune",
+                      "summary",
+                      "audience-prevalence"
+                  ],
+                  "text": "The following features were removed due to a high number of missing values in the source or target audience: "
+              },
+              {
+                  "severity": "debug",
+                  "tags": [
+                      "autotune",
+                      "summary",
+                      "correlation"
+                  ],
+                  "text": "The following features were removed due to colinearity: lql_lytics_content::YouTube, lql_lytics_content::25 Cent, lql_lytics_content::Titan Quest"
+              },
+              {
+                  "severity": "debug",
+                  "tags": [
+                      "autotune",
+                      "summary",
+                      "target-correlation"
+                  ],
+                  "text": "The following features were removed as they have very high or very low correlation with th target: lql_lytics_content::game, lql_lytics_content::video game"
+              },
+              {
+                  "severity": "debug",
+                  "tags": [
+                      "collinearity",
+                      "feature"
+                  ],
+                  "text": "Removed features: lql_lytics_content::game, lql_lytics_content::YouTube, lql_lytics_content::25 Cent, lql_lytics_content::video game, lql_lytics_content::Titan Quest"
+              }
+          ],
+          "reach": 2,
+          "rsq": 0.9271277630970197,
+          "success": {
+              "0.74": 1,
+              "0.75": 1,
+              "0.76": 1,
+              "0.92": 1,
+              "0.94": 4,
+              "0.95": 3,
+              "0.96": 1,
+              "0.97": 6,
+              "0.98": 8,
+              "0.99": 37,
+              "1.00": 993
+          },
+          "threshold": 0.67
+      }
+  },
+  "message": "success",
+  "status": 200
 }
