@@ -60,7 +60,7 @@ func (m *AccountUser) Row() []interface{} {
 }
 
 // GetUser returns a single user
-// https://www.getlytics.com/developers/rest-api#user
+// https://learn.lytics.com/documentation/developer/api-docs/user#auth
 func (l *Client) GetUser(id string) (AccountUser, error) {
 	res := ApiResp{}
 	data := AccountUser{}
@@ -81,7 +81,7 @@ func (l *Client) GetUser(id string) (AccountUser, error) {
 }
 
 // GetUsers returns a list of all users
-// https://www.getlytics.com/developers/rest-api#user-list
+// https://learn.lytics.com/documentation/developer/api-docs/user#user-list-user-list-get
 func (l *Client) GetUsers() ([]*AccountUser, error) {
 	res := ApiResp{}
 	data := []*AccountUser{}

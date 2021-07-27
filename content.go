@@ -45,7 +45,7 @@ type Recommendation struct {
 }
 
 // Filter params for recommendations:
-// https://www.getlytics.com/developers/rest-api#content-recommendation
+// https://learn.lytics.com/documentation/developer/api-docs/content#content-recommendation
 type RecommendationFilter struct {
 	Limit   int         // limit on number of documents to suggest/return
 	Ql      string      // raw FilterQL statement
@@ -114,7 +114,7 @@ type TopicRollup struct {
 
 // GetUserContentRecommendation returns a list of documents
 // to recommend the user based on their content affinities
-// https://www.getlytics.com/developers/rest-api#content-recommendation
+// https://learn.lytics.com/documentation/developer/api-docs/content#content-recommendation-content-recommendation-get
 func (l *Client) GetUserContentRecommendation(fieldName, fieldVal string, filter *RecommendationFilter) ([]Recommendation, error) {
 	res := ApiResp{}
 	data := []Recommendation{}
@@ -235,7 +235,7 @@ func (l *Client) GetSegmentContentRecommendation(segId string, filter *Recommend
 
 // GetDocuments returns a summary for document(s).
 // If no url is specified, then return the 10 most recent urls.
-// https://www.getlytics.com/developers/rest-api#content-document
+// https://learn.lytics.com/documentation/developer/api-docs/content#content-document
 func (l *Client) GetDocuments(urls []string, limit int) (Documents, error) {
 	res := ApiResp{}
 	data := Documents{}
@@ -259,7 +259,7 @@ func (l *Client) GetDocuments(urls []string, limit int) (Documents, error) {
 
 // GetTopicSummary returns a summary of user affinity for, and related
 // documents to a topic.
-// https://www.getlytics.com/developers/rest-api#content-topic-summary
+// https://learn.lytics.com/documentation/developer/api-docs/content#content-topic-summary
 func (l *Client) GetTopicSummary(topic string, limit int) (TopicSummary, error) {
 	res := ApiResp{}
 	data := TopicSummary{}
@@ -278,7 +278,7 @@ func (l *Client) GetTopicSummary(topic string, limit int) (TopicSummary, error) 
 }
 
 // GetContentTaxonomy returns a graph relationship among topics.
-// https://www.getlytics.com/developers/rest-api#content-taxonomy
+// https://learn.lytics.com/documentation/developer/api-docs/content#content-taxonomy
 func (l *Client) GetContentTaxonomy() (TopicGraph, error) {
 	res := ApiResp{}
 	data := TopicGraph{}
@@ -292,6 +292,7 @@ func (l *Client) GetContentTaxonomy() (TopicGraph, error) {
 }
 
 // GetTopicRollups returns a list of topic rollups for an account.
+// https://learn.lytics.com/documentation/developer/api-docs/content#content-topic-rollup
 func (l *Client) GetTopicRollups() ([]TopicRollup, error) {
 	res := ApiResp{}
 	data := []TopicRollup{}

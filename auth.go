@@ -41,7 +41,7 @@ func (m *Auth) Row() []interface{} {
 }
 
 // GetAuths returns a list of all available auths for an account
-// https://www.getlytics.com/developers/rest-api#auth
+// https://learn.lytics.com/documentation/developer/api-docs/auth#auth
 func (l *Client) GetAuths() ([]*Auth, error) {
 	res := ApiResp{}
 	data := []*Auth{}
@@ -56,7 +56,7 @@ func (l *Client) GetAuths() ([]*Auth, error) {
 }
 
 // GetAuth returns a single auth based on id
-// https://www.getlytics.com/developers/rest-api#auth
+// https://learn.lytics.com/documentation/developer/api-docs/auth#auth-retrieve-a-single-auth-get
 func (l *Client) GetAuth(id string) (Auth, error) {
 	res := ApiResp{}
 	data := Auth{}
