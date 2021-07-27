@@ -44,7 +44,7 @@ type (
 		Updated       time.Time `json:"updated"`
 		Created       time.Time `json:"created"`
 		Tags          []string  `json:"tags"`
-		Category      string    `json:category,omitempty`
+		Category      string    `json:"category,omitempty"`
 		Invalid       bool      `json:"invalid"`
 		InvalidReason string    `json:"invalid_reason"`
 		FilterQL      string    `json:"segment_ql,omitempty"`
