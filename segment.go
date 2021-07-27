@@ -323,7 +323,7 @@ func (l *Client) GetSegmentEntities(segment, next string, limit int) (interface{
 
 // GetAdHocSegmentEntities returns a single page of entities for the given Ad Hoc segment
 // also returns the next value if there are more than limit entities in the segment
-// https://www.getlytics.com/developers/rest-api#segment-scan
+// https://learn.lytics.com/documentation/developer/api-docs/segment#segment-scan
 func (l *Client) GetAdHocSegmentEntities(ql, next string, limit int) (interface{}, string, []*Entity, error) {
 
 	res := ApiResp{}
@@ -489,7 +489,7 @@ func (l *Client) CreateSegment(name, ql, slug string) (Segment, error) {
 }
 
 // ValidateSegment validates a single segment QL statement
-// https://learn.lytics.com/api-docs/segment#segment-validate-resource
+// https://learn.lytics.com/documentation/developer/api-docs/segment#segment-validate
 func (l *Client) ValidateSegment(ql string) (bool, error) {
 	res := ApiResp{}
 
