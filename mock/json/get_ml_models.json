@@ -1,0 +1,69 @@
+{
+    "data": [{
+            "aid": 1,
+            "config": {
+                "auto_tune": false,
+                "build_only": true,
+                "collect": 0,
+                "custom_segment_ids": null,
+                "internal": false,
+                "model_type": "",
+                "re_run": false,
+                "tune_model": false,
+                "use_content": false,
+                "use_ent_store": false,
+                "use_scores": false
+            },
+            "created": "2020-10-23T22:06:45.972Z",
+            "id": "3a539197927ed11b0124d7d34a642174",
+            "is_active": false,
+            "is_healthy": true,
+            "label": "",
+            "name": "all::ly_binge_user",
+            "source": "757157f2b33143c04a247d93e71e390b",
+            "state": "complete",
+            "target": "22188a35b22888715066812682af8d3c",
+            "type": "",
+            "updated": "2020-10-23T22:55:36.755Z",
+            "work_ids": [
+                "6db152e9b673cb50192b428fd5fe3377",
+                "7830f8ace7ae7b0d7d6e995a7825b189",
+                "e196086c3245fcc826d5ef03b6e2d20b"
+            ]
+        },
+        {
+            "aid": 1,
+            "config": {
+                "auto_tune": false,
+                "build_only": true,
+                "collect": 0,
+                "custom_segment_ids": null,
+                "internal": false,
+                "model_type": "",
+                "re_run": false,
+                "tune_model": false,
+                "use_content": false,
+                "use_ent_store": false,
+                "use_scores": false
+            },
+            "created": "2020-10-23T22:07:00.753Z",
+            "id": "05e49527930663222458428f3ebc9775",
+            "is_active": false,
+            "is_healthy": true,
+            "label": "",
+            "name": "all::ly_infrequent_user",
+            "source": "757157f2b33143c04a247d93e71e390b",
+            "state": "complete",
+            "target": "0d560ecb1d6024ceb0d738d114a6bc1a",
+            "type": "",
+            "updated": "2020-10-23T23:34:04.836Z",
+            "work_ids": [
+                "17951e000baae7e6e39a1971a1eb5f31",
+                "5b0e6b75dde8df02e1501aca0675a9be",
+                "7715f7964f766f556d11324b864f94ca"
+            ]
+        }
+    ],
+    "message": "success",
+    "status": 200
+}
