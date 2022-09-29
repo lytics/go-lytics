@@ -61,8 +61,8 @@ type RecommendationFilter struct {
 }
 
 type Documents struct {
-	Urls  []Document `json: "urls"`
-	Total int        `json: "total"`
+	Urls  []Document `json:"urls"`
+	Total int        `json:"total"`
 }
 
 type TopicSummary struct {
@@ -79,7 +79,7 @@ type TopicSummary struct {
 
 	Docs struct {
 		Total int        `json:"total"`
-		Urls  []Document `json:urls`
+		Urls  []Document `json:"urls"`
 	}
 }
 
