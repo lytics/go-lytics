@@ -187,7 +187,7 @@ type Prediction struct {
 }
 
 type Dependencies struct {
-	Fields map[string][][2]float64 "fields"
+	Fields map[string][][2]float64 `json:"fields"`
 }
 type Feature struct {
 	Kind            string  `json:"kind"`

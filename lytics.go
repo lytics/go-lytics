@@ -264,8 +264,6 @@ func prepRequestBody(body interface{}) (io.Reader, error) {
 
 		return bytes.NewReader(b), nil
 	}
-
-	return nil, nil
 }
 
 // buildRespJSON handles the first round of unmarshaling into the master Api Response struct

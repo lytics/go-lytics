@@ -5,7 +5,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/bmizerany/assert"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestJsonFlatten(t *testing.T) {
@@ -57,9 +57,9 @@ func TestJsonFlatten(t *testing.T) {
 
 	var jsonMap map[string]interface{}
 	err = json.Unmarshal([]byte(msg), &jsonMap)
-	assert.Tf(t, err == nil, "must not err: %v", err)
+	assert.Truef(t, err == nil, "must not err: %v", err)
 	qs := make(url.Values)
 	err = FlattenJsonMapIntoQs(qs, jsonMap, "")
-	assert.Tf(t, err == nil, "must not err: %v", err)
-	assert.Tf(t, qs.Get("bigint") == "7000000000000000000000", "must not have exponent format")
+	assert.Truef(t, err == nil, "must not err: %v", err)
+	assert.Truef(t, qs.Get("bigint") == "7000000000000000000000", "must not have exponent format")
 }

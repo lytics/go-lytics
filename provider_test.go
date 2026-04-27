@@ -3,7 +3,7 @@ package lytics
 import (
 	"testing"
 
-	"github.com/bmizerany/assert"
+	"github.com/stretchr/testify/assert"
 	"github.com/jarcoal/httpmock"
 	"github.com/lytics/go-lytics/mock"
 )
@@ -16,7 +16,7 @@ func TestGetProviders(t *testing.T) {
 	client := NewLytics(mock.MockApiKey, nil)
 	provider, err := client.GetProviders()
 	assert.Equal(t, err, nil)
-	assert.T(t, len(provider) > 1)
+	assert.True(t, len(provider) > 1)
 }
 
 func TestGetProvider(t *testing.T) {
@@ -27,5 +27,5 @@ func TestGetProvider(t *testing.T) {
 	client := NewLytics(mock.MockApiKey, nil)
 	provider, err := client.GetProvider(mock.MockProviderID)
 	assert.Equal(t, err, nil)
-	assert.T(t, provider.Id == mock.MockProviderID)
+	assert.True(t, provider.Id == mock.MockProviderID)
 }
