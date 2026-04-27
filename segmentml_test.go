@@ -3,7 +3,7 @@ package lytics
 import (
 	"testing"
 
-	"github.com/bmizerany/assert"
+	"github.com/stretchr/testify/assert"
 	"github.com/jarcoal/httpmock"
 	"github.com/lytics/go-lytics/mock"
 )
@@ -34,10 +34,10 @@ func TestGetSegmentMLModels(t *testing.T) {
 	assert.Equal(t, len(models), 2)
 
 	first := models[0]
-	// assert.T(t, ok)
+	// assert.True(t, ok)
 
 	second := models[1]
-	// assert.T(t, ok)
+	// assert.True(t, ok)
 
 	assert.Equal(t, first.Name, "all::ly_binge_user")
 	assert.Equal(t, first.Features[0].Importance, 0.03761499492078325)

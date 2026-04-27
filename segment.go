@@ -82,7 +82,7 @@ type (
 		Updated       time.Time         `json:"updated"`
 		Created       time.Time         `json:"created"`
 		Internal      bool              `json:"internal"`
-		Collection    []*SegColRelation `json:"collection""`
+		Collection    []*SegColRelation `json:"collection"`
 		ParentSegment string            `json:"parent_segment"`
 	}
 	// SegColRelation maps a segment relationship to a collection

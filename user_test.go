@@ -3,7 +3,7 @@ package lytics
 import (
 	"testing"
 
-	"github.com/bmizerany/assert"
+	"github.com/stretchr/testify/assert"
 	"github.com/jarcoal/httpmock"
 	"github.com/lytics/go-lytics/mock"
 )
@@ -17,7 +17,7 @@ func TestGetUsers(t *testing.T) {
 	client := NewLytics(mock.MockApiKey, nil)
 	users, err := client.GetUsers()
 	assert.Equal(t, err, nil)
-	assert.T(t, len(users) > 1)
+	assert.True(t, len(users) > 1)
 }
 
 func TestGetUser(t *testing.T) {
@@ -29,5 +29,5 @@ func TestGetUser(t *testing.T) {
 	client := NewLytics(mock.MockApiKey, nil)
 	user, err := client.GetUser(mock.MockUserID)
 	assert.Equal(t, err, nil)
-	assert.T(t, user.Id == mock.MockUserID)
+	assert.True(t, user.Id == mock.MockUserID)
 }
