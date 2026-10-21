@@ -3,6 +3,7 @@ package lytics
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -173,7 +174,7 @@ func (l *Client) Do(r *http.Request, response, data interface{}) error {
 		case *ApiResp:
 			// if we have an invalid response code error out
 			if res.StatusCode >= 301 {
-				return fmt.Errorf(rt.Message)
+				return errors.New(rt.Message)
 			}
 		}
 	}

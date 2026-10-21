@@ -1,6 +1,6 @@
 module github.com/lytics/go-lytics
 
-go 1.23
+go 1.26.6
 
 require (
 	github.com/jarcoal/httpmock v1.0.8
